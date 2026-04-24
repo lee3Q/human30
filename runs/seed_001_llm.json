@@ -1,0 +1,740 @@
+{
+  "seed": 1,
+  "generated_at": "2026-04-08T20:30:00+09:00",
+  "constraints": {
+    "sex_ratio": { "M": 15, "F": 15 },
+    "age": 20,
+    "region": "한국"
+  },
+  "table_versions": {
+    "body": "0.1",
+    "memory": "0.1",
+    "identity": "0.1",
+    "korea": "0.1"
+  },
+  "characters": [
+    {
+      "id": 1,
+      "sex": "M",
+      "post_hoc_label": ["#7 같이 하면 더 좋잖아"],
+      "body": {
+        "height_cm": 175.2,
+        "face_attractiveness": { "absolute_score": 5, "sex_rank": 9 },
+        "body_composition": { "bmi": 23.5, "muscle_mass": "평균", "grip_kg": 43, "waist_cm": 79, "shr": 1.36 },
+        "face_features": { "shape": "둥근형", "eyelid": "속쌍꺼풀", "nose_bridge": "평균", "teeth": "가지런함", "asymmetry_mm": 2.1, "marks": ["볼 점"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 12.8, "penis_girth_cm": 11.4, "foreskin": "포경 수술 완료", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "평균", "chest": "없음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "수용", "body": "수용", "genital": "중립", "focused_concern": ["키"] },
+        "chronic_health": [{ "condition": "알레르기성 비염", "severity": "계절성 중간" }],
+        "sleep": { "duration_hours": 6.5, "chronotype": "중간", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "안경 가끔" },
+        "vocal": { "pitch_hz": 118, "volume": "평균", "speech_rate": "평균", "quirks": [] },
+        "skin_hair": { "skin_type": "복합성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "목격하고 도움 시도", "peak_period": "중학교", "form": null, "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 2, "avoidance": 2, "threshold": "평균" },
+        "embedded_sentences": [],
+        "embedded_reactions": [
+          { "target": "키", "reaction": "농담으로 가장한 지적", "reactor": "친한 친구", "age": "중기 사춘기", "self_image_before": "수용", "rupture_depth": "경미한 의식", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Flight", "secondary": "없음", "threshold": "평균", "polyvagal": "Ventral Vagal", "signature": "화제 전환·시계 봄" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "사무직 (중소)", "mother_employment": "파트타임", "sibling_structure": "맏이 (2형제)", "economic_stability": "안정 일관", "residence_changes": "1~2회", "emotional_climate": "정서 표현 가능하지만 통제됨" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "권위적 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "막연한 기대", "transmission": "비교·예시" }
+      },
+      "identity": {
+        "cognitive": { "iq": 108, "strength": "균형", "weakness": "없음", "academic_performance": "중상위", "metacognition": "정확", "thinking_style": "맥락적", "curiosity": "중간" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "키스·애무까지", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": [], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 5.8, "platforms": ["카카오톡", "유튜브", "쇼츠", "네이버 카페"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 1잔", "other": "없음" }, "eating_impulse": "규칙적", "impulse_control": "평균", "reward_sensitivity": "평균", "escape_default": "디지털", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["롤"], "journal_tone": "할 일·체크리스트만", "sns_public_face": "연 1~2회 (흔적만)", "private_vs_public_gap": "약간 편집", "communities": ["네이버 카페 (소모임)"], "playlist": "K-pop 최신 주류", "album_theme": ["친구 모임", "음식", "여행·풍경"], "recent_search": ["과제·학업 검색", "쇼핑·제품 리뷰", "음식·맛집·배달"], "bookmarks": ["유튜브 구독 (많음)"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "3등급", "university_tier": "in서울 (그 외)", "major": "이공·공학", "retake": "재수 없음", "private_education": "평균 (학원 일상)", "academic_self_concept": "보통", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "거의 없음", "discrimination_domain": [], "management_level": "기본", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "수용 (현실)", "capital_awareness": "막연" },
+        "region_voice": { "birth_region": "경기·인천 (수도권)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "중도", "personal_politics": "가족과 일치", "family_religion": "무종교", "personal_religion": "가족과 일치 (무종교)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 2,
+      "sex": "F",
+      "post_hoc_label": ["#2 다 내 뜻대로", "#27 엄마가 실망하면 안 돼"],
+      "body": {
+        "height_cm": 162.5,
+        "face_attractiveness": { "absolute_score": 7, "sex_rank": 4 },
+        "body_composition": { "bmi": 20.8, "muscle_mass": "평균 이하", "grip_kg": 24, "waist_cm": 67, "whr": 0.74 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "평균", "teeth": "교정 경력", "asymmetry_mm": 1.8, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "B", "breast_asymmetry": "경미 (1컵 미만 차)", "nipple_features": ["평균 크기", "유륜 결절 도드라짐"], "labia_minora": "일부 노출", "vulva_color": "분홍-갈색", "menstrual": { "cycle_regularity": "약간 불규칙", "pain_severity": "중간 (진통제 가끔)" }, "body_hair": { "pubic": "옅음", "leg": "옅음", "chest": "없음", "underarm": "옅음" }, "body_odor": "거의 없음" },
+        "self_image": { "face": "만족", "body": "수용", "genital": "중립", "focused_concern": ["체형", "피부"] },
+        "chronic_health": [],
+        "sleep": { "duration_hours": 6.0, "chronotype": "저녁형", "current_debt": "심하게 부족", "insomnia": "입면 어려움" },
+        "sensory": { "visual_acuity": "중등도 근시 (-3D~)", "correction": "콘택트 상시" },
+        "vocal": { "pitch_hz": 215, "volume": "평균", "speech_rate": "빠름", "quirks": [] },
+        "skin_hair": { "skin_type": "복합성", "skin_tone": "밝음", "scars": [], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["부모 별거·이혼"], "total": 1, "primary": "복합" },
+        "csa": null,
+        "parental_loss": { "status": "이혼·별거 (어머니 양육)", "event_age": "초등", "caregiver_after": "남은 부모 (안정)", "contact_with_absent": "월 1회 이상", "narrative": "사실 그대로 들음" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": null, "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "anxious-preoccupied", "anxiety": 4, "avoidance": 2, "threshold": "예민" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "비교·열등", "trigger": "성취·실패 직후", "consciousness": "의식적으로 알고 동의함" }
+        ],
+        "embedded_reactions": [
+          { "target": "체형·살", "reaction": "농담으로 가장한 지적", "reactor": "친한 친구", "age": "초기 성인", "self_image_before": "수용", "rupture_depth": "강한 자기검열", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fawn", "secondary": "Freeze 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "자동 사과·과잉 동의·웃음" },
+        "formative_family": { "ses_quintile": "4분위", "father_occupation": "사무직 (대기업)", "mother_employment": "정규직", "sibling_structure": "외동", "economic_stability": "안정 일관", "residence_changes": "3~5회", "emotional_climate": "정서 표현 가능하지만 통제됨" },
+        "parent_voice": { "mother_pattern": "조건부 따뜻 (성취 시)", "father_pattern": "사실상 부재 (일)", "consistency": "불일치 (선·악 분리)", "intergenerational_pressure": "구체적 학력 압력", "transmission": "한숨·실망 표정" }
+      },
+      "identity": {
+        "cognitive": { "iq": 119, "strength": "언어 우세", "weakness": "없음", "academic_performance": "상위", "metacognition": "과소 평가", "thinking_style": "분석적", "curiosity": "높음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 1~2회", "first_age": "20~22세", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": ["쾌락 자체에 대한 죄책감", "본인의 외모로는 욕망될 자격 없음"], "function": { "arousal": "낮음", "performance": "가끔 어려움", "satisfaction": "불만" }, "consent_marker": "원치 않는 경험 1회 (불명확)" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 8.2, "platforms": ["인스타그램", "카카오톡", "쇼츠", "더쿠", "네이버 카페"], "compulsion": "높음", "substances": { "alcohol": "주 1~2회", "smoking": "전자담배만", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "절식·과식 순환 (binge-restrict)", "impulse_control": "과잉 통제", "reward_sensitivity": "평균", "escape_default": "폭식", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": [], "journal_tone": "자학·자책 메모", "sns_public_face": "일상 자랑 (여행·음식·커플)", "private_vs_public_gap": "뚜렷한 편집", "communities": ["더쿠", "인스티즈"], "playlist": "K-pop 특정 그룹 팬", "album_theme": ["셀카 중심", "친구 모임", "음식", "여행·풍경"], "recent_search": ["다이어트·운동", "성형·시술 정보", "건강·증상 검색 (강박적)", "연애 조언·이별"], "bookmarks": ["유튜브 구독 (많음)", "자기계발·동기부여"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "자사고", "suneung_grade": "2등급", "university_tier": "성균관·한양·중앙·경희·서강·이화 등", "major": "경상", "retake": "재수 없음", "private_education": "높음 (학원 + 과외 + 인강)", "academic_self_concept": "긍정", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "반복적 (월 단위)", "discrimination_domain": ["가족 내", "온라인·SNS", "학교"], "management_level": "높음 (피부과·헬스·옷 투자)", "cosmetic_surgery": "쌍꺼풀", "diet_history": "만성 다이어트 (일상)", "lookism_internalization": "내면화 (당연)", "capital_awareness": "명확 (외모 = 자원)" },
+        "region_voice": { "birth_region": "서울", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "보수 (온건)", "personal_politics": "가족과 다른 방향 (조용히)", "family_religion": "천주교 (가족)", "personal_religion": "가족 종교 명목상 유지", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 3,
+      "sex": "M",
+      "post_hoc_label": ["#28 어차피 뭘 해도...", "#22 눈에 안 띄고 싶어"],
+      "body": {
+        "height_cm": 170.1,
+        "face_attractiveness": { "absolute_score": 4, "sex_rank": 12 },
+        "body_composition": { "bmi": 22.1, "muscle_mass": "평균 이하", "grip_kg": 38, "waist_cm": 76, "shr": 1.32 },
+        "face_features": { "shape": "긴 얼굴", "eyelid": "외꺼풀", "nose_bridge": "낮음", "teeth": "부정교합", "asymmetry_mm": 4.2, "marks": ["이마 흉터", "눈밑 다크서클 상시"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 11.9, "penis_girth_cm": 10.8, "foreskin": "포경 상태 (미수술)", "shape_notes": ["좌측 굴곡"], "erectile_function": "가끔 어려움", "body_hair": { "pubic": "풍성", "leg": "평균", "chest": "옅음", "underarm": "평균" }, "body_odor": "뚜렷" },
+        "self_image": { "face": "불만", "body": "불만", "genital": "불안", "focused_concern": ["얼굴 특정 부위", "피부", "체취", "성기 크기"] },
+        "chronic_health": [{ "condition": "여드름 (중등도 이상)", "severity": "얼굴 전반" }, { "condition": "위염·역류", "severity": "스트레스 시" }],
+        "sleep": { "duration_hours": 5.5, "chronotype": "극단 저녁형", "current_debt": "심하게 부족", "insomnia": "중간 각성" },
+        "sensory": { "visual_acuity": "고도 근시 (-6D~)", "correction": "안경 상시" },
+        "vocal": { "pitch_hz": 115, "volume": "작음", "speech_rate": "느림", "quirks": ["쉰 목소리"] },
+        "skin_hair": { "skin_type": "지성", "skin_tone": "약간 어두움", "scars": ["손목 안쪽 (자해흔 의심)", "팔 어딘가 사고 흉터"], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 학대", "신체적 학대", "정서적 방임", "가족 알코올·약물 문제", "가족 수감 경험"], "total": 5, "primary": "복합 다중 (4+)" },
+        "csa": null,
+        "parental_loss": { "status": "이혼·별거 (어머니 양육)", "event_age": "유아기 (4~6)", "caregiver_after": "남은 부모 (재혼·새 가족)", "contact_with_absent": "완전 단절 (아버지)", "narrative": "부모 탓으로 들음" },
+        "bullying": { "victim": "중기 (수 개월)", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": "언어적 (욕설·놀림·비하)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "fearful-avoidant (disorganized)", "anxiety": 5, "avoidance": 5, "threshold": "과민 (사소한 신호도 트리거)" },
+        "embedded_sentences": [
+          { "speaker": "아버지", "message_type": "조롱·비하 (존재 자체)", "trigger": "권위자 앞", "consciousness": "완전 무의식" },
+          { "speaker": "어머니", "message_type": "위협", "trigger": "성취·실패 직후", "consciousness": "의식적으로 알고 거부 시도 중" }
+        ],
+        "embedded_reactions": [],
+        "trauma_trigger": [
+          { "channel": "청각 (가해자 숨소리·음성·배경음)", "intensity": "강함 (공황·해리)", "consciousness": "트리거만 알고 원인 사건 모름" }
+        ],
+        "default_reflex": { "primary": "Freeze", "secondary": "Fawn 보조", "threshold": "매우 낮음 (만성 활성)", "polyvagal": "Dorsal Vagal (만성 셧다운)", "signature": "표정 사라짐·눈 초점 흐려짐·말 안 함" },
+        "formative_family": { "ses_quintile": "1분위 (하위 20%)", "father_occupation": "단순노무·일용", "mother_employment": "파트타임", "sibling_structure": "맏이 (3+형제)", "economic_stability": "만성 빈곤", "residence_changes": "6~10회", "emotional_climate": "예측 불가 (상황별 폭발)" },
+        "parent_voice": { "mother_pattern": "비난 일관", "father_pattern": "폭력 (신체·언어)", "consistency": "양친 일치 (둘 다 부정적)", "intergenerational_pressure": "없음", "transmission": "직접 명령" }
+      },
+      "identity": {
+        "cognitive": { "iq": 124, "strength": "언어 우세", "weakness": "없음", "academic_performance": "중간 (학원 못 감)", "metacognition": "정확", "thinking_style": "반추형", "curiosity": "강박적 (멈추지 않음)" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "경험 없음 (기회 없음)", "first_age": "해당 없음", "desire_intensity": "높음", "desire_grain": "낭만 결합형 (억제)", "taboos": ["자위 자체", "쾌락 자체에 대한 죄책감", "본인의 외모로는 욕망될 자격 없음", "특정 자세·행위"], "function": { "arousal": "낮음", "performance": "심각한 어려움", "satisfaction": "불만 강함" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 9.5, "platforms": ["디시인사이드", "유튜브 쇼츠", "네이버 카페", "fmkorea", "포르노 사이트"], "compulsion": "매우 높음 (10분마다 확인)", "substances": { "alcohol": "주 3회 이상", "smoking": "하루 반 갑 이하", "caffeine": "하루 4잔+", "other": "없음" }, "eating_impulse": "스트레스성 과식 (가끔)", "impulse_control": "충동적", "reward_sensitivity": "높음", "escape_default": "디지털", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": [], "journal_tone": "자살 사고·유서 초안", "sns_public_face": "계정 없음·비공개", "private_vs_public_gap": "강한 이중성", "communities": ["디시 특정 갤러리", "fmkorea"], "playlist": "힙합·랩", "album_theme": ["본인 신체 부위 (부분)", "자해흔·의료 사진 (비밀)", "스크린샷"], "recent_search": ["자살 방법·안락사·죽음", "성형·시술 정보", "건강·증상 (강박적)", "특정 인물 검색"], "bookmarks": ["성인 사이트 북마크", "음모론·정치 우파"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "5등급", "university_tier": "재수 중·휴학 중", "major": "해당 없음", "retake": "1년 재수", "private_education": "거의 없음 (학원 못 보냄)", "academic_self_concept": "패배자 (자기 정체성 형성)", "parental_pressure": "극단 (체벌·박탈)" },
+        "appearance_experience": { "discrimination_frequency": "반복적 (월 단위)", "discrimination_domain": ["학교", "가족 내", "대중교통·길에서", "친척 모임·명절", "연애"], "management_level": "거의 없음", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "비판하지만 따름", "capital_awareness": "없음 (외모 = 운명)" },
+        "region_voice": { "birth_region": "경기·인천 (수도권)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "약간 (가족 앞에서만 나옴)", "accent_self_conscious": "자주 의식 (특정 자리)", "family_politics": "가족 내 분열", "personal_politics": "본인 미정", "family_religion": "무종교", "personal_religion": "탈가족 (무종교)", "regional_discrimination": "농담 수준" }
+      }
+    },
+    {
+      "id": 4,
+      "sex": "M",
+      "post_hoc_label": ["#1 1등이어야 해", "#3 나 이거 잘하지?"],
+      "body": {
+        "height_cm": 182.3,
+        "face_attractiveness": { "absolute_score": 8, "sex_rank": 1 },
+        "body_composition": { "bmi": 22.8, "muscle_mass": "단련됨", "grip_kg": 52, "waist_cm": 76, "shr": 1.52 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "높음", "teeth": "가지런함", "asymmetry_mm": 1.2, "marks": ["미간 점"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 13.8, "penis_girth_cm": 12.0, "foreskin": "포경 수술 완료", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "풍성", "chest": "뚜렷", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "자부심", "body": "만족", "genital": "만족", "focused_concern": [] },
+        "chronic_health": [{ "condition": "알레르기성 비염", "severity": "경미" }],
+        "sleep": { "duration_hours": 7.2, "chronotype": "아침형", "current_debt": "충분", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "정상", "correction": "불필요" },
+        "vocal": { "pitch_hz": 128, "volume": "큼", "speech_rate": "평균", "quirks": [] },
+        "skin_hair": { "skin_type": "중성", "skin_tone": "밝음", "scars": ["무릎 어릴 적 흉터"], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "단발 가담", "bystander": "목격하고 도움 시도", "peak_period": "중학교", "form": "언어적 (놀림)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 1, "avoidance": 1, "threshold": "둔감" },
+        "embedded_sentences": [
+          { "speaker": "아버지", "message_type": "과잉 기대 (너는 ~돼야 한다)", "trigger": "성취·실패 직후", "consciousness": "의식적으로 알고 동의함" }
+        ],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fight", "secondary": "없음", "threshold": "높음", "polyvagal": "Ventral Vagal", "signature": "즉각 대응·말 빨라짐·표정 굳음" },
+        "formative_family": { "ses_quintile": "5분위 (상위 20%)", "father_occupation": "전문직 (의사·변호사·교수)", "mother_employment": "전문직", "sibling_structure": "맏이 (2형제)", "economic_stability": "풍요", "residence_changes": "1~2회", "emotional_climate": "정서 표현 자유" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "권위적 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "구체적 직업 압력", "transmission": "직접 명령" }
+      },
+      "identity": {
+        "cognitive": { "iq": 132, "strength": "수리·논리 우세", "weakness": "없음", "academic_performance": "상위", "metacognition": "과대 평가", "thinking_style": "직관적·즉각", "curiosity": "높음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 3~10회", "first_age": "18~19세", "desire_intensity": "높음", "desire_grain": "신체 단일형", "taboos": [], "function": { "arousal": "높음", "performance": "안정 기능", "satisfaction": "충만" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 4.5, "platforms": ["카카오톡", "유튜브", "인스타그램", "해외 플랫폼"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 1잔", "other": "없음" }, "eating_impulse": "규칙적", "impulse_control": "통제적", "reward_sensitivity": "높음", "escape_default": "운동·헬스", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": ["발로란트", "콘솔 서사 게임"], "journal_tone": "할 일·체크리스트만", "sns_public_face": "일상 자랑 (여행·음식·커플)", "private_vs_public_gap": "일치", "communities": ["레딧·해외 포럼", "디스코드"], "playlist": "해외 팝", "album_theme": ["여행·풍경", "음식", "친구 모임"], "recent_search": ["과제·학업", "쇼핑·리뷰", "취업·자소서"], "bookmarks": ["유튜브 구독 (많음)", "뉴스·시사 채널"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "특목고 (외고·과학고·국제고)", "suneung_grade": "1등급", "university_tier": "SKY", "major": "의·치·약·수의", "retake": "재수 없음", "private_education": "최고 (의대·약대 입시 풀패키지)", "academic_self_concept": "엘리트 (자기 정체성)", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "거의 없음", "discrimination_domain": [], "management_level": "평균", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "수용 (현실)", "capital_awareness": "명확 (외모 = 자원)" },
+        "region_voice": { "birth_region": "서울", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "보수 (온건)", "personal_politics": "가족과 일치", "family_religion": "천주교 (가족)", "personal_religion": "가족과 일치 (실천)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 5,
+      "sex": "F",
+      "post_hoc_label": ["#6 나도 끼워줘", "#25 아무도 모르는 내가 있어"],
+      "body": {
+        "height_cm": 159.4,
+        "face_attractiveness": { "absolute_score": 5, "sex_rank": 10 },
+        "body_composition": { "bmi": 21.2, "muscle_mass": "평균", "grip_kg": 23, "waist_cm": 69, "whr": 0.77 },
+        "face_features": { "shape": "둥근형", "eyelid": "속쌍꺼풀", "nose_bridge": "낮음", "teeth": "가지런함", "asymmetry_mm": 2.3, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "A", "breast_asymmetry": "뚜렷 (1컵 이상 차)", "nipple_features": ["작음", "좌측 함몰 경향"], "labia_minora": "대음순 안에 완전 감춰짐", "vulva_color": "분홍-갈색", "menstrual": { "cycle_regularity": "심한 불규칙", "pain_severity": "강함 (매월 진통제)" }, "body_hair": { "pubic": "평균", "leg": "평균", "chest": "없음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "불만", "body": "수용", "genital": "불안", "focused_concern": ["가슴 크기", "얼굴 특정 부위"] },
+        "chronic_health": [{ "condition": "심한 생리통", "severity": "3일+ 일상 중단" }, { "condition": "여드름 (중등도 이상)", "severity": "턱선" }],
+        "sleep": { "duration_hours": 7.0, "chronotype": "저녁형", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "콘택트 상시" },
+        "vocal": { "pitch_hz": 218, "volume": "작음", "speech_rate": "평균", "quirks": ["비음"] },
+        "skin_hair": { "skin_type": "지성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "반곱슬", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 방임", "부모 별거·이혼"], "total": 2, "primary": "정서 방임 단독" },
+        "csa": null,
+        "parental_loss": { "status": "이혼·별거 (어머니 양육)", "event_age": "중·고등 (13~18)", "caregiver_after": "남은 부모 (안정)", "contact_with_absent": "연 1~2회", "narrative": "아무도 설명 안 함" },
+        "bullying": { "victim": "단발 (1~2회)", "perpetrator": "없음", "bystander": "방관 후 죄책감", "peak_period": "중학교", "form": "언어적 (욕설·놀림·비하)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "anxious-preoccupied", "anxiety": 4, "avoidance": 3, "threshold": "예민" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "조건부 사랑 (~하면 사랑한다)", "trigger": "성취·실패 직후", "consciousness": "막연히 들리지만 출처 불명" }
+        ],
+        "embedded_reactions": [
+          { "target": "가슴 크기·모양·유두", "reaction": "직접적 질문 (그거 원래 그래?)", "reactor": "첫 연인", "age": "초기 성인", "self_image_before": "만족", "rupture_depth": "영구 흉터", "processing": "사건 자체를 잊음 (반응만 남음)" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Freeze", "secondary": "Fawn 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "표정 사라짐·눈 초점 흐려짐" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "사무직 (중소)", "mother_employment": "파트타임", "sibling_structure": "외동", "economic_stability": "점진적 하락", "residence_changes": "3~5회", "emotional_climate": "공허·무관심" },
+        "parent_voice": { "mother_pattern": "방치 (정서 부재)", "father_pattern": "사실상 부재 (사망·이혼·일)", "consistency": "보완 (한쪽 약점 다른 쪽 보완)", "intergenerational_pressure": "막연한 기대", "transmission": "침묵·외면" }
+      },
+      "identity": {
+        "cognitive": { "iq": 95, "strength": "언어 처리 느림", "weakness": "없음", "academic_performance": "중하위", "metacognition": "과소 평가", "thinking_style": "반추형", "curiosity": "중간" },
+        "sexuality": { "orientation": "본인 미확정·탐색 중", "out_status": "본인만 알고 있음 (closeted)", "experience": "키스·애무까지", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "친밀 결합형 (안전감 필요)", "taboos": ["동성에 대한 끌림", "특정 신체 부위에 대한 욕망", "본인의 외모로는 욕망될 자격 없음"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "불만" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 9.0, "platforms": ["인스타그램", "트위터·X", "쇼츠", "더쿠", "웹툰 앱"], "compulsion": "높음", "substances": { "alcohol": "월 1~2회 (사교)", "smoking": "비흡연", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "만성 과식", "impulse_control": "충동적", "reward_sensitivity": "평균", "escape_default": "고립 (혼자 시간)", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["가챠·수집형 (원신·블루아카 등)"], "journal_tone": "감정 일기 (비공개)", "sns_public_face": "감성 사진·무드", "private_vs_public_gap": "강한 이중성", "communities": ["더쿠", "트위터 특정 덕질 서클"], "playlist": "K-pop 특정 그룹 팬", "album_theme": ["셀카 중심", "반려동물", "스크린샷", "음식"], "recent_search": ["연애 조언·이별·전남친/전여친", "정신과·상담 정보", "다이어트·운동", "건강·증상 검색 (강박적)"], "bookmarks": ["웹툰 구독 (10개+)", "특정 유튜버 팬", "페미니즘·사회 이슈"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "4등급", "university_tier": "지방 사립", "major": "사범·교육", "retake": "재수 없음", "private_education": "평균 (학원 일상)", "academic_self_concept": "낮음 (회피·체념)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "간헐적 (연 단위)", "discrimination_domain": ["학교 (또래 놀림·따돌림)", "연애 (거절·평가)"], "management_level": "평균", "cosmetic_surgery": "없음", "diet_history": "반복 다이어트", "lookism_internalization": "비판하지만 따름", "capital_awareness": "막연" },
+        "region_voice": { "birth_region": "충청 (대전·세종 포함)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "뚜렷 (의식적 교정 시도)", "accent_self_conscious": "자주 의식 (특정 자리)", "family_politics": "중도", "personal_politics": "가족과 일치", "family_religion": "개신교 (가족)", "personal_religion": "가족 종교 명목상 유지", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 6,
+      "sex": "F",
+      "post_hoc_label": ["#28 어차피 뭘 해도...", "#25 아무도 모르는 내가 있어"],
+      "body": {
+        "height_cm": 156.2,
+        "face_attractiveness": { "absolute_score": 3, "sex_rank": 15 },
+        "body_composition": { "bmi": 27.5, "muscle_mass": "평균 이하", "grip_kg": 21, "waist_cm": 82, "whr": 0.83 },
+        "face_features": { "shape": "둥근형", "eyelid": "외꺼풀", "nose_bridge": "낮음", "teeth": "덧니", "asymmetry_mm": 3.5, "marks": ["볼 점", "이마 흉터"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "C", "breast_asymmetry": "경미 (1컵 미만 차)", "nipple_features": ["큼", "색 진함", "유륜 큼"], "labia_minora": "뚜렷 노출", "vulva_color": "짙은 갈색", "menstrual": { "cycle_regularity": "약간 불규칙", "pain_severity": "강함 (매월 진통제)" }, "body_hair": { "pubic": "풍성", "leg": "평균", "chest": "없음", "underarm": "풍성" }, "body_odor": "뚜렷" },
+        "self_image": { "face": "혐오", "body": "혐오", "genital": "수치·회피", "focused_concern": ["얼굴 특정 부위", "체형", "성기 형태", "체모", "피부"] },
+        "chronic_health": [{ "condition": "여드름 (중등도 이상)", "severity": "얼굴+등·가슴" }, { "condition": "섭식 장애 초기", "severity": "과식 후 죄책감" }, { "condition": "빈혈", "severity": "중간" }],
+        "sleep": { "duration_hours": 5.8, "chronotype": "극단 저녁형", "current_debt": "심하게 부족", "insomnia": "복합" },
+        "sensory": { "visual_acuity": "중등도 근시 (-3D~)", "correction": "안경 상시" },
+        "vocal": { "pitch_hz": 205, "volume": "작음", "speech_rate": "느림", "quirks": ["허스키"] },
+        "skin_hair": { "skin_type": "지성", "skin_tone": "약간 어두움", "scars": ["손목 안쪽 (자해흔 의심)", "팔 어딘가 사고 흉터", "배 수술 자국"], "hair_density": "평균", "hair_texture": "곱슬", "tattoos": "작은 숨김형 1개" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 학대", "정서적 방임", "신체적 방임", "가족 알코올·약물 문제", "가족 정신질환·자살 시도"], "total": 5, "primary": "복합 다중 (4+)" },
+        "csa": {
+          "first_age": "초등 고학년 (10~12)",
+          "perpetrator": "친척 (삼촌·이모부·사촌)",
+          "frequency": "단기 반복 (수 주~수 개월)",
+          "physical_intensity": "접촉 (신체 만짐·강제 포옹)",
+          "primary_sensory_channel": "후각 (가해자 체취·향수·담배·술)",
+          "narrative_processing": "단편적 회상 (감각 조각만)",
+          "disclosure": "아무에게도 말 안 함"
+        },
+        "parental_loss": { "status": "양친 동거 불화 만성" },
+        "bullying": { "victim": "중기 (수 개월)", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": "관계적 (따돌림·소문)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "fearful-avoidant (disorganized)", "anxiety": 5, "avoidance": 5, "threshold": "과민 (사소한 신호도 트리거)" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "조롱·비하 (외모)", "trigger": "신체 노출·평가 상황", "consciousness": "완전 무의식" },
+          { "speaker": "가해자 (삼촌)", "message_type": "도구화 (네가 ~ 해줘야)", "trigger": "친밀한 순간", "consciousness": "의식적으로 알고 거부 시도 중" }
+        ],
+        "embedded_reactions": [
+          { "target": "체형·살", "reaction": "침묵 (대답 없음·화제 전환)", "reactor": "가족 (어머니·아버지)", "age": "초기 사춘기", "self_image_before": "막연한 의식", "rupture_depth": "강한 자기검열", "processing": "의식적으로 알지만 못 풀음" },
+          { "target": "체취·구취", "reaction": "물러섬·거리두기", "reactor": "지나가는 또래", "age": "중기 사춘기", "self_image_before": "수용", "rupture_depth": "회피 동선 형성", "processing": "기억나지만 영향 부정" }
+        ],
+        "trauma_trigger": [
+          { "channel": "후각 (특정 향·체취·담배 연기)", "intensity": "강함 (공황·해리)", "consciousness": "트리거만 알고 원인 사건 모름" },
+          { "channel": "체감 (특정 압박·체온·진동·자세)", "intensity": "뚜렷 (회피 행동)", "consciousness": "본인도 자기 반응을 모름" }
+        ],
+        "default_reflex": { "primary": "Freeze", "secondary": "Fawn 보조", "threshold": "매우 낮음 (만성 활성)", "polyvagal": "Dorsal Vagal (만성 셧다운)", "signature": "표정 사라짐·눈 초점 흐려짐·말 안 함" },
+        "formative_family": { "ses_quintile": "1분위 (하위 20%)", "father_occupation": "단순노무·일용", "mother_employment": "전업주부 (불안정 가계)", "sibling_structure": "막내 (3+형제)", "economic_stability": "만성 빈곤", "residence_changes": "6~10회", "emotional_climate": "예측 불가 (상황별 폭발)" },
+        "parent_voice": { "mother_pattern": "예측 불가 (좋았다 나빴다)", "father_pattern": "폭력 (신체·언어)", "consistency": "양친 일치 (둘 다 부정적)", "intergenerational_pressure": "없음", "transmission": "한숨·실망 표정" }
+      },
+      "identity": {
+        "cognitive": { "iq": 88, "strength": "언어 처리 느림", "weakness": "단기 기억 약함 (말 들은 거 놓침)", "academic_performance": "하위 (학교 부적응)", "metacognition": "자기 머리 평가 불가 (자기 객관화 없음)", "thinking_style": "이분법적 (옳고 그름)", "curiosity": "낮음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "경험 없음 (의도적 보류)", "first_age": "해당 없음", "desire_intensity": "높음", "desire_grain": "복합·유동 (억제)", "taboos": ["자위 자체", "특정 자세·행위", "본인의 외모로는 욕망될 자격 없음", "임신·피임 공포", "쾌락 자체에 대한 죄책감", "본인의 욕망을 말하는 것"], "function": { "arousal": "낮음", "performance": "가끔 어려움", "satisfaction": "불만 강함" }, "consent_marker": "명확한 강요 경험 (M2 활성)" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 11.5, "platforms": ["유튜브 쇼츠", "여성시대", "웹툰 앱", "포르노 사이트", "쇼핑 앱"], "compulsion": "임상 수준 (일상 기능 저하)", "substances": { "alcohol": "거의 매일 (의존 의심)", "smoking": "전자담배만", "caffeine": "하루 4잔+", "other": "처방약 오남용 (수면제 등)" }, "eating_impulse": "절식·과식 순환 (binge-restrict)", "impulse_control": "극단 충동적 (즉각 반응)", "reward_sensitivity": "과민 (작은 보상도 강한 반응)", "escape_default": "자해·통증", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["가챠·수집형", "모바일 리듬·캐주얼"], "journal_tone": "자살 사고·유서 초안", "sns_public_face": "계정 없음·비공개", "private_vs_public_gap": "강한 이중성", "communities": ["여성시대", "네이트판"], "playlist": "발라드·감성", "album_theme": ["본인 신체 부위 (부분)", "자해흔·의료 사진 (비밀)", "음식", "반려동물"], "recent_search": ["자살 방법·안락사·죽음", "다이어트·운동", "건강·증상 (강박적)", "정신과·상담 정보"], "bookmarks": ["성인 사이트 북마크", "특정 유튜버 팬"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "특성화고 (실업·직업)", "suneung_grade": "7등급", "university_tier": "고졸", "major": "해당 없음", "retake": "재수 없음", "private_education": "거의 없음 (학원 못 보냄)", "academic_self_concept": "패배자 (자기 정체성 형성)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "만성 (일상 차별)", "discrimination_domain": ["학교 (또래 놀림·따돌림)", "가족 내 (부모·형제 비교)", "친척 모임·명절", "대중교통·길에서", "연애 (거절·평가)"], "management_level": "거의 없음 (관리 안 함)", "cosmetic_surgery": "없음", "diet_history": "만성 다이어트 (일상)", "lookism_internalization": "내면화 (당연)", "capital_awareness": "없음 (외모 = 운명)" },
+        "region_voice": { "birth_region": "영남 (부산·대구·울산·경남·경북)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "뚜렷 (의식적 교정 시도)", "accent_self_conscious": "강박적 교정", "family_politics": "보수 (강함)", "personal_politics": "가족과 일치", "family_religion": "이단·사이비 의심", "personal_religion": "탈가족 (무종교)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 7,
+      "sex": "M",
+      "post_hoc_label": ["#21 ......", "#13 난 여기 안 어울려"],
+      "body": {
+        "height_cm": 171.8,
+        "face_attractiveness": { "absolute_score": 4, "sex_rank": 13 },
+        "body_composition": { "bmi": 24.6, "muscle_mass": "평균 이하", "grip_kg": 40, "waist_cm": 82, "shr": 1.28 },
+        "face_features": { "shape": "둥근형", "eyelid": "외꺼풀", "nose_bridge": "평균", "teeth": "덧니", "asymmetry_mm": 2.8, "marks": [], "early_hair_recession": "헤어라인 살짝 후퇴" },
+        "sex_characteristics": { "penis_length_cm": 12.3, "penis_girth_cm": 11.2, "foreskin": "포경 상태 (미수술)", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "평균", "chest": "옅음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "불만", "body": "수용", "genital": "중립", "focused_concern": ["얼굴 특정 부위", "목소리"] },
+        "chronic_health": [{ "condition": "과민성 대장 (IBS)", "severity": "중간" }],
+        "sleep": { "duration_hours": 5.0, "chronotype": "극단 저녁형", "current_debt": "철야 후", "insomnia": "입면 어려움" },
+        "sensory": { "visual_acuity": "고도 근시 (-6D~)", "correction": "안경 상시" },
+        "vocal": { "pitch_hz": 108, "volume": "작음", "speech_rate": "느림", "quirks": ["비음", "말더듬 경미"] },
+        "skin_hair": { "skin_type": "지성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 방임"], "total": 1, "primary": "정서 방임 단독" },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "중기 (수 개월)", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": "언어적 (욕설·놀림·비하)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "dismissive-avoidant", "anxiety": 3, "avoidance": 4, "threshold": "평균" },
+        "embedded_sentences": [
+          { "speaker": "또래", "message_type": "조롱·비하 (외모·능력·존재 자체)", "trigger": "신체 노출·평가 상황", "consciousness": "의식적으로 알지만 동의함" }
+        ],
+        "embedded_reactions": [
+          { "target": "목소리 (톤·말투)", "reaction": "농담으로 가장한 지적", "reactor": "지나가는 또래", "age": "초기 사춘기 (12~14)", "self_image_before": "수용", "rupture_depth": "강한 자기검열", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Flight", "secondary": "Freeze 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "화제 전환·자리 이동·시계 봄" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "사무직 (중소)", "mother_employment": "전업주부 (안정)", "sibling_structure": "외동", "economic_stability": "안정 일관", "residence_changes": "1~2회", "emotional_climate": "정서 표현 금기 (특정 감정만)" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "무관심·부재 (있으나 없음)", "consistency": "보완 (한쪽 약점 다른 쪽 보완)", "intergenerational_pressure": "막연한 기대", "transmission": "침묵·외면" }
+      },
+      "identity": {
+        "cognitive": { "iq": 100, "strength": "공간·시각 우세", "weakness": "언어 처리 느림", "academic_performance": "중간", "metacognition": "과소 평가", "thinking_style": "반추형", "curiosity": "낮음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "경험 없음 (기회 없음)", "first_age": "해당 없음", "desire_intensity": "높음", "desire_grain": "신체 단일형 (낭만 분리 가능)", "taboos": ["본인의 외모로는 욕망될 자격 없음", "본인의 욕망을 말하는 것"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "불만" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 12.0, "platforms": ["유튜브", "쇼츠", "디시 특정 갤러리", "fmkorea", "포르노 사이트"], "compulsion": "매우 높음 (10분마다 확인)", "substances": { "alcohol": "월 1~2회", "smoking": "비흡연", "caffeine": "하루 4잔+", "other": "없음" }, "eating_impulse": "야식 습관 상시", "impulse_control": "충동적", "reward_sensitivity": "평균", "escape_default": "디지털 (쇼츠·게임·웹서핑)", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["롤·오버워치 등 경쟁 MOBA·FPS", "발로란트·배그", "가챠·수집형", "RPG·MMORPG"], "journal_tone": "일기·메모 없음", "sns_public_face": "계정 없음·비공개", "private_vs_public_gap": "강한 이중성", "communities": ["디시인사이드 특정 갤러리", "fmkorea"], "playlist": "OST·게임음악", "album_theme": ["스크린샷 (대화·밈·참고)", "본인 신체 부위 (부분)"], "recent_search": ["포르노·성적 콘텐츠", "게임 공략·스트리머", "특정 인물 검색 (스토킹 의심)"], "bookmarks": ["게임 공략·스트리머", "성인 사이트 북마크"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "4등급", "university_tier": "지방 거점 국립대", "major": "이공·공학", "retake": "재수 없음", "private_education": "낮음 (단과 1~2개)", "academic_self_concept": "낮음 (회피·체념)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "간헐적 (연 단위)", "discrimination_domain": ["학교", "대중교통·길에서"], "management_level": "기본 (씻고 옷 입음)", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "수용 (현실)", "capital_awareness": "없음" },
+        "region_voice": { "birth_region": "충청 (대전·세종 포함)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "정치 무관심", "personal_politics": "정치 자체 회피", "family_religion": "무종교", "personal_religion": "가족과 일치 (무종교)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 8,
+      "sex": "F",
+      "post_hoc_label": ["#5 다들 나 좋아하지?", "#27 엄마가 실망하면 안 돼"],
+      "body": {
+        "height_cm": 165.1,
+        "face_attractiveness": { "absolute_score": 9, "sex_rank": 1 },
+        "body_composition": { "bmi": 19.5, "muscle_mass": "평균 이하", "grip_kg": 22, "waist_cm": 63, "whr": 0.72 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽, 성형)", "nose_bridge": "높음 (성형)", "teeth": "가지런함 (교정 경력)", "asymmetry_mm": 0.8, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "B", "breast_asymmetry": "거의 없음", "nipple_features": ["평균 크기"], "labia_minora": "대음순 안에 완전 감춰짐", "vulva_color": "옅은 분홍", "menstrual": { "cycle_regularity": "약간 불규칙", "pain_severity": "없음/경미" }, "body_hair": { "pubic": "옅음", "leg": "거의 없음", "chest": "없음", "underarm": "옅음" }, "body_odor": "거의 없음" },
+        "self_image": { "face": "만족", "body": "수용", "genital": "중립", "focused_concern": ["체형", "피부", "얼굴 특정 부위"] },
+        "chronic_health": [{ "condition": "수면 장애 (불면)", "severity": "중간 각성" }],
+        "sleep": { "duration_hours": 5.5, "chronotype": "극단 저녁형", "current_debt": "심하게 부족", "insomnia": "복합" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "라식·라섹 완료" },
+        "vocal": { "pitch_hz": 222, "volume": "평균", "speech_rate": "평균", "quirks": [] },
+        "skin_hair": { "skin_type": "복합성", "skin_tone": "매우 밝음", "scars": [], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 학대"], "total": 1, "primary": "정서 학대 단독" },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "보지 않음·기억 없음", "peak_period": null, "form": null, "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "dismissive-avoidant", "anxiety": 3, "avoidance": 4, "threshold": "예민" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "조건부 사랑 (~하면 사랑한다)", "trigger": "성취·실패 직후", "consciousness": "의식적으로 알지만 동의함" }
+        ],
+        "embedded_reactions": [
+          { "target": "체형·살", "reaction": "표정 굳음·미세 흔들림", "reactor": "첫 연인", "age": "중기 사춘기 (15~17)", "self_image_before": "만족", "rupture_depth": "영구 흉터 (이후 모든 친밀에 그림자)", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fawn", "secondary": "Flight 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "자동 사과·과잉 동의·웃음·상대 기분 살핌" },
+        "formative_family": { "ses_quintile": "5분위 (상위 20%)", "father_occupation": "관리직·임원", "mother_employment": "전업주부 (안정)", "sibling_structure": "맏이 (2형제)", "economic_stability": "풍요", "residence_changes": "1~2회", "emotional_climate": "정서 표현 가능하지만 통제됨" },
+        "parent_voice": { "mother_pattern": "통제 일관 (간섭 만성)", "father_pattern": "무관심·부재 (있으나 없음)", "consistency": "불일치 (선·악 분리)", "intergenerational_pressure": "복합 압력 (전 영역)", "transmission": "한숨·실망 표정" }
+      },
+      "identity": {
+        "cognitive": { "iq": 110, "strength": "사회적 인지 우세 (마음 읽기)", "weakness": "수리·계산 약함", "academic_performance": "상위", "metacognition": "과소 평가", "thinking_style": "맥락적", "curiosity": "중간" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 3~10회", "first_age": "18~19세", "desire_intensity": "높음", "desire_grain": "낭만 결합형", "taboos": ["본인의 외모로는 욕망될 자격 없음", "쾌락 자체에 대한 죄책감"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 7.5, "platforms": ["인스타그램", "카카오톡", "유튜브", "쇼츠", "쇼핑 앱"], "compulsion": "높음", "substances": { "alcohol": "주 3회 이상", "smoking": "전자담배만", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "절식·과식 순환 (binge-restrict)", "impulse_control": "과잉 통제", "reward_sensitivity": "높음", "escape_default": "복합 회피", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": [], "journal_tone": "감정 일기 (비공개)", "sns_public_face": "일상 자랑 (여행·음식·커플)", "private_vs_public_gap": "뚜렷한 편집", "communities": ["인스티즈", "더쿠"], "playlist": "K-pop 최신 주류", "album_theme": ["셀카 중심", "연인·썸 사진", "여행·풍경", "음식"], "recent_search": ["다이어트·운동", "성형·시술 정보", "연애 조언·이별", "정신과·상담 정보"], "bookmarks": ["특정 유튜버 팬", "자기계발·동기부여"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "자사고", "suneung_grade": "2등급", "university_tier": "성균관·한양·중앙·경희·서강·이화 등", "major": "인문·사회", "retake": "재수 없음", "private_education": "높음 (학원 + 과외 + 인강)", "academic_self_concept": "긍정 (자랑하지는 않음)", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "반복적 (월 단위)", "discrimination_domain": ["학교", "온라인·SNS", "연애 (거절·평가)", "가족 내"], "management_level": "강박 (시간·돈 다수 투입)", "cosmetic_surgery": "눈+코 패키지", "diet_history": "반복 다이어트", "lookism_internalization": "내면화 (당연)", "capital_awareness": "전략적 (외모 = 자본)" },
+        "region_voice": { "birth_region": "서울", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "보수 (온건)", "personal_politics": "가족과 일치", "family_religion": "개신교 (가족)", "personal_religion": "가족 종교 명목상 유지", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 9,
+      "sex": "M",
+      "post_hoc_label": ["#17 왜? 어떻게? 정말?", "#14 나는 나야"],
+      "body": {
+        "height_cm": 180.5,
+        "face_attractiveness": { "absolute_score": 7, "sex_rank": 2 },
+        "body_composition": { "bmi": 22.2, "muscle_mass": "평균", "grip_kg": 45, "waist_cm": 77, "shr": 1.42 },
+        "face_features": { "shape": "역삼각", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "높음", "teeth": "가지런함", "asymmetry_mm": 1.5, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 13.2, "penis_girth_cm": 11.6, "foreskin": "포경 상태 (미수술)", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "풍성", "chest": "뚜렷", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "만족", "body": "만족", "genital": "만족", "focused_concern": [] },
+        "chronic_health": [],
+        "sleep": { "duration_hours": 7.5, "chronotype": "중간", "current_debt": "충분", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "정상", "correction": "불필요" },
+        "vocal": { "pitch_hz": 125, "volume": "평균", "speech_rate": "평균", "quirks": ["허스키"] },
+        "skin_hair": { "skin_type": "중성", "skin_tone": "약간 어두움", "scars": [], "hair_density": "많음", "hair_texture": "반곱슬", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "단발 (1~2회)", "perpetrator": "없음", "bystander": "목격하고 도움 시도", "peak_period": "초등 고학년", "form": "언어적", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 2, "avoidance": 2, "threshold": "둔감" },
+        "embedded_sentences": [],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fight", "secondary": "없음", "threshold": "높음", "polyvagal": "Ventral Vagal", "signature": "즉각 대응·말 빨라짐" },
+        "formative_family": { "ses_quintile": "5분위 (상위 20%)", "father_occupation": "전문직 (교수)", "mother_employment": "전문직", "sibling_structure": "외동", "economic_stability": "풍요", "residence_changes": "10회 이상 (해외·국내)", "emotional_climate": "정서 표현 자유" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "따뜻 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "막연한 기대", "transmission": "비교·예시" }
+      },
+      "identity": {
+        "cognitive": { "iq": 128, "strength": "언어 우세", "weakness": "없음", "academic_performance": "상위", "metacognition": "메타인지 강함 (자기 사고 과정 추적)", "thinking_style": "추상화 선호 (개념·이론)", "curiosity": "강박적 (멈추지 않음)" },
+        "sexuality": { "orientation": "이성애 우세 + 동성 끌림 약함", "out_status": "친구 일부에게 알림", "experience": "삽입성교 3~10회", "first_age": "18~19세", "desire_intensity": "높음", "desire_grain": "낭만 결합형", "taboos": [], "function": { "arousal": "높음", "performance": "안정 기능", "satisfaction": "충만" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 6.0, "platforms": ["카카오톡", "해외 플랫폼", "레딧·디스코드", "유튜브", "트위터·X"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 1잔", "other": "호기심 1~2회 (해외 체류 중 등)" }, "eating_impulse": "규칙적", "impulse_control": "통제적", "reward_sensitivity": "평균", "escape_default": "없음 (정면 마주함)", "self_awareness": "변화 성공 경험 (단약·단디지털 경력)" },
+          "B_footprint": { "games": ["스팀 인디·싱글 서사", "시뮬레이션·도시·경영"], "journal_tone": "몽상·창작 노트", "sns_public_face": "취미·덕질 중심", "private_vs_public_gap": "약간 편집", "communities": ["레딧·해외 포럼", "디스코드 서버"], "playlist": "재즈·클래식", "album_theme": ["여행·풍경", "작품·창작물", "친구 모임"], "recent_search": ["과제·학업 검색", "음식·맛집·배달", "뉴스·시사"], "bookmarks": ["뉴스·시사 채널", "자기계발·동기부여"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "특목고 (외고·과학고·국제고)", "suneung_grade": "1등급", "university_tier": "in서울 (그 외)", "major": "인문·사회", "retake": "재수 없음", "private_education": "높음 (학원 + 과외 + 인강)", "academic_self_concept": "긍정 (자랑하지는 않음)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "거의 없음", "discrimination_domain": [], "management_level": "평균", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "거부 (lookism 비판적)", "capital_awareness": "명확 (외모 = 자원)" },
+        "region_voice": { "birth_region": "해외 출생·재외 한인", "residence_match": "수도권으로 상경 (유학·외국 체류 후 복귀)", "accent_intensity": "약간 (가족 앞에서만 나옴)", "accent_self_conscious": "가끔 의식", "family_politics": "진보 (온건)", "personal_politics": "가족과 일치", "family_religion": "무종교", "personal_religion": "가족과 일치 (무종교)", "regional_discrimination": "농담 수준" }
+      }
+    },
+    {
+      "id": 10,
+      "sex": "F",
+      "post_hoc_label": ["#22 눈에 안 띄고 싶어", "#21 ......"],
+      "body": {
+        "height_cm": 160.2,
+        "face_attractiveness": { "absolute_score": 5, "sex_rank": 11 },
+        "body_composition": { "bmi": 21.8, "muscle_mass": "평균", "grip_kg": 26, "waist_cm": 68, "whr": 0.76 },
+        "face_features": { "shape": "계란형", "eyelid": "외꺼풀", "nose_bridge": "평균", "teeth": "가지런함", "asymmetry_mm": 2.0, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "A", "breast_asymmetry": "경미 (1컵 미만 차)", "nipple_features": ["작음", "색 옅음"], "labia_minora": "대음순 안에 완전 감춰짐", "vulva_color": "분홍-갈색", "menstrual": { "cycle_regularity": "규칙적", "pain_severity": "중간 (진통제 가끔)" }, "body_hair": { "pubic": "평균", "leg": "평균", "chest": "없음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "수용", "body": "수용", "genital": "중립", "focused_concern": ["목소리", "얼굴 특정 부위"] },
+        "chronic_health": [{ "condition": "알레르기성 비염", "severity": "연중 심함" }],
+        "sleep": { "duration_hours": 6.2, "chronotype": "중간", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "중등도 근시 (-3D~)", "correction": "안경 상시" },
+        "vocal": { "pitch_hz": 208, "volume": "작음", "speech_rate": "평균", "quirks": ["특이 억양 (지역)"] },
+        "skin_hair": { "skin_type": "중성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 방임", "부모 간 폭력 목격", "신체적 방임"], "total": 3, "primary": "복합 정서·신체 학대" },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정 (한국 이주로 사실상 분리)", "event_age": "초등", "caregiver_after": "조부모", "contact_with_absent": "연 1~2회", "narrative": "사실 그대로 들음" },
+        "bullying": { "victim": "중기 (수 개월)", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "초등 고학년", "form": "언어적 (조선족 놀림)", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "fearful-avoidant (disorganized)", "anxiety": 4, "avoidance": 4, "threshold": "예민" },
+        "embedded_sentences": [
+          { "speaker": "또래", "message_type": "조롱·비하 (조선족이라는 이유)", "trigger": "권위자 앞", "consciousness": "의식적으로 알고 거부 시도 중" }
+        ],
+        "embedded_reactions": [
+          { "target": "목소리 (톤·말투)", "reaction": "표정 굳음·미세 흔들림", "reactor": "지나가는 또래", "age": "초기 사춘기 (12~14)", "self_image_before": "수용", "rupture_depth": "강한 자기검열", "processing": "의식적으로 알지만 못 풀음" },
+          { "target": "취향 (옷·음식·관심사)", "reaction": "만지지 않음·접촉 끊김", "reactor": "친한 친구", "age": "초기 성인 (18~22)", "self_image_before": "수용", "rupture_depth": "회피 동선 형성", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [
+          { "channel": "언어 (특정 단어·문장·말투)", "intensity": "뚜렷 (회피 행동)", "consciousness": "왜 반응하는지 안다 (서사 통합)" }
+        ],
+        "default_reflex": { "primary": "Freeze", "secondary": "Fawn 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "표정 사라짐·눈 초점 흐려짐" },
+        "formative_family": { "ses_quintile": "2분위", "father_occupation": "단순노무·일용", "mother_employment": "전업주부 (불안정 가계)", "sibling_structure": "외동", "economic_stability": "점진적 상승", "residence_changes": "3~5회 (중국→한국)", "emotional_climate": "정서 표현 전면 금기" },
+        "parent_voice": { "mother_pattern": "따뜻 일관 (표현 억제)", "father_pattern": "엄격·체벌", "consistency": "양친 일치 (사랑하지만 표현 불가)", "intergenerational_pressure": "구체적 학력 압력", "transmission": "침묵·외면" }
+      },
+      "identity": {
+        "cognitive": { "iq": 115, "strength": "언어 우세", "weakness": "없음", "academic_performance": "중상위", "metacognition": "정확", "thinking_style": "분석적·느림", "curiosity": "높음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "경험 없음 (의도적 보류)", "first_age": "해당 없음", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": ["본인의 외모로는 욕망될 자격 없음", "자위 자체"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 7.0, "platforms": ["카카오톡", "유튜브", "네이버 카페", "쇼츠"], "compulsion": "평균", "substances": { "alcohol": "월 1~2회", "smoking": "비흡연", "caffeine": "하루 1잔", "other": "없음" }, "eating_impulse": "규칙적", "impulse_control": "통제적", "reward_sensitivity": "평균", "escape_default": "고립 (혼자 시간)", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": ["모바일 리듬·캐주얼"], "journal_tone": "감정 일기 (비공개)", "sns_public_face": "계정 없음·비공개", "private_vs_public_gap": "강한 이중성", "communities": ["네이버 카페 (소모임)", "디시인사이드 특정 갤러리"], "playlist": "해외 팝", "album_theme": ["음식", "가족", "여행·풍경"], "recent_search": ["과제·학업", "취업·자소서·면접", "건강·증상 검색", "자살 방법·안락사 (간헐적)"], "bookmarks": ["유튜브 구독 (많음)", "자기계발·동기부여"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "3등급", "university_tier": "재수 중·휴학 중", "major": "해당 없음", "retake": "1년 재수", "private_education": "거의 없음 (학원 못 보냄)", "academic_self_concept": "낮음 (회피·체념)", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "간헐적 (연 단위)", "discrimination_domain": ["학교", "대중교통·길에서", "아르바이트·취업"], "management_level": "기본 (씻고 옷 입음)", "cosmetic_surgery": "없음", "diet_history": "단발 다이어트 (1~2회)", "lookism_internalization": "수용 (현실)", "capital_awareness": "막연" },
+        "region_voice": { "birth_region": "조선족 (중국 동포)", "residence_match": "수도권으로 상경", "accent_intensity": "강함 (교정 어려움)", "accent_self_conscious": "강박적 교정", "family_politics": "정치 무관심", "personal_politics": "정치 자체 회피", "family_religion": "무종교", "personal_religion": "가족과 일치 (무종교)", "regional_discrimination": "만성 차별 (정체성 핵심)" }
+      }
+    },
+    {
+      "id": 11,
+      "sex": "M",
+      "post_hoc_label": ["#19 이건 불공평해", "#4 이 시스템이 잘못됐어"],
+      "body": {
+        "height_cm": 174.8,
+        "face_attractiveness": { "absolute_score": 6, "sex_rank": 5 },
+        "body_composition": { "bmi": 22.9, "muscle_mass": "평균", "grip_kg": 44, "waist_cm": 78, "shr": 1.38 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "평균", "teeth": "가지런함", "asymmetry_mm": 1.8, "marks": ["턱 점"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 12.6, "penis_girth_cm": 11.5, "foreskin": "포경 수술 완료", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "평균", "chest": "옅음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "수용", "body": "수용", "genital": "만족", "focused_concern": [] },
+        "chronic_health": [],
+        "sleep": { "duration_hours": 6.8, "chronotype": "중간", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "안경 가끔" },
+        "vocal": { "pitch_hz": 122, "volume": "큼", "speech_rate": "평균", "quirks": ["특이 억양 (지역)"] },
+        "skin_hair": { "skin_type": "복합성", "skin_tone": "중간", "scars": ["무릎 어릴 적 흉터"], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "목격하고 도움 시도", "peak_period": "고등학교", "form": "언어적", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 2, "avoidance": 2, "threshold": "평균" },
+        "embedded_sentences": [
+          { "speaker": "아버지", "message_type": "이상화 (너만 믿는다·우리 가족 희망)", "trigger": "혼자 있는 시간", "consciousness": "의식적으로 알지만 동의함" }
+        ],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fight", "secondary": "없음", "threshold": "평균", "polyvagal": "Ventral Vagal", "signature": "즉각 대응·표정 굳음" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "자영업 (안정)", "mother_employment": "정규직", "sibling_structure": "맏이 (2형제)", "economic_stability": "점진적 상승", "residence_changes": "1~2회", "emotional_climate": "정서 표현 자유" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "따뜻 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "막연한 기대", "transmission": "비교·예시" }
+      },
+      "identity": {
+        "cognitive": { "iq": 118, "strength": "언어 우세", "weakness": "없음", "academic_performance": "상위", "metacognition": "정확", "thinking_style": "분석적·느림", "curiosity": "높음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 1~2회", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": [], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 6.5, "platforms": ["카카오톡", "트위터·X", "유튜브", "레딧·해외 포럼", "네이버 뉴스"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "규칙적", "impulse_control": "평균", "reward_sensitivity": "평균", "escape_default": "운동·헬스", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": ["콘솔 서사 게임"], "journal_tone": "할 일·체크리스트만", "sns_public_face": "정치·이슈·분노", "private_vs_public_gap": "약간 편집", "communities": ["트위터 특정 덕질 서클", "레딧·해외 포럼"], "playlist": "인디·시티팝", "album_theme": ["친구 모임", "여행·풍경", "음식"], "recent_search": ["과제·학업", "뉴스·시사", "음식·맛집"], "bookmarks": ["뉴스·시사 채널", "페미니즘·사회 이슈"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "1등급", "university_tier": "SKY", "major": "인문·사회", "retake": "재수 없음", "private_education": "평균 (학원 일상)", "academic_self_concept": "엘리트 (자기 정체성)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "거의 없음", "discrimination_domain": [], "management_level": "평균", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "거부 (lookism 비판적)", "capital_awareness": "명확 (외모 = 자원)" },
+        "region_voice": { "birth_region": "호남 (광주·전남·전북)", "residence_match": "수도권으로 상경", "accent_intensity": "뚜렷 (의식적 교정 시도)", "accent_self_conscious": "자주 의식 (특정 자리)", "family_politics": "진보 (강함)", "personal_politics": "가족과 일치", "family_religion": "천주교 (가족)", "personal_religion": "탈가족 (무종교)", "regional_discrimination": "직접적 차별 경험" }
+      }
+    },
+    {
+      "id": 12,
+      "sex": "F",
+      "post_hoc_label": ["#12 싸우지 말자...", "#8 그 사람만 보여"],
+      "body": {
+        "height_cm": 159.8,
+        "face_attractiveness": { "absolute_score": 6, "sex_rank": 7 },
+        "body_composition": { "bmi": 20.9, "muscle_mass": "평균", "grip_kg": 25, "waist_cm": 66, "whr": 0.74 },
+        "face_features": { "shape": "계란형", "eyelid": "속쌍꺼풀", "nose_bridge": "평균", "teeth": "가지런함", "asymmetry_mm": 2.2, "marks": ["볼 점"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "B", "breast_asymmetry": "경미 (1컵 미만 차)", "nipple_features": ["평균 크기"], "labia_minora": "일부 노출", "vulva_color": "분홍-갈색", "menstrual": { "cycle_regularity": "규칙적", "pain_severity": "중간 (진통제 가끔)" }, "body_hair": { "pubic": "평균", "leg": "옅음", "chest": "없음", "underarm": "옅음" }, "body_odor": "평균" },
+        "self_image": { "face": "수용", "body": "수용", "genital": "중립", "focused_concern": ["체형"] },
+        "chronic_health": [{ "condition": "심한 생리통", "severity": "2일 진통제" }],
+        "sleep": { "duration_hours": 7.0, "chronotype": "중간", "current_debt": "충분", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "콘택트 상시" },
+        "vocal": { "pitch_hz": 213, "volume": "평균", "speech_rate": "평균", "quirks": ["특이 억양 (지역)"] },
+        "skin_hair": { "skin_type": "건성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 방임", "부모 간 폭력 목격"], "total": 2, "primary": "복합 정서·신체 학대" },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 불화 만성" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": "언어적", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "anxious-preoccupied", "anxiety": 4, "avoidance": 2, "threshold": "예민" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "위협 (안 그러면 ~)", "trigger": "거절·거리감 신호", "consciousness": "막연히 들리지만 출처 불명" }
+        ],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fawn", "secondary": "Flight 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "자동 사과·과잉 동의" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "자영업 (영세)", "mother_employment": "파트타임", "sibling_structure": "중간", "economic_stability": "점진적 하락", "residence_changes": "3~5회", "emotional_climate": "예측 불가 (상황별 폭발)" },
+        "parent_voice": { "mother_pattern": "통제 일관 (간섭 만성)", "father_pattern": "권위적 관여", "consistency": "불일치 (예측 불가)", "intergenerational_pressure": "구체적 결혼 압력", "transmission": "한숨·실망 표정" }
+      },
+      "identity": {
+        "cognitive": { "iq": 102, "strength": "균형 (강점 없음)", "weakness": "없음 (균형)", "academic_performance": "중간", "metacognition": "정확", "thinking_style": "맥락적", "curiosity": "중간" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 3~10회", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": ["특정 자세·행위", "쾌락 자체에 대한 죄책감", "임신·피임 공포"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 6.8, "platforms": ["카카오톡", "인스타그램", "유튜브", "네이버 카페"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 1잔", "other": "없음" }, "eating_impulse": "규칙적", "impulse_control": "평균", "reward_sensitivity": "평균", "escape_default": "디지털", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["모바일 리듬·캐주얼"], "journal_tone": "감정 일기 (비공개)", "sns_public_face": "일상 자랑", "private_vs_public_gap": "약간 편집", "communities": ["네이버 카페 (소모임)", "인스티즈"], "playlist": "K-pop 최신 주류", "album_theme": ["연인·썸 사진", "친구 모임", "음식", "여행·풍경"], "recent_search": ["과제·학업", "연애 조언·이별", "쇼핑·제품 리뷰", "음식·맛집"], "bookmarks": ["웹툰 구독 (10개+)", "특정 유튜버 팬"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "4등급", "university_tier": "지방 사립", "major": "사범·교육", "retake": "재수 없음", "private_education": "평균 (학원 일상)", "academic_self_concept": "보통", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "간헐적 (연 단위)", "discrimination_domain": ["가족 내", "연애"], "management_level": "평균", "cosmetic_surgery": "없음", "diet_history": "반복 다이어트", "lookism_internalization": "비판하지만 따름", "capital_awareness": "막연" },
+        "region_voice": { "birth_region": "영남 (부산·대구·울산·경남·경북)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "강함 (교정 어려움)", "accent_self_conscious": "자부심으로 노출", "family_politics": "보수 (강함)", "personal_politics": "가족과 일치", "family_religion": "개신교 (가족)", "personal_religion": "가족과 일치 (실천)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 13,
+      "sex": "F",
+      "post_hoc_label": ["#14 나는 나야", "#25 아무도 모르는 내가 있어"],
+      "body": {
+        "height_cm": 163.0,
+        "face_attractiveness": { "absolute_score": 7, "sex_rank": 5 },
+        "body_composition": { "bmi": 19.8, "muscle_mass": "평균 이하", "grip_kg": 23, "waist_cm": 64, "whr": 0.73 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "평균", "teeth": "가지런함 (교정 경력)", "asymmetry_mm": 1.5, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "B", "breast_asymmetry": "거의 없음", "nipple_features": ["평균 크기", "색 옅음"], "labia_minora": "대음순 안에 완전 감춰짐", "vulva_color": "옅은 분홍", "menstrual": { "cycle_regularity": "규칙적", "pain_severity": "없음/경미" }, "body_hair": { "pubic": "옅음", "leg": "거의 없음", "chest": "없음", "underarm": "옅음" }, "body_odor": "거의 없음" },
+        "self_image": { "face": "만족", "body": "만족", "genital": "중립", "focused_concern": [] },
+        "chronic_health": [{ "condition": "만성 두통·편두통", "severity": "월 몇 회" }],
+        "sleep": { "duration_hours": 5.5, "chronotype": "극단 저녁형", "current_debt": "심하게 부족", "insomnia": "입면 어려움" },
+        "sensory": { "visual_acuity": "정상", "correction": "불필요" },
+        "vocal": { "pitch_hz": 220, "volume": "작음", "speech_rate": "빠름", "quirks": [] },
+        "skin_hair": { "skin_type": "건성", "skin_tone": "밝음", "scars": [], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": ["정서적 학대"], "total": 1, "primary": "정서 학대 단독" },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "보지 않음·기억 없음", "peak_period": null, "form": null, "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "dismissive-avoidant", "anxiety": 3, "avoidance": 4, "threshold": "평균" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "비교·열등 (다른 사람은 ~한데)", "trigger": "거절·거리감 신호", "consciousness": "의식적으로 알고 거부 시도 중" },
+          { "speaker": "어머니", "message_type": "조건부 사랑 (~하면 사랑한다)", "trigger": "성취·실패 직후", "consciousness": "막연히 들리지만 출처 불명" }
+        ],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Freeze", "secondary": "Flight 보조", "threshold": "낮음", "polyvagal": "교감 우세", "signature": "표정 사라짐·눈 초점 흐려짐" },
+        "formative_family": { "ses_quintile": "5분위 (상위 20%)", "father_occupation": "관리직·임원", "mother_employment": "전문직", "sibling_structure": "외동", "economic_stability": "풍요", "residence_changes": "1~2회", "emotional_climate": "정서 표현 전면 금기" },
+        "parent_voice": { "mother_pattern": "통제 일관 (간섭 만성)", "father_pattern": "무관심·부재 (있으나 없음)", "consistency": "불일치 (선·악 분리)", "intergenerational_pressure": "복합 압력 (전 영역)", "transmission": "직접 명령" }
+      },
+      "identity": {
+        "cognitive": { "iq": 126, "strength": "언어 우세", "weakness": "없음", "academic_performance": "상위", "metacognition": "메타인지 강함", "thinking_style": "추상화 선호 (개념·이론)", "curiosity": "강박적 (멈추지 않음)" },
+        "sexuality": { "orientation": "양성애 (양쪽 동등)", "out_status": "본인만 알고 있음 (closeted)", "experience": "키스·애무까지", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "친밀 결합형", "taboos": ["동성에 대한 끌림", "본인의 욕망을 말하는 것", "쾌락 자체에 대한 죄책감"], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 5.5, "platforms": ["카카오톡", "트위터·X", "해외 플랫폼", "더쿠"], "compulsion": "평균", "substances": { "alcohol": "주 1~2회", "smoking": "전자담배만", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "절식·과식 순환", "impulse_control": "과잉 통제", "reward_sensitivity": "평균", "escape_default": "없음 (정면 마주함)", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": ["스팀 인디·싱글 서사"], "journal_tone": "감정 일기 (비공개)", "sns_public_face": "감성 사진·무드", "private_vs_public_gap": "강한 이중성", "communities": ["트위터 특정 덕질 서클", "더쿠", "레딧·해외 포럼"], "playlist": "재즈·클래식", "album_theme": ["작품·창작물", "여행·풍경", "음식"], "recent_search": ["연애 조언 (동성)", "정신과·상담 정보", "과제·학업", "페미니즘·사회 이슈"], "bookmarks": ["페미니즘·사회 이슈", "자기계발·동기부여"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "특목고 (외고)", "suneung_grade": "1등급", "university_tier": "성균관·한양·중앙·경희·서강·이화 등", "major": "인문·사회", "retake": "재수 없음", "private_education": "최고 (의대·약대 입시 풀패키지)", "academic_self_concept": "엘리트 (자기 정체성)", "parental_pressure": "강함 (성적표 공포)" },
+        "appearance_experience": { "discrimination_frequency": "단발 사건 (1~2회)", "discrimination_domain": ["가족 내", "온라인·SNS"], "management_level": "높음", "cosmetic_surgery": "없음", "diet_history": "단발 다이어트 (1~2회)", "lookism_internalization": "비판하지만 따름", "capital_awareness": "전략적 (외모 = 자본)" },
+        "region_voice": { "birth_region": "서울", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "보수 (강함)", "personal_politics": "가족과 다른 방향 (충돌)", "family_religion": "천주교 (가족)", "personal_religion": "탈가족 (무종교)", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 14,
+      "sex": "M",
+      "post_hoc_label": ["#6 나도 끼워줘", "#15 재밌으면 됐지!"],
+      "body": {
+        "height_cm": 172.5,
+        "face_attractiveness": { "absolute_score": 5, "sex_rank": 10 },
+        "body_composition": { "bmi": 24.8, "muscle_mass": "평균", "grip_kg": 42, "waist_cm": 83, "shr": 1.30 },
+        "face_features": { "shape": "각진형", "eyelid": "외꺼풀", "nose_bridge": "평균", "teeth": "가지런함", "asymmetry_mm": 2.5, "marks": ["눈밑 다크서클 상시"], "early_hair_recession": "없음" },
+        "sex_characteristics": { "penis_length_cm": 12.2, "penis_girth_cm": 11.3, "foreskin": "포경 상태 (미수술)", "shape_notes": ["곧음"], "erectile_function": "정상", "body_hair": { "pubic": "평균", "leg": "평균", "chest": "옅음", "underarm": "평균" }, "body_odor": "평균" },
+        "self_image": { "face": "수용", "body": "수용", "genital": "중립", "focused_concern": [] },
+        "chronic_health": [],
+        "sleep": { "duration_hours": 6.0, "chronotype": "저녁형", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "중등도 근시 (-3D~)", "correction": "안경 상시" },
+        "vocal": { "pitch_hz": 118, "volume": "평균", "speech_rate": "평균", "quirks": ["특이 억양 (지역)"] },
+        "skin_hair": { "skin_type": "지성", "skin_tone": "중간", "scars": [], "hair_density": "평균", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "단발 가담", "bystander": "목격했으나 개입 못함", "peak_period": "중학교", "form": "언어적", "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 2, "avoidance": 3, "threshold": "평균" },
+        "embedded_sentences": [],
+        "embedded_reactions": [],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fight", "secondary": "없음", "threshold": "평균", "polyvagal": "Ventral Vagal", "signature": "즉각 대응" },
+        "formative_family": { "ses_quintile": "3분위 (중간)", "father_occupation": "기능직·생산직", "mother_employment": "파트타임", "sibling_structure": "맏이 (2형제)", "economic_stability": "안정 일관", "residence_changes": "1~2회", "emotional_climate": "정서 표현 금기 (특정 감정만)" },
+        "parent_voice": { "mother_pattern": "따뜻 일관", "father_pattern": "권위적 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "막연한 기대", "transmission": "비교·예시" }
+      },
+      "identity": {
+        "cognitive": { "iq": 95, "strength": "균형 (강점 없음)", "weakness": "수리·계산 약함", "academic_performance": "중간", "metacognition": "정확", "thinking_style": "직관적·즉각", "curiosity": "낮음" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "키스·애무까지", "first_age": "18~19세", "desire_intensity": "높음", "desire_grain": "신체 단일형", "taboos": [], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 8.5, "platforms": ["카카오톡", "유튜브", "쇼츠", "fmkorea", "디시인사이드"], "compulsion": "높음", "substances": { "alcohol": "주 3회 이상", "smoking": "하루 반 갑 이하", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "야식 습관 상시", "impulse_control": "충동적", "reward_sensitivity": "평균", "escape_default": "디지털", "self_awareness": "막연히 의식" },
+          "B_footprint": { "games": ["롤", "배그", "발로란트"], "journal_tone": "일기·메모 없음", "sns_public_face": "연 1~2회 (흔적만)", "private_vs_public_gap": "약간 편집", "communities": ["fmkorea", "디시인사이드 특정 갤러리", "펨코 정치·축구"], "playlist": "힙합·랩", "album_theme": ["친구 모임", "음식", "스크린샷"], "recent_search": ["스포츠", "게임 공략·스트리머", "쇼핑·제품 리뷰"], "bookmarks": ["게임 공략·스트리머", "음모론·정치 우파"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "5등급", "university_tier": "지방 사립", "major": "이공·공학", "retake": "재수 없음", "private_education": "평균 (학원 일상)", "academic_self_concept": "보통", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "거의 없음", "discrimination_domain": [], "management_level": "기본 (씻고 옷 입음)", "cosmetic_surgery": "없음", "diet_history": "다이어트 경험 없음", "lookism_internalization": "내면화 (당연)", "capital_awareness": "막연" },
+        "region_voice": { "birth_region": "영남 (부산·대구·울산·경남·경북)", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "강함 (교정 어려움)", "accent_self_conscious": "의식 안 함", "family_politics": "보수 (강함)", "personal_politics": "가족과 일치", "family_religion": "불교 (가족)", "personal_religion": "가족 종교 명목상 유지", "regional_discrimination": "없음" }
+      }
+    },
+    {
+      "id": 15,
+      "sex": "F",
+      "post_hoc_label": ["#5 다들 나 좋아하지?", "#3 나 이거 잘하지?"],
+      "body": {
+        "height_cm": 164.5,
+        "face_attractiveness": { "absolute_score": 8, "sex_rank": 2 },
+        "body_composition": { "bmi": 18.9, "muscle_mass": "평균 이하", "grip_kg": 22, "waist_cm": 61, "whr": 0.71 },
+        "face_features": { "shape": "계란형", "eyelid": "쌍꺼풀 있음 (양쪽)", "nose_bridge": "평균", "teeth": "가지런함 (교정 경력)", "asymmetry_mm": 1.2, "marks": [], "early_hair_recession": "없음" },
+        "sex_characteristics": { "breast_cup": "B", "breast_asymmetry": "경미 (1컵 미만 차)", "nipple_features": ["평균 크기", "색 옅음"], "labia_minora": "일부 노출", "vulva_color": "옅은 분홍", "menstrual": { "cycle_regularity": "약간 불규칙", "pain_severity": "중간 (진통제 가끔)" }, "body_hair": { "pubic": "옅음", "leg": "옅음", "chest": "없음", "underarm": "옅음" }, "body_odor": "거의 없음" },
+        "self_image": { "face": "만족", "body": "불만", "genital": "중립", "focused_concern": ["체형"] },
+        "chronic_health": [{ "condition": "섭식 장애 초기", "severity": "절식 강박" }],
+        "sleep": { "duration_hours": 6.0, "chronotype": "저녁형", "current_debt": "살짝 부족", "insomnia": "없음" },
+        "sensory": { "visual_acuity": "경미 근시", "correction": "콘택트 상시" },
+        "vocal": { "pitch_hz": 216, "volume": "평균", "speech_rate": "평균", "quirks": [] },
+        "skin_hair": { "skin_type": "복합성", "skin_tone": "밝음", "scars": [], "hair_density": "많음", "hair_texture": "직모", "tattoos": "없음" }
+      },
+      "memory": {
+        "ace": { "categories": [], "total": 0, "primary": null },
+        "csa": null,
+        "parental_loss": { "status": "양친 동거 안정" },
+        "bullying": { "victim": "없음", "perpetrator": "없음", "bystander": "보지 않음·기억 없음", "peak_period": null, "form": null, "dual_role": "단일 역할 유지" },
+        "attachment": { "style": "secure", "anxiety": 3, "avoidance": 2, "threshold": "평균" },
+        "embedded_sentences": [
+          { "speaker": "어머니", "message_type": "과잉 기대 (너는 ~돼야 한다)", "trigger": "신체 노출·평가 상황", "consciousness": "의식적으로 알지만 동의함" }
+        ],
+        "embedded_reactions": [
+          { "target": "체형·살", "reaction": "직접적 질문 (그거 원래 그래?)", "reactor": "첫 연인", "age": "중기 사춘기 (15~17)", "self_image_before": "만족", "rupture_depth": "강한 자기검열", "processing": "의식적으로 알지만 못 풀음" }
+        ],
+        "trauma_trigger": [],
+        "default_reflex": { "primary": "Fawn", "secondary": "없음", "threshold": "평균", "polyvagal": "Ventral Vagal", "signature": "웃음·상대 기분 살핌" },
+        "formative_family": { "ses_quintile": "4분위", "father_occupation": "사무직 (대기업)", "mother_employment": "전문직", "sibling_structure": "맏이 (2형제)", "economic_stability": "안정 일관", "residence_changes": "1~2회", "emotional_climate": "정서 표현 가능하지만 통제됨" },
+        "parent_voice": { "mother_pattern": "조건부 따뜻 (성취 시)", "father_pattern": "따뜻 관여", "consistency": "양친 일치 안전감", "intergenerational_pressure": "막연한 기대", "transmission": "비교·예시" }
+      },
+      "identity": {
+        "cognitive": { "iq": 109, "strength": "공간·시각 우세", "weakness": "없음", "academic_performance": "중상위", "metacognition": "정확", "thinking_style": "직관적·즉각", "curiosity": "중간" },
+        "sexuality": { "orientation": "이성애", "out_status": "해당 없음", "experience": "삽입성교 1~2회", "first_age": "18~19세", "desire_intensity": "평균", "desire_grain": "낭만 결합형", "taboos": [], "function": { "arousal": "평균", "performance": "평균", "satisfaction": "수용" }, "consent_marker": "강요 경험 없음" },
+        "impulse_footprint": {
+          "A_impulse": { "digital_hours": 7.5, "platforms": ["인스타그램", "카카오톡", "유튜브", "쇼츠", "쇼핑 앱"], "compulsion": "높음", "substances": { "alcohol": "주 1~2회", "smoking": "비흡연", "caffeine": "하루 2~3잔", "other": "없음" }, "eating_impulse": "절식 강박", "impulse_control": "과잉 통제", "reward_sensitivity": "평균", "escape_default": "운동·헬스 (강박적)", "self_awareness": "명확히 인식하지만 변화 안 함" },
+          "B_footprint": { "games": [], "journal_tone": "체중·식단·운동 기록", "sns_public_face": "셀카·외모 중심", "private_vs_public_gap": "약간 편집", "communities": ["인스티즈"], "playlist": "K-pop 특정 그룹 팬", "album_theme": ["셀카 중심", "연인·썸 사진", "음식", "여행·풍경", "친구 모임"], "recent_search": ["다이어트·운동", "성형·시술 정보", "건강·증상", "쇼핑·제품 리뷰"], "bookmarks": ["특정 유튜버 팬", "요리·라이프스타일"] }
+        }
+      },
+      "korea": {
+        "education": { "high_school": "일반고 (인문계)", "suneung_grade": "3등급", "university_tier": "성균관·한양·중앙·경희·서강·이화 등", "major": "예체능", "retake": "재수 없음", "private_education": "높음 (학원 + 과외 + 인강)", "academic_self_concept": "긍정 (자랑하지는 않음)", "parental_pressure": "평균" },
+        "appearance_experience": { "discrimination_frequency": "단발 사건 (1~2회)", "discrimination_domain": ["가족 내", "온라인·SNS"], "management_level": "높음 (피부과·헬스·옷 투자)", "cosmetic_surgery": "프티 (보톡스·필러)", "diet_history": "만성 다이어트 (일상)", "lookism_internalization": "내면화 (당연)", "capital_awareness": "전략적 (외모 = 자본)" },
+        "region_voice": { "birth_region": "서울", "residence_match": "출생지에서 그대로 거주", "accent_intensity": "표준어", "accent_self_conscious": "의식 안 함", "family_politics": "중도", "personal_politics": "가족과 일치", "family_religion": "무종교", "personal_religion": "가족과 일치 (무종교)", "regional_discrimination": "없음" }
+      }
+    }
+  ],
+  "post_generation_notes": [
+    "WIP: 캐릭터 1~15 저장 완료. 16~30은 이어서 append 예정."
+  ]
+}

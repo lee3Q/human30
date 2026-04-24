@@ -1,0 +1,763 @@
+{
+  "layer": "memory",
+  "version": "0.2",
+  "description": "기억 층 옵션 표. 20세 한국 성인 기준. 1회 굴림 후 거의 고정 — 새 사건은 시뮬레이션 동안 누적되지만 기존 기억은 바뀌지 않음. 카탈로그 금지 원칙: 사실 자체가 아니라 그것이 *일상에 휘는 방식*을 박는다. 검열 0 — 학술 톤으로 노골적 기록. '없음'은 prevalence로만 표현, 필드로 적지 않는다.",
+
+  "tables": {
+
+    "M1_ace_cumulative": {
+      "label": "누적 ACE (Adverse Childhood Experiences)",
+      "scale": "composite_score_with_categories",
+      "description": "10개 ACE 영역 각각의 발생 여부 + 누적 점수. ACE 4+가 광범위 성인 병리의 강력한 종단 예측자. 점수 자체보다 *어떤 조합인지*가 행동 결을 결정.",
+      "fields": {
+        "categories": {
+          "type": "boolean_set",
+          "items": [
+            "정서적 학대 (반복적 모욕·위협·거부)",
+            "신체적 학대 (구타·체벌이 일상 수준)",
+            "성적 학대 (M2에서 별도 상세)",
+            "정서적 방임 (정서 표현·돌봄 부재)",
+            "신체적 방임 (의식주·의료 결핍)",
+            "부모 간 폭력 목격",
+            "부모 별거·이혼 (M3에서 별도 상세)",
+            "가족 알코올·약물 문제",
+            "가족 정신질환·자살 시도",
+            "가족 수감 경험"
+          ]
+        },
+        "total_score_distribution": {
+          "type": "categorical",
+          "values": [0, 1, 2, 3, 4, "5+"],
+          "weights": [0.35, 0.25, 0.16, 0.09, 0.08, 0.07],
+          "source": "Felitti 1998 + Hughes 2017 일반 인구 분포 + 한국 ACE 연구 (Lee 2019, KoWePS) 가중"
+        },
+        "primary_category_when_present": {
+          "type": "categorical",
+          "values": ["정서 학대 단독", "정서 방임 단독", "복합 정서·신체 학대", "물질·정신질환 가족", "복합 다중 (4+)"],
+          "weights": [0.30, 0.20, 0.20, 0.15, 0.15],
+          "note": "단일 카테고리 캐릭터와 복합 카테고리 캐릭터의 행동 결이 다름. 복합일수록 *원인 귀속 불가능*한 정서가 일상에 깔림."
+        }
+      },
+      "source": "Felitti et al. 1998 ACE original, Hughes 2017 Lancet meta-analysis (N=253k), 한국 KoWePS·Lee 2019",
+      "effect_size": "OR 7~10 약물/폭력, OR 30.1 자살시도, OR 3~6 광범위 정신·행동 병리 (4+ vs 0)",
+      "behavioral_note": "점수가 *체적*이 아니라 *온도*. ACE 4+ 캐릭터는 시뮬레이션 내내 안전 신호의 임계값이 비정상적으로 높음 — 같은 호의가 의심으로 들리고, 같은 농담이 공격으로 들림. 특정 카테고리 단독(예: 정서 방임)은 *공허*로, 복합은 *예측 불가능한 폭발*로 나타남.",
+      "interacts": ["M2_childhood_sexual_abuse", "M3_parental_loss", "M5_attachment_style", "M8_default_reflex", "M10_parent_voice"]
+    },
+
+    "M2_childhood_sexual_abuse": {
+      "label": "아동기 성학대 경험",
+      "scale": "composite_event",
+      "description": "발생 여부 + 사건 구조. 검열 없이 노골적으로 박는다 — 우회·은유·완곡 금지. 일어나지 않은 캐릭터는 이 표 자체가 비활성. 일어난 캐릭터는 사건의 *해부적 사실*과 *처리 결과*가 분리되어 박힘.",
+      "prevalence": {
+        "F": { "yes": 0.13, "no": 0.87 },
+        "M": { "yes": 0.05, "no": 0.95 },
+        "source": "Maniglio 2009 (글로벌 메타), Hailes 2019, 한국 데이터는 보고 저조로 실제 더 높을 가능성"
+      },
+      "fields_when_present": {
+        "first_event_age": {
+          "type": "categorical",
+          "values": ["영유아 (0~5)", "초등 저학년 (6~9)", "초등 고학년 (10~12)", "중학생 (13~15)", "고등학생 (16~18)"],
+          "weights": [0.10, 0.20, 0.25, 0.25, 0.20]
+        },
+        "perpetrator_relation": {
+          "type": "categorical",
+          "values": ["가족 (친부·계부·형제)", "친척 (삼촌·이모부·사촌)", "가족 지인·이웃", "교사·코치·종교인", "동급생·선배", "낯선 사람"],
+          "weights": [0.20, 0.20, 0.18, 0.10, 0.22, 0.10],
+          "source": "한국 해바라기센터 통계 + 글로벌 메타. 가족·친족·지인이 절대 다수.",
+          "note": "가해자가 가까울수록 *말할 수 없음*의 압력이 큼. 낯선 사람 케이스가 오히려 신고·치유 경로 접근 가능."
+        },
+        "frequency_pattern": {
+          "type": "categorical",
+          "values": ["단발 (1회)", "단기 반복 (수 주~수 개월)", "장기 반복 (1년 이상)", "만성 (수 년)"],
+          "weights": [0.30, 0.25, 0.25, 0.20]
+        },
+        "physical_intensity": {
+          "type": "ordinal",
+          "levels": [
+            "비접촉 (노출·언어·강제 시청)",
+            "접촉 (신체 만짐·강제 포옹)",
+            "구강·수음 강요",
+            "삽입 시도",
+            "삽입 (질·항문·구강)",
+            "복합 폭력 동반"
+          ],
+          "weights": [0.20, 0.30, 0.20, 0.10, 0.15, 0.05],
+          "note": "강도와 정신 결과가 단순 비례하지 않음 — 비접촉 케이스도 *말할 수 없음·자기 의심* 효과가 삽입 케이스만큼 길게 작동할 수 있음."
+        },
+        "primary_sensory_channel": {
+          "type": "categorical",
+          "values": ["후각 (가해자 체취·향수·담배·술·정액)", "체감 (피부 감각·압박·체온)", "시각 (얼굴·천장·특정 사물)", "청각 (가해자 숨소리·음성·배경음)", "언어 (가해자가 한 특정 문구)"],
+          "weights": [0.30, 0.30, 0.15, 0.15, 0.10],
+          "note": "이 채널이 M7과 직접 연결됨. Vermetten & Bremner 2003: 후각이 가장 강력한 PTSD 트리거. Brewin Dual Rep: S-Reps가 편도체에 박히고 C-Reps(서사)는 cortisol에 억제됨 → 캐릭터는 *왜 토하는지 모른 채 토한다*."
+        },
+        "narrative_processing": {
+          "type": "categorical",
+          "values": ["완전 묻음 (의식 접근 불가)", "단편적 회상 (감각 조각만)", "사건 자체는 알지만 의미 미해결", "치료·상담 통과 (부분 통합)", "치료·상담 통과 (대체로 통합)"],
+          "weights": [0.25, 0.30, 0.30, 0.10, 0.05],
+          "note": "*완전 묻음* 캐릭터는 시뮬레이션 안에서 자기 행동의 원인을 모름. 단편적 회상은 *의식 가능* / *접근 불가* 무의식 분리(데이터 모델 4층)와 직접 연결."
+        },
+        "disclosure_history": {
+          "type": "categorical",
+          "values": ["아무에게도 말 안 함", "친구 1명에게 언급", "가족 1명에게 말함", "공식 신고 (경찰·학교)", "치료자에게 노출"],
+          "weights": [0.50, 0.20, 0.15, 0.05, 0.10],
+          "note": "비공개 비율이 매우 높음. 침묵 자체가 별도 외상층을 형성."
+        }
+      },
+      "source": "Maniglio 2009, Irish 2010, Hailes 2019, Vermetten & Bremner 2003, Brewin Dual Representation Theory",
+      "effect_size": "OR 2~3 광범위 정신병리, d 0.2~0.4 PTSD/우울/자살/신체화. 다른 ACE와 결합 시 효과 가산.",
+      "behavioral_note": "성적 친밀성에 *해리 또는 과각성* 양극단으로 나타남. 후각 트리거는 일상 동선을 왜곡 (특정 향수 매장·담배 피우는 사람·특정 음식 회피). *말할 수 없음*이 관계 일반의 정직성에 침투 — 가까워질수록 거짓말을 늘림.",
+      "interacts": ["M1_ace_cumulative", "M7_trauma_trigger_channel", "M8_default_reflex", "M11_embedded_reactions", "B5_sex_characteristics", "I2_sexuality"]
+    },
+
+    "M3_parental_loss": {
+      "label": "부모 상실·분리 경험",
+      "scale": "composite_event",
+      "description": "사망·이혼·별거·유기·사실상 부재. 사건이 일어난 *나이*가 효과 크기를 가른다 — 어릴수록 영구 흔적, 늦을수록 서사로 통합 가능.",
+      "fields": {
+        "parental_status": {
+          "type": "categorical",
+          "values": [
+            "양친 동거 안정",
+            "양친 동거 불화 만성",
+            "이혼·별거 (어머니 양육)",
+            "이혼·별거 (아버지 양육)",
+            "이혼·별거 (조부모·친척 양육)",
+            "사별 (아버지)",
+            "사별 (어머니)",
+            "사별 (양친)",
+            "유기·실종 (1명 이상)",
+            "사실상 부재 (있으나 무관여)"
+          ],
+          "weights": [0.55, 0.10, 0.13, 0.03, 0.02, 0.06, 0.02, 0.005, 0.015, 0.06],
+          "source": "통계청 한국 청년 가구 + KoWePS 가족 구조"
+        },
+        "event_age_when_present": {
+          "type": "categorical",
+          "values": ["영유아 (0~3)", "유아기 (4~6)", "초등 (7~12)", "중·고등 (13~18)", "성인 후 (19+)"],
+          "weights": [0.15, 0.20, 0.30, 0.25, 0.10],
+          "note": "0~6세 사건이 가장 깊은 흔적. 사춘기 사건은 *분노·자기파괴*로, 성인 후 사건은 *우울·서사*로 처리됨."
+        },
+        "primary_caregiver_after": {
+          "type": "categorical",
+          "values": ["남은 부모 (안정)", "남은 부모 (재혼·새 가족)", "조부모", "친척 (삼촌·이모)", "시설", "방임 (사실상 본인)"],
+          "weights": [0.40, 0.25, 0.20, 0.10, 0.02, 0.03]
+        },
+        "contact_with_absent_parent": {
+          "type": "categorical",
+          "values": ["완전 단절", "연 1~2회", "월 1회 이상", "갑자기 다시 나타남", "사망"],
+          "weights": [0.30, 0.20, 0.15, 0.10, 0.25],
+          "note": "*갑자기 다시 나타남*이 가장 복잡한 케이스 — 거부와 그리움이 동시에 작동."
+        },
+        "narrative_around_loss": {
+          "type": "categorical",
+          "values": [
+            "사실 그대로 들음",
+            "거짓말로 들음 (출장 중·외국 등)",
+            "부모 탓으로 들음",
+            "본인 탓으로 들음",
+            "아무도 설명 안 함",
+            "본인이 직접 목격"
+          ],
+          "weights": [0.30, 0.10, 0.15, 0.10, 0.20, 0.15],
+          "note": "*본인 탓으로 들음*이 가장 파괴적. 자기 도식 영구 왜곡."
+        }
+      },
+      "source": "Berg 2016, Simbi 2020, Luecken 2008, Felitti ACE",
+      "effect_size": "OR 2.16 우울 (사망), OR 3.14 (별거), 15.9% 주요 우울 (Berg 2016)",
+      "behavioral_note": "*떠난 사람*에 대한 자세가 캐릭터의 친밀 관계 패턴 전체를 지배. 사망 케이스는 *이상화 + 죄책감*, 별거 케이스는 *불신 + 통제 욕구*, 유기 케이스는 *자기 가치 영구 미해결*. 시뮬레이션에서 누가 떠나는 신호를 보이면 즉각 활성화.",
+      "interacts": ["M1_ace_cumulative", "M5_attachment_style", "M9_formative_family", "M10_parent_voice"]
+    },
+
+    "M4_bullying_history": {
+      "label": "학교 폭력 경험",
+      "scale": "composite_dual_role",
+      "description": "피해·가해·이중 역할 모두 박힘. 한 캐릭터가 *피해자에서 가해자로* 또는 그 반대로 전환했을 수 있음. 형태 + 시기 + 지속 기간이 각각 다른 흔적을 남김.",
+      "fields": {
+        "victim_role": {
+          "type": "categorical",
+          "values": ["없음", "단발 (1~2회)", "중기 (수 개월)", "지속 (1년+)", "다년 만성"],
+          "weights": [0.45, 0.25, 0.15, 0.10, 0.05]
+        },
+        "perpetrator_role": {
+          "type": "categorical",
+          "values": ["없음", "단발 가담", "그룹 동조", "주도", "주모자 (반복)"],
+          "weights": [0.65, 0.18, 0.10, 0.05, 0.02]
+        },
+        "bystander_role": {
+          "type": "categorical",
+          "values": ["보지 않음·기억 없음", "목격했으나 개입 못함", "목격하고 도움 시도", "방관 후 죄책감"],
+          "weights": [0.20, 0.45, 0.15, 0.20]
+        },
+        "peak_period": {
+          "type": "categorical",
+          "values": ["초등 저학년", "초등 고학년", "중학교", "고등학교"],
+          "weights": [0.10, 0.20, 0.45, 0.25],
+          "note": "한국 학교폭력 발생 분포는 중학교 정점."
+        },
+        "primary_form_when_present": {
+          "type": "categorical",
+          "values": [
+            "신체적 (구타·밀침)",
+            "언어적 (욕설·놀림·비하)",
+            "관계적 (따돌림·소문)",
+            "사이버 (단톡방·SNS)",
+            "성적 (성희롱·성추행)",
+            "갈취 (돈·물건)",
+            "복합"
+          ],
+          "weights": [0.15, 0.25, 0.25, 0.15, 0.07, 0.03, 0.10]
+        },
+        "dual_role_transition": {
+          "type": "categorical",
+          "values": [
+            "단일 역할 유지",
+            "피해자 → 가해자 전환",
+            "가해자 → 피해자 전환",
+            "동시 양쪽 (가해 + 피해)"
+          ],
+          "weights": [0.75, 0.10, 0.05, 0.10],
+          "note": "*피해→가해 전환*이 정신병리적으로 가장 무거움. 자기 보호와 복수의 혼합."
+        }
+      },
+      "source": "Takizawa 2014 (British 1958 cohort, 45년 추적), 한국 학교폭력 실태 조사, Wolke 2013",
+      "effect_size": "OR 2~4 성인 우울·자살성·사회 고립·경제적 어려움. 40년 후에도 유의.",
+      "behavioral_note": "피해 만성 캐릭터는 *집단 상황의 위계*를 즉각 감지하고 자동 회피 동선. 가해 주모 캐릭터는 *약자 감지*가 동등하게 자동 — 두 캐릭터가 같은 방에 들어가면 즉각 서로를 알아본다. 이중 역할은 *예측 불가능한 폭발*.",
+      "interacts": ["M1_ace_cumulative", "M5_attachment_style", "M8_default_reflex", "M11_embedded_reactions", "K2_korea_appearance_experience"]
+    },
+
+    "M5_attachment_style": {
+      "label": "성인 애착 유형",
+      "scale": "categorical_with_dimensions",
+      "description": "Bowlby/Ainsworth 4유형. 1차 양육자와의 초기 경험이 *내부 작동 모델*로 박혀 평생의 친밀 관계 패턴을 결정. 단일 라벨이지만 두 차원(불안·회피)으로 측정 가능.",
+      "fields": {
+        "style": {
+          "type": "categorical",
+          "values": ["secure", "anxious-preoccupied", "dismissive-avoidant", "fearful-avoidant (disorganized)"],
+          "weights": [0.50, 0.20, 0.20, 0.10],
+          "source": "Bartholomew & Horowitz 1991 일반 인구 분포 + 메타 갱신"
+        },
+        "anxiety_dimension": {
+          "type": "ordinal",
+          "levels": ["매우 낮음", "낮음", "중간", "높음", "매우 높음"],
+          "weights": [0.15, 0.25, 0.30, 0.20, 0.10],
+          "note": "버림받음·거절에 대한 과각성 정도"
+        },
+        "avoidance_dimension": {
+          "type": "ordinal",
+          "levels": ["매우 낮음", "낮음", "중간", "높음", "매우 높음"],
+          "weights": [0.15, 0.25, 0.30, 0.20, 0.10],
+          "note": "친밀·의존에 대한 회피 정도"
+        },
+        "trigger_threshold": {
+          "type": "ordinal",
+          "levels": ["매우 둔감", "둔감", "평균", "예민", "과민 (사소한 신호도 트리거)"],
+          "weights": [0.10, 0.20, 0.40, 0.20, 0.10]
+        }
+      },
+      "source": "Fraley 2002, Groh 2014, Fearon 2010 (disorganized→externalizing), Bartholomew & Horowitz 1991",
+      "effect_size": "d=0.39 또래 유능성, d=0.31 외현화, d=0.34 와해→외현화, 관계 만족·정신병리 광범위",
+      "behavioral_note": "secure는 갈등 후 회복 가능, avoidant는 갈등 시 *정서 셧다운*, anxious는 *과추적·확인 요청*, disorganized는 *접근과 회피 동시* — 같은 사람을 한 시간 안에 끌어당기고 밀어낸다. 시뮬레이션의 친밀 장면에서 가장 즉각 작동하는 변수.",
+      "interacts": ["M1_ace_cumulative", "M3_parental_loss", "M8_default_reflex", "M10_parent_voice"]
+    },
+
+    "M6_embedded_sentences": {
+      "label": "박힌 문장 (반복적으로 들은 말)",
+      "scale": "list_sample_with_speaker",
+      "description": "어린 시절~청소년기 동안 *반복적으로 들어서* 자기 도식의 일부가 된 타인의 발화. 0~3개의 강하게 박힌 문장. M11(박힌 반응)과 분리 — M6은 *말로 들은 것*, M11은 *반응으로 박힌 것*.",
+      "fields": {
+        "count": {
+          "type": "categorical",
+          "values": [0, 1, 2, 3],
+          "weights": [0.15, 0.30, 0.30, 0.25]
+        },
+        "speaker_categories": {
+          "type": "categorical_per_sentence",
+          "values": ["어머니", "아버지", "형제·자매", "조부모", "교사", "또래", "연인", "가해자"],
+          "weights": [0.35, 0.20, 0.10, 0.05, 0.10, 0.12, 0.05, 0.03]
+        },
+        "message_type": {
+          "type": "categorical_per_sentence",
+          "values": [
+            "조건부 사랑 (~하면 사랑한다)",
+            "비교·열등 (다른 사람은 ~한데)",
+            "조롱·비하 (외모·능력·존재 자체)",
+            "방치·무관심 (네 일은 네가)",
+            "과잉 기대 (너는 ~돼야 한다)",
+            "위협 (안 그러면 ~)",
+            "도구화 (네가 ~ 해줘야)",
+            "이상화 (너만 믿는다·우리 가족 희망)",
+            "투사 (너 때문에 내가)"
+          ],
+          "weights": [0.15, 0.15, 0.15, 0.10, 0.15, 0.05, 0.05, 0.10, 0.10]
+        },
+        "activation_trigger": {
+          "type": "categorical_per_sentence",
+          "values": [
+            "성취·실패 직후",
+            "거절·거리감 신호",
+            "신체 노출·평가 상황",
+            "권위자 앞",
+            "혼자 있는 시간",
+            "친밀한 순간"
+          ],
+          "weights": [0.25, 0.20, 0.15, 0.15, 0.15, 0.10],
+          "note": "박힌 문장은 *특정 상황에서만* 자동 재생됨. 이 트리거가 캐릭터의 평소 모습과 위기 모습의 간극을 만듦."
+        },
+        "consciousness_of_sentence": {
+          "type": "categorical_per_sentence",
+          "values": [
+            "의식적으로 알고 거부 시도 중",
+            "의식적으로 알고 동의함",
+            "막연히 들리지만 출처 불명",
+            "완전 무의식 (행동에만 나타남)"
+          ],
+          "weights": [0.20, 0.30, 0.30, 0.20]
+        }
+      },
+      "source": "Ehlers & Clark 2000 인지 모델, Foa Emotional Processing Theory, 자기 도식 이론",
+      "effect_size": "직접 효과 크기 측정 어려움 — 자기 도식 매개변수로 광범위 정신병리 예측",
+      "behavioral_note": "캐릭터가 거울 앞에서 자기 외모를 평가할 때, 직장 면접에서 멈출 때, 연인의 작은 표정에 과민 반응할 때 — 그 순간 활성화되는 *내적 음성*. 시뮬레이션 X-ray의 핵심 재료.",
+      "interacts": ["M1_ace_cumulative", "M10_parent_voice", "M11_embedded_reactions", "B5b_self_image"]
+    },
+
+    "M7_trauma_trigger_channel": {
+      "label": "트라우마 트리거 채널",
+      "scale": "categorical_with_strength",
+      "description": "캐릭터가 트라우마성 사건과 연결된 *주된 감각 채널*. 0~2개의 활성 채널. M2 등에서 사건이 발생한 캐릭터에서 자동 도출되지만 독립 굴림으로 다른 기억(M3·M4)과 연결될 수도 있음.",
+      "fields": {
+        "active_channels_count": {
+          "type": "categorical",
+          "values": [0, 1, 2],
+          "weights": [0.40, 0.45, 0.15],
+          "note": "0인 캐릭터는 트라우마성 트리거 없음 (다른 종류의 정신적 어려움은 가능)"
+        },
+        "channel_per_slot": {
+          "type": "categorical",
+          "values": [
+            "후각 (특정 향·체취·연기·음식 냄새)",
+            "체감 (특정 압박·체온·진동·자세)",
+            "시각 (특정 색·형태·각도·조명)",
+            "청각 (특정 음성 톤·배경음·정적)",
+            "언어 (특정 단어·문장·말투)"
+          ],
+          "weights": [0.35, 0.25, 0.15, 0.15, 0.10],
+          "source": "Vermetten & Bremner 2003, Daniels & Vermetten 2016, Brewin Dual Representation Theory",
+          "note": "후각이 우세한 이유: 후각 신경만 시상 우회, 편도체·해마 직결. 다른 감각은 시상 경유."
+        },
+        "response_intensity": {
+          "type": "ordinal",
+          "levels": ["경미 (불편감)", "뚜렷 (회피 행동)", "강함 (공황·해리)", "압도 (셧다운·실신·구토)"],
+          "weights": [0.30, 0.40, 0.20, 0.10]
+        },
+        "consciousness_of_link": {
+          "type": "categorical",
+          "values": [
+            "왜 반응하는지 안다 (서사 통합)",
+            "사건과 트리거를 연결하지만 막을 수 없음",
+            "트리거만 알고 원인 사건 모름",
+            "본인도 자기 반응을 모름 (외부에서 관찰만)"
+          ],
+          "weights": [0.15, 0.30, 0.30, 0.25],
+          "note": "*본인도 모름* 케이스가 카페라떼 시나리오 — 캐릭터는 *왜 토하는지 모른 채 토한다*."
+        }
+      },
+      "source": "Brewin Dual Representation, Vermetten 후각 특이성, Ehlers & Clark data-driven processing",
+      "effect_size": "peritraumatic sensory responsiveness OR 2.11 PTSD 위험",
+      "behavioral_note": "시뮬레이션 무대에 트리거 자극이 등장하는 순간(예: 누군가 특정 향수를 뿌림, 특정 톤으로 말함) 해당 채널 보유 캐릭터의 perception에 자동 등록. 외부에서는 *왜 갑자기 표정이 변했는지 모름*.",
+      "interacts": ["M2_childhood_sexual_abuse", "M3_parental_loss", "M4_bullying_history", "B8_sensory_profile"]
+    },
+
+    "M8_default_reflex": {
+      "label": "기본 위협 반응 (Pete Walker F4 + Polyvagal)",
+      "scale": "categorical_with_threshold",
+      "description": "위협 감지 시 자동 활성화되는 기본 반응. Fight/Flight/Freeze/Fawn 중 하나가 *우세*하지만 보조 반응이 함께 있을 수 있음. 관계적 트라우마는 Fawn 비율을 끌어올림.",
+      "fields": {
+        "primary_reflex": {
+          "type": "categorical",
+          "values": ["대결형", "도피형", "얼어붙음형", "과잉 사회성형", "균형·차분형"],
+          "weights": [0.10, 0.17, 0.18, 0.20, 0.35],
+          "source": "Pete Walker F4 (Fight/Flight/Freeze/Fawn) + Polyvagal Theory (Porges) + 일반 인구 분포 보정 (2026-04-11, v0.2)",
+          "note": "*균형·차분형*이 최빈값인 이유: 일반 인구 코호트에서는 ACE 낮고 secure attachment인 사람이 다수이므로, 위협 신호에 자동 반사가 아니라 *판단이 먼저 작동*하는 기본값이 가장 흔하다. 관계적 트라우마(가족 내) 표본에서는 과잉 사회성형이 끌어올려짐 — 도망/싸움 불가 환경에서 가해자에게 *맞춰주는* 것이 유일한 생존 전략으로 박히기 때문. 임상 표본용 시드를 돌릴 때는 이 가중치를 재조정할 것."
+        },
+        "secondary_reflex": {
+          "type": "categorical",
+          "values": ["없음", "대결 보조", "도피 보조", "얼어붙음 보조", "과잉 사회성 보조"],
+          "weights": [0.40, 0.15, 0.15, 0.15, 0.15]
+        },
+        "activation_threshold": {
+          "type": "ordinal",
+          "levels": ["매우 높음 (큰 위협만)", "높음", "평균", "낮음 (사소한 신호)", "매우 낮음 (만성 활성)"],
+          "weights": [0.10, 0.25, 0.35, 0.20, 0.10]
+        },
+        "polyvagal_default_state": {
+          "type": "categorical",
+          "values": [
+            "사회 교전 기본 (안정 상태)",
+            "교감 우세 (만성 동원)",
+            "부동화 (만성 셧다운)",
+            "전환 빈번 (불안정)"
+          ],
+          "weights": [0.50, 0.25, 0.10, 0.15]
+        },
+        "visible_signature": {
+          "type": "categorical_per_reflex",
+          "values": [
+            "대결형: 즉각 대응·말 빨라짐·표정 굳음",
+            "도피형: 화제 전환·자리 이동·시계 봄",
+            "얼어붙음형: 표정 사라짐·눈 초점 흐려짐·말 안 함",
+            "과잉 사회성형: 자동 사과·과잉 동의·웃음·상대 기분 살핌"
+          ],
+          "note": "외부 관찰자가 캐릭터의 위협 반응을 식별하는 가장 즉각적 신호."
+        }
+      },
+      "source": "Pete Walker 'Complex PTSD: From Surviving to Thriving', Porges Polyvagal Theory",
+      "effect_size": "직접 측정 어려움 — 다른 외상 변수의 매개·조절 변수",
+      "behavioral_note": "Fawn 캐릭터가 시뮬레이션의 *관계 윤활유*가 되지만 정작 자기 욕구는 한 마디도 못 함. Freeze 캐릭터는 갑자기 *없는 사람*이 됨. Fight는 사소한 자극에 폭발. Flight는 항상 출구를 본다. 이 4명이 한 방에 있으면 즉각 조직된다. *균형·차분형*은 위협 신호에 자동 반사가 아니라 *판단이 먼저 작동* — ACE 낮고 secure attachment인 사람의 기본값. 시뮬레이션에서 이 유형은 갈등 중에도 *창문(window of tolerance)*을 유지해 다른 캐릭터에게 *호흡 공간*을 돌려준다. 네 반사 유형 옆에 이 한 명이 있으면 방의 온도가 2도 내려간다.",
+      "interacts": ["M1_ace_cumulative", "M2_childhood_sexual_abuse", "M5_attachment_style", "M11_embedded_reactions"]
+    },
+
+    "M9_formative_family": {
+      "label": "형성기 가족 환경",
+      "scale": "composite_socioeconomic",
+      "description": "캐릭터가 자란 *가정의 구조와 자원*. 부모 사망·이혼은 M3, 학대는 M1에서 다룸. 여기서는 SES·구조·정서적 분위기.",
+      "fields": {
+        "ses_quintile": {
+          "type": "categorical",
+          "values": ["1분위 (하위 20%)", "2분위", "3분위 (중간)", "4분위", "5분위 (상위 20%)"],
+          "weights": [0.20, 0.20, 0.20, 0.20, 0.20],
+          "source": "한국 통계청 가구 소득 분위 + KoWePS"
+        },
+        "father_occupation_category": {
+          "type": "categorical",
+          "values": [
+            "전문직 (의사·변호사·교수)",
+            "관리직·임원",
+            "사무직 (대기업)",
+            "사무직 (중소)",
+            "자영업 (안정)",
+            "자영업 (영세)",
+            "기능직·생산직",
+            "단순노무·일용",
+            "농림어업",
+            "무직·부재"
+          ],
+          "weights": [0.05, 0.05, 0.10, 0.20, 0.10, 0.15, 0.15, 0.10, 0.05, 0.05]
+        },
+        "mother_employment": {
+          "type": "categorical",
+          "values": ["전업주부 (안정)", "전업주부 (불안정 가계)", "파트타임", "정규직", "자영업", "전문직"],
+          "weights": [0.30, 0.10, 0.20, 0.20, 0.15, 0.05]
+        },
+        "sibling_structure": {
+          "type": "categorical",
+          "values": ["외동", "맏이 (2형제)", "맏이 (3+형제)", "중간", "막내 (2형제)", "막내 (3+형제)", "쌍둥이"],
+          "weights": [0.30, 0.20, 0.05, 0.10, 0.20, 0.10, 0.05]
+        },
+        "economic_stability_during_childhood": {
+          "type": "categorical",
+          "values": [
+            "안정 일관",
+            "점진적 상승",
+            "점진적 하락",
+            "급격한 추락 (사업 실패·도산)",
+            "만성 빈곤",
+            "풍요"
+          ],
+          "weights": [0.40, 0.15, 0.10, 0.10, 0.15, 0.10],
+          "note": "*급격한 추락* 케이스가 자기 가치 영구 흔들기."
+        },
+        "residence_changes_count": {
+          "type": "categorical",
+          "values": ["1~2회", "3~5회", "6~10회", "10회 이상"],
+          "weights": [0.40, 0.35, 0.20, 0.05],
+          "note": "한국 청년 전세 사기·이사 빈도 맥락. 과다 이사는 또래 관계 단절 누적."
+        },
+        "family_emotional_climate": {
+          "type": "categorical",
+          "values": [
+            "정서 표현 자유",
+            "정서 표현 가능하지만 통제됨",
+            "정서 표현 금기 (특정 감정만)",
+            "정서 표현 전면 금기",
+            "예측 불가 (상황별 폭발)",
+            "공허·무관심"
+          ],
+          "weights": [0.15, 0.30, 0.20, 0.10, 0.15, 0.10]
+        }
+      },
+      "source": "Sirin 2005 (SES 메타), Peverill 2021 (SES → 아동 정신병리), KoWePS, 한국 통계청",
+      "effect_size": "g=0.19~0.32 부모 SES → 아동 정신병리, r=0.25~0.31 학업 성취",
+      "behavioral_note": "SES 자체보다 *집안 분위기*가 일상 행동의 디폴트를 결정. 정서 금기 가정 출신은 시뮬레이션에서 *감정 단어 자체를 못 씀*. 풍요 가정 출신은 *결핍 감각 부재*로 다른 캐릭터의 갈급함을 인식하지 못함.",
+      "interacts": ["M1_ace_cumulative", "M10_parent_voice", "K1_korea_education", "I1_cognitive_ability"]
+    },
+
+    "M10_parent_voice": {
+      "label": "부모 음성 패턴 (반복 메시지의 결)",
+      "scale": "composite_per_parent",
+      "description": "어머니·아버지 각각이 캐릭터에게 일상적으로 들려준 *반복 패턴*. M6(박힌 문장)이 *특정 문구*라면 M10은 *전체 음색·관계의 결*. 둘은 결합해 자기 도식을 만든다.",
+      "fields": {
+        "mother_pattern": {
+          "type": "categorical",
+          "values": [
+            "따뜻 일관 (안정 양육)",
+            "조건부 따뜻 (성취 시)",
+            "통제 일관 (간섭 만성)",
+            "비난 일관",
+            "방치 (정서 부재)",
+            "이상화 투사 (너만 믿는다)",
+            "역할 역전 (자녀가 어머니 정서 돌봄)",
+            "예측 불가 (좋았다 나빴다)",
+            "사실상 부재 (사망·이혼·일)"
+          ],
+          "weights": [0.25, 0.20, 0.15, 0.05, 0.08, 0.10, 0.07, 0.07, 0.03]
+        },
+        "father_pattern": {
+          "type": "categorical",
+          "values": [
+            "따뜻 관여",
+            "권위적 관여",
+            "엄격·체벌",
+            "무관심·부재 (있으나 없음)",
+            "친구 같은 (역할 미정)",
+            "예측 불가 (술·기분)",
+            "폭력 (신체·언어)",
+            "사실상 부재 (사망·이혼·일)",
+            "이상화·약속 남발 후 배신"
+          ],
+          "weights": [0.15, 0.20, 0.15, 0.20, 0.05, 0.10, 0.05, 0.07, 0.03]
+        },
+        "consistency_between_parents": {
+          "type": "ordinal",
+          "levels": [
+            "양친 일치 (안전감)",
+            "양친 일치 (둘 다 부정적)",
+            "보완 (한쪽 약점 다른 쪽 보완)",
+            "불일치 (선·악 분리)",
+            "불일치 (예측 불가)"
+          ],
+          "weights": [0.25, 0.10, 0.20, 0.25, 0.20]
+        },
+        "intergenerational_pressure": {
+          "type": "categorical",
+          "values": [
+            "없음",
+            "막연한 기대",
+            "구체적 직업 압력",
+            "구체적 결혼 압력",
+            "구체적 학력 압력",
+            "복합 압력 (전 영역)"
+          ],
+          "weights": [0.15, 0.30, 0.15, 0.10, 0.20, 0.10]
+        },
+        "transmission_mechanism": {
+          "type": "categorical",
+          "values": [
+            "직접 명령",
+            "비교·예시",
+            "한숨·실망 표정",
+            "침묵·외면",
+            "조건부 보상",
+            "신체 접촉 통제 (포옹 회수)"
+          ],
+          "weights": [0.20, 0.25, 0.20, 0.15, 0.15, 0.05]
+        }
+      },
+      "source": "ACE 가족 정서 학대 축, 한국 가족 연구 (이재경 등), 애착 이론",
+      "effect_size": "M5 attachment_style 매개로 광범위 효과",
+      "behavioral_note": "*어머니 패턴*과 *아버지 패턴*의 조합이 캐릭터의 권위자·연인·동료 대응 디폴트를 만듦. 어머니 통제+아버지 부재 조합은 한국에서 가장 흔하고, 캐릭터에게 *책임 과다 + 자기 욕구 박탈*을 박는다.",
+      "interacts": ["M1_ace_cumulative", "M5_attachment_style", "M6_embedded_sentences", "M9_formative_family"]
+    },
+
+    "M11_embedded_reactions": {
+      "label": "박힌 타인 반응 (충돌 지점)",
+      "scale": "list_sample_with_target",
+      "description": "*자기 인식이 OK였다가 타인의 반응에 의해 깨진* 사건의 흔적. M6과 분리 — M6은 *말로 들은 것*, M11은 *반응(표정·침묵·시선·거리두기)으로 박힌 것*. B5b 자기 이미지의 평면적 평가와 다름: 여기는 *변곡점*. 0~3개의 강하게 박힌 반응.",
+      "fields": {
+        "count": {
+          "type": "categorical",
+          "values": [0, 1, 2, 3],
+          "weights": [0.20, 0.40, 0.25, 0.15]
+        },
+        "target_attribute_per_event": {
+          "type": "categorical",
+          "values": [
+            "얼굴 (특정 부위)",
+            "체형·살",
+            "키",
+            "체모·다모·결핍",
+            "피부 (여드름·흉터·색)",
+            "성기 (형태·크기·색)",
+            "가슴 (크기·모양·유두)",
+            "체취·구취",
+            "목소리 (톤·말투)",
+            "지능·이해 속도",
+            "취향 (옷·음식·관심사)",
+            "감정 표현 (울음·웃음·분노)"
+          ],
+          "weights": [0.18, 0.15, 0.05, 0.06, 0.10, 0.08, 0.08, 0.05, 0.07, 0.06, 0.07, 0.05]
+        },
+        "reaction_modality_per_event": {
+          "type": "categorical",
+          "values": [
+            "표정 굳음·미세 흔들림",
+            "시선 회피",
+            "침묵 (대답 없음·화제 전환)",
+            "물러섬·거리두기",
+            "직접적 질문 (그거 원래 그래?)",
+            "농담으로 가장한 지적",
+            "만지지 않음·접촉 끊김",
+            "다른 사람과 비교"
+          ],
+          "weights": [0.25, 0.15, 0.20, 0.10, 0.08, 0.10, 0.07, 0.05],
+          "note": "*표정 굳음*과 *침묵*이 가장 깊게 박힘 — 명시적 비난보다 더 풀 수 없음."
+        },
+        "reactor_relation_per_event": {
+          "type": "categorical",
+          "values": [
+            "첫 연인",
+            "오랜 연인",
+            "가족 (어머니·아버지)",
+            "가족 (형제·자매)",
+            "친한 친구",
+            "지나가는 또래",
+            "낯선 사람",
+            "권위자 (교사·의사)"
+          ],
+          "weights": [0.25, 0.10, 0.15, 0.10, 0.15, 0.10, 0.05, 0.10],
+          "note": "*첫 연인*의 반응이 가장 깊게 박힘 — 신체·정체성 노출의 첫 자리."
+        },
+        "event_age_per_event": {
+          "type": "categorical",
+          "values": ["사춘기 이전", "초기 사춘기 (12~14)", "중기 사춘기 (15~17)", "초기 성인 (18~22)", "최근 (~1년 내)"],
+          "weights": [0.10, 0.20, 0.30, 0.30, 0.10]
+        },
+        "self_image_before": {
+          "type": "ordinal",
+          "levels": ["만족", "수용", "막연한 의식", "이미 불만"],
+          "weights": [0.30, 0.40, 0.20, 0.10],
+          "note": "*만족·수용 상태에서 깨진 사건*이 핵심 케이스. 이미 불만이었던 것이 확인된 사건은 효과 약함."
+        },
+        "rupture_depth": {
+          "type": "ordinal",
+          "levels": [
+            "경미한 의식 (가끔 떠오름)",
+            "회피 동선 형성 (특정 상황 피함)",
+            "강한 자기검열 (옷·자세·노출 통제)",
+            "영구 흉터 (이후 모든 친밀에 그림자)"
+          ],
+          "weights": [0.30, 0.30, 0.25, 0.15]
+        },
+        "narrative_processing": {
+          "type": "categorical",
+          "values": [
+            "의식적으로 알고 거부 시도 중",
+            "의식적으로 알지만 못 풀음",
+            "기억나지만 영향 부정",
+            "사건 자체를 잊음 (반응만 남음)"
+          ],
+          "weights": [0.15, 0.45, 0.25, 0.15]
+        }
+      },
+      "source": "사용자 케이스 (가슴 사례) + Herbenick FGSIS 변곡 사건 + Veale 2015 BDD 발생 패턴",
+      "effect_size": "직접 측정 없음 — B5b 자기 이미지의 *형성 사건*으로 작용. 사건 1개가 BDD/회피 행동의 단일 충분 원인이 될 수 있음.",
+      "behavioral_note": "B5b가 *현재 평가*라면 M11은 *그 평가가 어떻게 그 자리에 도달했는가*. 시뮬레이션에서 캐릭터가 *왜 특정 옷만 입는가*, *왜 특정 자세로 잠자리에 드는가*, *왜 특정 단어에 멈추는가*의 기원. 이 표가 비어 있는 캐릭터는 자기 신체에 대한 *서사 없는 평형*을 가진다 — 흔하지 않다.",
+      "interacts": ["B5_sex_characteristics", "B5b_self_image", "M2_childhood_sexual_abuse", "M4_bullying_history", "M6_embedded_sentences"]
+    },
+
+    "M12_resources": {
+      "label": "자원·회복 (Sources of Resilience)",
+      "scale": "multi_field",
+      "description": "결핍의 반대편 — 이 사람이 힘든 시점에 실제로 기대는 것들. 트라우마와 무관하게 존재할 수 있고, 트라우마가 있어도 존재할 수 있다. 일반 인구의 대부분은 *자원도 결핍도 함께* 가진다.",
+      "fields": {
+        "support_network": {
+          "type": "categorical",
+          "values": ["강함 (여러 명의 안정된 관계)", "중간 (한두 명의 가까운 친구·가족)", "약함 (기능적 관계뿐)", "희박 (거의 혼자)"],
+          "weights": [0.25, 0.45, 0.20, 0.10],
+          "note": "한국 성인 일반 분포. 결핍 쪽으로 치우치지 않도록 '중간'을 최빈값으로."
+        },
+        "coping_repertoire": {
+          "type": "list_sample",
+          "pool": [
+            "운동·몸 움직이기",
+            "친한 사람에게 말하기",
+            "혼자 걷기·산책",
+            "음악·영화로 분리",
+            "글쓰기·일기",
+            "창작·취미 몰입",
+            "종교·명상",
+            "반려동물과 시간",
+            "요리·루틴 작업",
+            "자연에 있기",
+            "잠으로 리셋",
+            "수동적 소비 (유튜브·쇼츠)",
+            "술·담배로 마비",
+            "폭식·절식",
+            "쇼핑·소비",
+            "게임 몰입"
+          ],
+          "count_dist": {"lambda": 2.3, "note": "평균 2~3개 대처 전략. 하위 pool에 건강하지 않은 대처도 포함 — 실제로 사람들이 쓰는 것이기 때문."},
+          "note": "상위 11개는 상대적으로 회복적, 하위 5개는 마비·도피 성격. 한 사람이 두 범주에서 섞어 쓰는 게 일반적."
+        },
+        "meaning_source": {
+          "type": "list_sample",
+          "pool": [
+            "가족 (부모·형제)",
+            "친구",
+            "연인·배우자",
+            "자녀",
+            "일·커리어",
+            "학업·공부",
+            "취미·창작",
+            "종교·신앙",
+            "운동·신체 단련",
+            "공동체·동아리",
+            "반려동물",
+            "자기 발견·성찰",
+            "특별히 없음 / 찾는 중"
+          ],
+          "count_dist": {"values": [1, 2, 3], "weights": [0.35, 0.45, 0.20]},
+          "note": "이 사람이 *왜 사는지* 물었을 때 떠오르는 것들. 마지막 옵션 '찾는 중'은 20대 초반에 더 흔함."
+        },
+        "positive_role_model": {
+          "type": "categorical",
+          "values": ["있음 (가까운 사람)", "있음 (멀리서 본 사람·인물)", "있었음 (과거형)", "없음"],
+          "weights": [0.35, 0.25, 0.20, 0.20],
+          "note": "있음의 두 종류를 구분 — 가까운 사람과 먼 사람의 롤모델은 내면화 방식이 다름."
+        },
+        "self_efficacy": {
+          "type": "categorical",
+          "values": ["높음 (어려워도 해낼 수 있다)", "중간 (영역에 따라 다름)", "낮음 (보통 안 될 것 같다)", "매우 낮음 (무력감 기본값)"],
+          "weights": [0.20, 0.50, 0.22, 0.08],
+          "note": "Bandura self-efficacy. 중간이 최빈값 — 사람들은 *분야에 따라 다르다*. 매우 낮음은 결핍 표본의 신호로 읽힘."
+        }
+      },
+      "source": "Bonanno 회복탄력성 연구 + Masten 'Ordinary Magic' + Bandura self-efficacy + 일반 인구 조사 근사",
+      "effect_size": "자원 변수는 *결핍 변수의 효과를 조절*. 같은 ACE 3점이어도 support_network 강 + self_efficacy 높음이면 우울·불안 위험이 유의하게 낮음 (Masten).",
+      "behavioral_note": "자원이 *있는* 캐릭터는 같은 자극에도 회복 시간이 짧고, 타인에게도 *호흡 공간을 돌려줄 수 있음*. 자원이 *없는* 캐릭터는 자기 결핍을 타인에게 전가하거나, 침묵으로 철수. 시뮬레이션에서 이 차이는 관계가 하루 이상 지속될 때부터 드러남.",
+      "interacts": ["M1_ace_cumulative", "M5_attachment_style", "M8_default_reflex", "M10_parent_voice"]
+    }
+
+  },
+
+  "meta": {
+    "total_tables": 12,
+    "note": "M1~M10 + M11 (충돌 지점, 04-08 사용자 가슴 사례 기반 신설) + M12 (자원·회복, 04-11 seed_001 평가 기반 신설, v0.2). M6과 M11은 분리 — 말로 들은 것 vs 반응으로 박힌 것. M1~M11은 결핍 축, M12는 자원 축 — 이 둘이 함께 작동해야 일반 인구 코호트가 재현됨.",
+    "changelog": [
+      "v0.1 (2026-04-08): 초기 11표 (M1~M11)",
+      "v0.2 (2026-04-11): M8_default_reflex에 '균형·차분형' 옵션 추가 + 가중치 일반 인구 재조정 [0.10/0.17/0.18/0.20/0.35]. M12_resources 신설 (support_network, coping_repertoire, meaning_source, positive_role_model, self_efficacy). seed_001_assessment.md의 임상 표본 편향 지적 반영."
+    ],
+    "philosophy": [
+      "카탈로그 금지, 작용만 — 사실 자체보다 일상에 휘는 방식",
+      "검열 0 — 학술 톤으로 노골적",
+      "'없음'은 prevalence로만 표현, 별도 필드로 적지 않음",
+      "trauma 사건은 *처리 결과*까지 박아야 행동 예측 가능 (Brewin Dual Rep)",
+      "메모리 표는 1회 굴림 후 거의 고정. 시뮬레이션 동안 새 사건은 누적되지만 이 표는 바뀌지 않음."
+    ],
+    "next_steps": [
+      "user 검수: M1~M11 한 번에 보고 빠진 것·이상한 분포 지적",
+      "identity.json (I1 cognitive_ability + I2 sexuality)",
+      "korea.json (K1 education + K2 appearance + K3 region_voice)",
+      "generate.py로 시드 기반 30명 생성"
+    ]
+  }
+}

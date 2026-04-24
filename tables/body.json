@@ -1,0 +1,408 @@
+{
+  "layer": "body",
+  "version": "0.1",
+  "description": "신체 층 옵션 표. 20세 한국 성인 기준. 생성 시 1회 굴림 후 거의 고정. 분포는 KNHANES·KOSIS·임상 추정·디자인 기반. source 필드가 출처 투명성 제공.",
+
+  "tables": {
+
+    "B1_height": {
+      "label": "키 (신장)",
+      "scale": "continuous",
+      "unit": "cm",
+      "distributions": {
+        "M": { "type": "normal", "mean": 173.7, "sd": 5.7, "clip": [150, 195] },
+        "F": { "type": "normal", "mean": 160.9, "sd": 5.3, "clip": [140, 180] }
+      },
+      "source": "KNHANES 2020-2023 (20대 한국 성인)",
+      "effect_size": "ρ=0.41 사회 존경, β=0.26 소득 (Judge & Cable 2004)",
+      "behavioral_note": "남성에서 특히 지위·수입·리더십 예측. 여성은 파트너 선택 가중치. 키 불만족은 체계적 외로움·사회 철수 직접 예측자.",
+      "korea_amplified": true
+    },
+
+    "B2_face_attractiveness": {
+      "label": "얼굴 매력도",
+      "scale": "ordinal_with_rank",
+      "description": "1~10 절대 점수 + 30인 내 성별 서열 (남 15명·여 15명 각각 1~15위)",
+      "distributions": {
+        "absolute_score": { "type": "normal", "mean": 5, "sd": 1.8, "clip": [1, 10] },
+        "sex_rank": "post-hoc computed from absolute_score within sex group"
+      },
+      "source": "디자인 추정. 사회적 매력도는 객관 측정 불가 but '관찰자 간 일치도 높음' (Langlois 2000)",
+      "effect_size": "d=0.20~0.37 (행동·직업), 평생 수입 +10~15% (Hamermesh)",
+      "behavioral_note": "초기 사회 평가, 대우 차이, 고용, 결혼 시장. 한국에서 증폭 (OR 3.70 반복 차별→건강 악화, Yoon 2017).",
+      "korea_amplified": true,
+      "interacts": ["B3_body_composition", "B4_face_features", "K2_korea_appearance_experience"]
+    },
+
+    "B3_body_composition": {
+      "label": "체성분 (BMI, 근육, 악력, WHR/SHR)",
+      "scale": "composite",
+      "fields": {
+        "bmi": {
+          "type": "normal",
+          "M": { "mean": 24.1, "sd": 3.2, "clip": [16, 35] },
+          "F": { "mean": 22.3, "sd": 3.5, "clip": [15, 35] },
+          "source": "KNHANES 20대"
+        },
+        "muscle_mass": {
+          "type": "ordinal",
+          "levels": ["빈약", "평균 이하", "평균", "평균 이상", "단련됨"],
+          "weights_M": [0.15, 0.25, 0.35, 0.15, 0.10],
+          "weights_F": [0.25, 0.30, 0.30, 0.10, 0.05]
+        },
+        "grip_strength_kg": {
+          "type": "normal",
+          "M": { "mean": 42, "sd": 8, "clip": [20, 65] },
+          "F": { "mean": 25, "sd": 6, "clip": [12, 45] },
+          "note": "근육량과 상관 0.6"
+        },
+        "whr_female": {
+          "type": "normal",
+          "mean": 0.76,
+          "sd": 0.05,
+          "clip": [0.65, 0.95],
+          "note": "허리-엉덩이 비율. 짝짓기 시각 단서"
+        },
+        "shr_male": {
+          "type": "normal",
+          "mean": 1.35,
+          "sd": 0.1,
+          "clip": [1.1, 1.65],
+          "note": "어깨-엉덩이 비율. 남성 짝짓기 성공 최강 신체 예측자 (근육과 동등)"
+        },
+        "waist_cm": {
+          "type": "normal",
+          "M": { "mean": 80, "sd": 8, "clip": [60, 110] },
+          "F": { "mean": 70, "sd": 7, "clip": [55, 95] },
+          "source": "KNHANES 20대 허리둘레",
+          "note": "코어 근력 + 여성 몸매 의식 변수. 복부비만 cutoff M≥90 / F≥85."
+        }
+      },
+      "source": "KNHANES + Gemini WHR/SHR 연구",
+      "effect_size": "체중 낙인-정신건강 r=-0.35, 고용 OR 1.3~2.0 (여성↑)",
+      "behavioral_note": "BMI 자체보다 *낙인·차별 경험*이 행동 예측. 여성 비만에 고용·임금 페널티 특히 큼.",
+      "korea_amplified": true
+    },
+
+    "B4_face_features": {
+      "label": "얼굴 세부 특징",
+      "scale": "categorical_multi",
+      "fields": {
+        "face_shape": {
+          "type": "categorical",
+          "values": ["계란형", "둥근형", "긴 얼굴", "각진형", "역삼각", "하트형"],
+          "weights": [0.35, 0.20, 0.15, 0.10, 0.10, 0.10]
+        },
+        "eyelid": {
+          "type": "categorical",
+          "values": ["쌍꺼풀 있음 (양쪽)", "쌍꺼풀 한쪽만", "속쌍꺼풀", "외꺼풀"],
+          "weights": [0.55, 0.08, 0.15, 0.22]
+        },
+        "nose_bridge": {
+          "type": "ordinal",
+          "levels": ["낮음", "평균", "높음"],
+          "weights": [0.40, 0.45, 0.15]
+        },
+        "teeth": {
+          "type": "categorical",
+          "values": ["가지런함", "덧니", "뻐드렁니", "부정교합", "사이 벌어짐", "교정 중", "교정 경력"],
+          "weights": [0.45, 0.15, 0.08, 0.05, 0.05, 0.10, 0.12]
+        },
+        "asymmetry_mm": {
+          "type": "normal",
+          "mean": 2.5,
+          "sd": 1.5,
+          "clip": [0, 10],
+          "note": "대부분 경미. 5mm 이상은 본인 의식 시작"
+        },
+        "marks": {
+          "type": "list_sample",
+          "pool": ["미간 점", "볼 점", "코옆 점", "턱 점", "이마 흉터", "입가 작은 흉터", "눈밑 다크서클 상시", "모반", "없음"],
+          "count_dist": { "type": "poisson", "lambda": 1.2 }
+        },
+        "early_hair_recession": {
+          "type": "categorical",
+          "values": ["없음", "헤어라인 살짝 후퇴", "M자 진행 중", "정수리 가르마 넓어짐"],
+          "weights_M": [0.82, 0.10, 0.06, 0.02],
+          "weights_F": [0.98, 0.01, 0.005, 0.005],
+          "note": "20세 남성 조기 탈모 드물지만 존재"
+        }
+      },
+      "source": "디자인 추정 (한국 20대 관찰)",
+      "behavioral_note": "B2 얼굴 매력도의 하위 재료. 개별 특징이 매력도 점수를 만들고, 동시에 *자기 의식의 구체적 위치*를 결정 (어디를 거울 앞에서 가리는가, 어떤 각도로 사진을 찍는가)."
+    },
+
+    "B5_sex_characteristics": {
+      "label": "2차 성징 및 외성기 상세",
+      "scale": "composite_sex_specific",
+      "description": "객관적 형태와 자기 인식 둘 다 박음. 자기 인식(B5_self_image)이 행동 예측에 더 강력하지만 형태가 그 인식의 토양.",
+      "fields_M": {
+        "penis_length_erect_cm": {
+          "type": "normal",
+          "mean": 12.5,
+          "sd": 1.6,
+          "clip": [7, 18],
+          "source": "한국비뇨기학회 조사 평균"
+        },
+        "penis_girth_cm": {
+          "type": "normal",
+          "mean": 11.5,
+          "sd": 1.0,
+          "clip": [8, 15]
+        },
+        "foreskin": {
+          "type": "categorical",
+          "values": ["포경 수술 완료", "포경 상태 (미수술)"],
+          "weights": [0.60, 0.40],
+          "note": "한국 20대 포경수술율 감소 추세"
+        },
+        "penis_shape_notes": {
+          "type": "list_sample",
+          "pool": ["곧음", "좌측 굴곡", "우측 굴곡", "상방 굴곡", "하방 굴곡", "귀두 크기 비대칭", "특이 없음"],
+          "count_dist": { "type": "categorical", "values": [0, 1, 2], "weights": [0.70, 0.25, 0.05] }
+        },
+        "erectile_function": {
+          "type": "ordinal",
+          "levels": ["정상", "가끔 어려움", "자주 어려움", "심한 발기부전"],
+          "weights": [0.88, 0.09, 0.02, 0.01]
+        }
+      },
+      "fields_F": {
+        "breast_cup": {
+          "type": "categorical",
+          "values": ["AA", "A", "B", "C", "D", "E+"],
+          "weights": [0.08, 0.22, 0.38, 0.22, 0.08, 0.02],
+          "source": "한국 속옷 산업 판매 데이터 추정"
+        },
+        "breast_asymmetry": {
+          "type": "ordinal",
+          "levels": ["거의 없음", "경미 (1컵 미만 차)", "뚜렷 (1컵 이상 차)"],
+          "weights": [0.55, 0.35, 0.10]
+        },
+        "nipple_features": {
+          "type": "list_sample",
+          "pool": ["평균 크기", "작음", "큼", "색 옅음", "색 진함", "좌측 함몰 경향", "우측 함몰 경향", "양측 함몰", "유륜 결절 도드라짐", "유륜 큼"],
+          "count_dist": { "type": "poisson", "lambda": 1.5 }
+        },
+        "labia_minora": {
+          "type": "categorical",
+          "values": ["대음순 안에 완전 감춰짐", "일부 노출", "뚜렷 노출", "돌출형"],
+          "weights": [0.30, 0.40, 0.20, 0.10]
+        },
+        "vulva_color": {
+          "type": "ordinal",
+          "levels": ["옅은 분홍", "분홍-갈색", "갈색", "짙은 갈색"],
+          "weights": [0.15, 0.35, 0.35, 0.15]
+        },
+        "menstrual": {
+          "type": "composite",
+          "cycle_regularity": {
+            "type": "categorical",
+            "values": ["규칙적", "약간 불규칙", "심한 불규칙", "무월경 경험"],
+            "weights": [0.50, 0.30, 0.15, 0.05]
+          },
+          "pain_severity": {
+            "type": "ordinal",
+            "levels": ["없음/경미", "중간 (진통제 가끔)", "강함 (매월 진통제)", "심각 (일상 중단)"],
+            "weights": [0.30, 0.35, 0.25, 0.10]
+          }
+        }
+      },
+      "fields_common": {
+        "body_hair_density": {
+          "type": "composite",
+          "pubic": { "type": "ordinal", "levels": ["거의 없음", "옅음", "평균", "풍성", "매우 풍성"], "weights": [0.05, 0.15, 0.50, 0.25, 0.05] },
+          "leg": { "type": "ordinal", "levels": ["거의 없음", "옅음", "평균", "풍성"], "weights_M": [0.05, 0.20, 0.50, 0.25], "weights_F": [0.40, 0.40, 0.18, 0.02] },
+          "chest": { "type": "ordinal", "levels": ["없음", "옅음", "뚜렷", "풍성"], "weights_M": [0.35, 0.40, 0.20, 0.05], "weights_F": [1.0, 0.0, 0.0, 0.0] },
+          "underarm": { "type": "ordinal", "levels": ["옅음", "평균", "풍성"], "weights": [0.30, 0.50, 0.20] }
+        },
+        "body_odor_level": {
+          "type": "ordinal",
+          "levels": ["거의 없음", "평균", "뚜렷", "심함 (다한증·액취증 진단)"],
+          "weights": [0.30, 0.55, 0.12, 0.03]
+        }
+      },
+      "source": "한국 의학 연구 + 성형·비뇨기과 임상 추정 + 디자인. 일반 인구 대표성 없음 — 본 시뮬레이터용 합리적 분포.",
+      "effect_size": "FGSIS → FSFI 전 차원 유의, 남성 자기이미지 → 우울 OR 2.92 양방향 (Liu 2018)",
+      "behavioral_note": "형태 자체는 데이터, 작용은 B5_self_image를 통해. 평균에서 멀수록 일상 회피·의식이 강해지고, 평균 안에 있어도 개인적 수치/자부심의 결이 다름.",
+      "interacts": ["B5_self_image", "M7_trauma_trigger_channel", "I2_sexuality"]
+    },
+
+    "B5b_self_image": {
+      "label": "신체·성기 자기 인식",
+      "scale": "composite",
+      "description": "B5 형태 위에 얹히는 *주관적 평가*. 리서치가 확인한 '객관적 형태보다 자기 인식이 행동 예측에 강력함'을 반영.",
+      "fields": {
+        "face_satisfaction": { "type": "ordinal", "levels": ["혐오", "불만", "수용", "만족", "자부심"], "weights": [0.08, 0.30, 0.35, 0.22, 0.05] },
+        "body_satisfaction": { "type": "ordinal", "levels": ["혐오", "불만", "수용", "만족", "자부심"], "weights": [0.10, 0.35, 0.30, 0.20, 0.05] },
+        "genital_self_image": {
+          "type": "ordinal",
+          "levels": ["수치·회피", "불안", "중립", "만족", "자부심"],
+          "weights": [0.12, 0.30, 0.35, 0.18, 0.05],
+          "source": "FGSIS 분포 추정"
+        },
+        "focused_concern": {
+          "type": "list_sample_sex_split",
+          "pool_common": [
+            "얼굴 특정 부위 (지정)",
+            "체형",
+            "키",
+            "체모",
+            "피부",
+            "목소리",
+            "체취"
+          ],
+          "pool_M": [
+            "성기 크기",
+            "성기 형태"
+          ],
+          "pool_F": [
+            "가슴 크기",
+            "성기 형태"
+          ],
+          "count_dist": { "type": "poisson", "lambda": 1.8 },
+          "note": "각 캐릭터의 거울 앞 2분을 결정. 성별 분리: 가슴 크기는 F, 성기 크기는 M, 성기 형태는 남녀 둘 다. 남성 여유증은 B6_chronic_health에서 처리."
+        }
+      },
+      "source": "Herbenick FGSIS, Veale 2015 BDD, 디자인",
+      "behavioral_note": "이 필드가 행동 예측의 *진짜 변수*. 형태는 토양, 자기 인식은 작용. 회피 동선·옷 선택·접촉 회피·성 기능 전부 여기서 파생."
+    },
+
+    "B6_chronic_health": {
+      "label": "만성 건강 상태",
+      "scale": "list_sample_with_severity",
+      "description": "각 캐릭터는 0~3개의 만성 상태를 가짐. 각 상태에 severity 부여.",
+      "pool": {
+        "알레르기성 비염": { "prevalence": 0.30, "severity_levels": ["경미", "계절성 중간", "연중 심함"] },
+        "과민성 대장 증후군": { "prevalence": 0.08, "severity_levels": ["경미", "중간", "심함"] },
+        "여드름 (중등도 이상)": { "prevalence": 0.15, "severity_levels": ["턱선", "얼굴 전반", "얼굴+등·가슴"] },
+        "아토피": { "prevalence": 0.10, "severity_levels": ["국소", "광범위", "심한 재발성"] },
+        "만성 두통·편두통": { "prevalence": 0.12, "severity_levels": ["월 몇 회", "주 2~3회", "일상 기능 저하"] },
+        "허리 디스크 초기": { "prevalence": 0.05, "severity_levels": ["간헐적", "자주 통증", "앉는 시간 제한"] },
+        "턱관절 장애": { "prevalence": 0.08, "severity_levels": ["가끔", "자주 딸깍", "통증 수반"] },
+        "심한 생리통 (F only)": { "prevalence": 0.35, "severity_levels": ["하루", "2일 진통제", "3일+ 일상 중단"] },
+        "수면 장애 (불면)": { "prevalence": 0.12, "severity_levels": ["입면 어려움", "중간 각성", "만성 불면"] },
+        "섭식 장애 초기": { "prevalence": 0.06, "severity_levels": ["절식 강박", "과식 후 죄책감", "임상 수준 접근"] },
+        "다한증": { "prevalence": 0.04, "severity_levels": ["손바닥", "겨드랑이", "전신"] },
+        "액취증": { "prevalence": 0.05, "severity_levels": ["본인만 의식", "가까운 사람만", "명확히 감지"] },
+        "위염·역류": { "prevalence": 0.10, "severity_levels": ["스트레스 시", "일상 통증", "위산 억제제 복용"] },
+        "빈혈": { "prevalence": 0.08, "severity_levels": ["경미", "중간", "일상 피로"] },
+        "지루성 피부염": { "prevalence": 0.07, "severity_levels": ["두피만", "얼굴까지", "재발성"] },
+        "여유증 (M only)": { "prevalence": 0.08, "severity_levels": ["경미 (유두 아래 조직)", "중등도 (가슴 돌출 눈에 띔)", "심각 (옷 위로도 드러남)"] }
+      },
+      "count_dist": { "type": "categorical", "values": [0, 1, 2, 3], "weights": [0.20, 0.40, 0.30, 0.10] },
+      "source": "KNHANES + 한국 의학 유병률 보고 추정",
+      "behavioral_note": "일상 기능 제한이 핵심. '질환 유무'보다 '오늘 아침 어떻게 작동하는가'가 행동 예측 변수. severity가 M7 trigger 및 B5b self_image와 상호작용.",
+      "interacts": ["B7_sleep", "B5b_self_image"]
+    },
+
+    "B7_sleep": {
+      "label": "수면 상태",
+      "scale": "composite",
+      "fields": {
+        "habitual_duration_hours": {
+          "type": "normal",
+          "mean": 6.5,
+          "sd": 1.2,
+          "clip": [3, 11]
+        },
+        "chronotype": {
+          "type": "categorical",
+          "values": ["극단 아침형", "아침형", "중간", "저녁형", "극단 저녁형"],
+          "weights": [0.05, 0.15, 0.40, 0.30, 0.10]
+        },
+        "current_debt": {
+          "type": "ordinal",
+          "levels": ["충분", "살짝 부족", "심하게 부족", "철야 후"],
+          "weights": [0.30, 0.40, 0.25, 0.05]
+        },
+        "insomnia": {
+          "type": "categorical",
+          "values": ["없음", "입면 어려움", "중간 각성", "조기 각성", "복합"],
+          "weights": [0.60, 0.15, 0.12, 0.08, 0.05]
+        }
+      },
+      "source": "KNHANES 수면 역학 + 한국 청년 수면 연구",
+      "effect_size": "g=-0.94 긍정 정서 (Tomaso 2021) — 가장 큰 즉각 효과",
+      "behavioral_note": "시뮬레이션에서 매 tick 작동. 'current_debt'이 높은 캐릭터는 즉각 감정 기복·인내심 저하·충동 제어 실패가 일어남. 긍정 정서가 가장 먼저 무너짐."
+    },
+
+    "B8_sensory_profile": {
+      "label": "감각 프로파일 (시력)",
+      "scale": "composite",
+      "description": "Aron HSP(Highly Sensitive Person) 기반 감각 민감도 표는 폐기 — 예측력 약하고 카탈로그화 우려. 시력만 박는다. 다른 감각의 *과민/둔감*은 필요 시 M 층(트라우마 채널) 또는 행동 결로 다룬다.",
+      "fields": {
+        "visual_acuity": {
+          "type": "categorical",
+          "values": ["정상", "경미 근시", "중등도 근시 (-3D~)", "고도 근시 (-6D~)", "난시 동반", "색약"],
+          "weights": [0.35, 0.25, 0.20, 0.12, 0.05, 0.03]
+        },
+        "correction": {
+          "type": "categorical",
+          "values": ["불필요", "안경 상시", "안경 가끔", "콘택트 상시", "콘택트+안경 병행", "라식·라섹 완료"],
+          "weights": [0.30, 0.30, 0.10, 0.15, 0.05, 0.10],
+          "note": "한국 20대 안경/렌즈 의존도 매우 높음"
+        }
+      },
+      "source": "한국 시력 역학 (KNHANES 안과 모듈)",
+      "behavioral_note": "시력은 *세계 지도(world_map)의 입력 해상도*. 고도 근시 캐릭터는 안경 벗으면 사람 얼굴 식별 거리가 극단적으로 줄어 사회적 상황의 결이 다르다. 안경/렌즈 의존도는 일상 동선·외모 자기 인식과 연결."
+    },
+
+    "B9_vocal": {
+      "label": "음성 특징",
+      "scale": "composite",
+      "fields": {
+        "pitch_hz": {
+          "type": "normal",
+          "M": { "mean": 120, "sd": 18, "clip": [80, 180] },
+          "F": { "mean": 210, "sd": 22, "clip": [150, 280] }
+        },
+        "volume_default": { "type": "ordinal", "levels": ["매우 작음", "작음", "평균", "큼", "매우 큼"], "weights": [0.08, 0.22, 0.45, 0.20, 0.05] },
+        "speech_rate": { "type": "ordinal", "levels": ["느림", "평균", "빠름", "매우 빠름"], "weights": [0.15, 0.55, 0.25, 0.05] },
+        "voice_quirks": {
+          "type": "list_sample",
+          "pool": ["허스키", "코막힘 소리", "비음", "쉰 목소리", "말더듬 경미", "특이 억양 (지역)", "특정 발음 실수", "없음"],
+          "count_dist": { "type": "poisson", "lambda": 0.7 }
+        }
+      },
+      "source": "음성학 + 디자인",
+      "behavioral_note": "Polyvagal face-heart connection으로 트라우마 시 인후 경직, 음성 변조 불가. K3_region_voice와 연결되어 사회적 인식 형성."
+    },
+
+    "B10_skin_hair": {
+      "label": "피부·머리카락",
+      "scale": "composite",
+      "fields": {
+        "skin_type": { "type": "categorical", "values": ["지성", "건성", "중성", "복합성"], "weights": [0.30, 0.20, 0.20, 0.30] },
+        "skin_tone": { "type": "ordinal", "levels": ["매우 밝음", "밝음", "중간", "약간 어두움", "어두움"], "weights": [0.10, 0.35, 0.40, 0.12, 0.03] },
+        "visible_scars": {
+          "type": "list_sample",
+          "pool": ["손목 안쪽 (자해흔 의심)", "팔 어딘가 사고 흉터", "무릎 어릴 적 흉터", "배 수술 자국", "이마 흉터", "발목 흉터", "없음"],
+          "count_dist": { "type": "poisson", "lambda": 1.0 }
+        },
+        "hair_density": { "type": "ordinal", "levels": ["얇고 적음", "평균", "많음", "매우 많음"], "weights": [0.15, 0.50, 0.25, 0.10] },
+        "hair_texture": { "type": "categorical", "values": ["직모", "반곱슬", "곱슬", "얇고 힘없음", "굵고 뻣뻣"], "weights": [0.60, 0.20, 0.05, 0.10, 0.05] },
+        "tattoos": {
+          "type": "categorical",
+          "values": ["없음", "작은 숨김형 1개", "작은 숨김형 여러 개", "뚜렷 1개", "여러 개·큰 것"],
+          "weights": [0.82, 0.10, 0.05, 0.02, 0.01]
+        }
+      },
+      "source": "한국 피부과 임상 + 디자인",
+      "behavioral_note": "자기 의식의 구체적 위치 — 어떤 옷을 고르는가, 어떤 상황을 피하는가. visible_scars에 자해흔 들어가면 M2 관련 기억 트리거."
+    }
+
+  },
+
+  "meta": {
+    "total_tables": 11,
+    "note": "B1~B10 + B5b (자기 이미지 별도 표). 총 11개 서브테이블이지만 논리적으로는 10층.",
+    "not_yet_filled": "일부 표의 분포는 '한국 20대 관찰' 기반 디자인 추정. KNHANES/KOSIS 실제 수치로 교체 가능한 것은 나중에 교체.",
+    "next_steps": [
+      "user 검수: 빠진 영역·이상한 분포 지적",
+      "memory.json 작성 (M1~M10)",
+      "identity.json (I1~I2) 및 korea.json (K1~K3)",
+      "generate.py로 시드 기반 30명 생성"
+    ]
+  }
+}

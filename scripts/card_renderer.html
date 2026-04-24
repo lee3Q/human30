@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30p — 시드 카드 렌더러</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f0f13;color:#e0e0e0;min-height:100vh}
+.header{background:#16161d;padding:20px 24px;border-bottom:1px solid #2a2a3a;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:10}
+.header h1{font-size:18px;font-weight:600;color:#a78bfa}
+.header input{flex:1;max-width:400px;padding:8px 14px;background:#1e1e2a;border:1px solid #333;border-radius:6px;color:#e0e0e0;font-size:14px;outline:none}
+.header input:focus{border-color:#7c3aed}
+.stats{font-size:13px;color:#888;margin-left:auto}
+.controls{padding:12px 24px;background:#13131a;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.controls label{font-size:12px;color:#999;display:flex;align-items:center;gap:6px}
+.controls select{padding:4px 8px;background:#1e1e2a;border:1px solid #333;border-radius:4px;color:#ccc;font-size:12px}
+.controls button{padding:6px 14px;background:#7c3aed;color:#fff;border:none;border-radius:4px;font-size:12px;cursor:pointer}
+.controls button:hover{background:#6d28d9}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:20px 24px}
+.card{background:#1a1a24;border:1px solid #2a2a3a;border-radius:10px;overflow:hidden;transition:transform .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);border-color:#7c3aed}
+.card-top{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.avatar.m{background:#1e3a5f;color:#60a5fa}
+.avatar.f{background:#4a1942;color:#f472b6}
+.card-id{font-size:12px;color:#666;font-weight:600}
+.card-name{font-size:13px;color:#aaa}
+.card-age-sex{margin-left:auto;font-size:11px;color:#666}
+.card-body{padding:10px 14px}
+.attr-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px}
+.attr-label{color:#777}
+.attr-val{color:#c0c0c0;font-weight:500}
+.tag-list{padding:8px 14px;display:flex;flex-wrap:wrap;gap:4px;border-top:1px solid #222}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;background:#1e1e2a;color:#999;border:1px solid #333}
+.card-footer{padding:8px 14px;border-top:1px solid #222;font-size:11px;color:#555;display:flex;justify-content:space-between}
+.card-footer .highlight{color:#a78bfa}
+.empty{text-align:center;padding:60px;color:#555;font-size:14px}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center}
+.modal-bg.active{display:flex}
+.modal{background:#1a1a24;border:1px solid #333;border-radius:12px;max-width:600px;width:90%;max-height:85vh;overflow-y:auto;padding:24px;position:relative}
+.modal pre{font-size:12px;color:#bbb;white-space:pre-wrap;word-break:break-all;line-height:1.5}
+.modal .close-btn{position:absolute;top:12px;right:12px;background:#333;border:none;color:#aaa;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>30p 카드 렌더러</h1>
+<input type="file" id="fileInput" accept=".json">
+<span class="stats" id="stats"></span>
+</div>
+<div class="controls" id="controls" style="display:none">
+<label>성별 <select id="filterSex"><option value="">전체</option><option value="M">남</option><option value="F">여</option></select></label>
+<label>키 <select id="filterHeight"><option value="">전체</option><option value="short">170↓/157↓</option><option value="mid">170~178/157~165</option><option value="tall">178↑/165↑</option></select></label>
+<label>BMI <select id="filterBmi"><option value="">전체</option><option value="low">저체중(&lt;18.5)</option><option value="normal">정상(18.5~25)</option><option value="high">과체중(25↑)</option></select></label>
+<button id="resetBtn">초기화</button>
+<button id="expandAll">JSON 보기</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="modal-bg" id="modalBg"><div class="modal"><button class="close-btn" id="closeModal">✕</button><pre id="modalContent"></pre></div></div>
+
+<script>
+let data=null;
+const $=id=>document.getElementById(id);
+
+function loadSeed(json){
+  if(!json.characters||!Array.isArray(json.characters))return alert('유효하지 않은 시드 JSON');
+  data=json;
+  $('controls').style.display='flex';
+  $('stats').textContent=`시드 ${json.seed||'?'} · ${json.characters.length}명`;
+  render();
+}
+
+function getAttr(c,path){
+  return path.split('.').reduce((o,k)=>o&&o[k],c);
+}
+
+function fmt(v){
+  if(v===undefined||v===null)return '-';
+  if(typeof v==='object')return Array.isArray(v)?v.join(', '):JSON.stringify(v);
+  return String(v);
+}
+
+function pickAttrs(c){
+  const rows=[];
+  const sex=c.sex;
+  const h=getAttr(c,'body.height_cm');
+  if(h)rows.push(['키',h+'cm']);
+  const bmi=getAttr(c,'body.body_composition.bmi');
+  if(bmi)rows.push(['BMI',bmi.toFixed(1)]);
+  const muscle=getAttr(c,'body.body_composition.muscle_mass');
+  if(muscle)rows.push(['근육',muscle]);
+  const grip=getAttr(c,'body.body_composition.grip_kg');
+  if(grip)rows.push(['악력',grip+'kg']);
+  const face=getAttr(c,'body.face_attractiveness.absolute_score');
+  if(face)rows.push(['안면',face+'/10']);
+  const shape=getAttr(c,'body.face_features.shape');
+  if(shape)rows.push(['이목구비',shape]);
+  const eyelid=getAttr(c,'body.face_features.eyelid');
+  if(eyelid)rows.push(['쌍꺼풀',eyelid]);
+  const orientation=getAttr(c,'identity.orientation');
+  if(orientation)rows.push(['성향',orientation]);
+  const iq=getAttr(c,'identity.cognitive.iq');
+  if(iq)rows.push(['IQ',iq]);
+  const mbti=getAttr(c,'identity.cognitive.mbti');
+  if(mbti)rows.push(['MBTI',mbti]);
+  const region=getAttr(c,'identity.region');
+  if(region)rows.push(['지역',region]);
+  const major=getAttr(c,'identity.major');
+  if(major)rows.push(['전공',major]);
+  const income=getAttr(c,'identity.family_income');
+  if(income)rows.push(['가구소득',income]);
+  const trauma=getAttr(c,'memory.trauma');
+  if(trauma&&trauma!=='없음')rows.push(['트라우마',trauma]);
+  const secret=getAttr(c,'memory.secret');
+  if(secret)rows.push(['비밀',secret.length>30?secret.slice(0,30)+'…':secret]);
+  const habit=getAttr(c,'memory.habit');
+  if(habit)rows.push(['습관',habit]);
+  return rows.slice(0,12);
+}
+
+function renderCard(c){
+  const attrs=pickAttrs(c);
+  const tags=(c.post_hoc_label||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+  const sexClass=c.sex==='M'?'m':'f';
+  const sexLabel=c.sex==='M'?'남':'여';
+  return `<div class="card" data-idx="${c.id}" data-sex="${c.sex}" data-bmi="${getAttr(c,'body.body_composition.bmi')||0}" data-height="${getAttr(c,'body.height_cm')||0}">
+    <div class="card-top">
+      <div class="avatar ${sexClass}">${c.id}</div>
+      <span class="card-id">#${c.id}</span>
+      <span class="card-age-sex">${c.age}세 · ${sexLabel}</span>
+    </div>
+    <div class="card-body">${attrs.map(([l,v])=>`<div class="attr-row"><span class="attr-label">${l}</span><span class="attr-val">${v}</span></div>`).join('')}</div>
+    ${tags?`<div class="tag-list">${tags}</div>`:''}
+    <div class="card-footer"><span>시드 ${data.seed||'?'}</span><span class="highlight" style="cursor:pointer" onclick="showJson(${c.id})">상세 ↓</span></div>
+  </div>`;
+}
+
+function getFiltered(){
+  if(!data)return[];
+  let chars=data.characters;
+  const sex=$('filterSex').value;
+  if(sex)chars=chars.filter(c=>c.sex===sex);
+  const hf=$('filterHeight').value;
+  if(hf){
+    chars=chars.filter(c=>{
+      const h=getAttr(c,'body.height_cm')||0;
+      const isM=c.sex==='M';
+      if(hf==='short')return isM?h<170:h<157;
+      if(hf==='mid')return isM?(h>=170&&h<=178):(h>=157&&h<=165);
+      if(hf==='tall')return isM?h>178:h>165;
+      return true;
+    });
+  }
+  const bf=$('filterBmi').value;
+  if(bf){
+    chars=chars.filter(c=>{
+      const b=getAttr(c,'body.body_composition.bmi')||0;
+      if(bf==='low')return b<18.5;
+      if(bf==='normal')return b>=18.5&&b<25;
+      if(bf==='high')return b>=25;
+      return true;
+    });
+  }
+  return chars;
+}
+
+function render(){
+  const chars=getFiltered();
+  if(!chars.length){$('grid').innerHTML='<div class="empty">해당 조건의 캐릭터가 없습니다</div>';return;}
+  $('grid').innerHTML=chars.map(renderCard).join('');
+}
+
+window.showJson=function(id){
+  const c=data.characters.find(c=>c.id===id);
+  if(!c)return;
+  $('modalContent').textContent=JSON.stringify(c,null,2);
+  $('modalBg').classList.add('active');
+};
+
+$('fileInput').addEventListener('change',e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{loadSeed(JSON.parse(r.result))}catch(er){alert('JSON 파싱 오류: '+er.message)}};
+  r.readAsText(f);
+});
+
+$('filterSex').addEventListener('change',render);
+$('filterHeight').addEventListener('change',render);
+$('filterBmi').addEventListener('change',render);
+$('resetBtn').addEventListener('click',()=>{$('filterSex').value='';$('filterHeight').value='';$('filterBmi').value='';render();});
+$('expandAll').addEventListener('click',()=>{if(data)$('modalContent').textContent=JSON.stringify(data,null,2);$('modalBg').classList.add('active');});
+$('closeModal').addEventListener('click',()=>$('modalBg').classList.remove('active'));
+$('modalBg').addEventListener('click',e=>{if(e.target===$('modalBg'))$('modalBg').classList.remove('active');});
+</script>
+</body>
+</html>

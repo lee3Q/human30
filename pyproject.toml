@@ -1,0 +1,9 @@
+[project]
+name = "cls30"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.89.0",
+    "python-dotenv>=1.2.2",
+    "textual>=8.2.3",
+]

@@ -1,0 +1,5 @@
+# 민감 데이터 — 절대 커밋 금지
+uploads/
+sessions/
+__pycache__/
+*.pyc
