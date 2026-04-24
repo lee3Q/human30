@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#007aff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="심리측정">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.svg">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<title>AI 개인화 심리측정 테스트</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f7;color:#1d1d1f;line-height:1.6;-webkit-tap-highlight-color:transparent}
+.header{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e0e0e0;padding:12px 20px;padding-top:max(12px,env(safe-area-inset-top));z-index:100}
+.header h1{font-size:18px;font-weight:600}
+.progress-bar{height:4px;background:#e0e0e0;border-radius:2px;margin-top:8px}
+.progress-fill{height:100%;background:#007aff;border-radius:2px;transition:width .3s}
+.progress-text{font-size:12px;color:#86868b;margin-top:4px}
+.tabs{display:flex;gap:4px;margin-top:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{padding:6px 14px;border-radius:16px;font-size:13px;cursor:pointer;border:1px solid #d1d1d6;background:#fff;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.tab.active{background:#007aff;color:#fff;border-color:#007aff}
+.tab.done{background:#34c759;color:#fff;border-color:#34c759}
+.tab:hover{opacity:.8}
+.container{max-width:720px;margin:0 auto;padding:20px;padding-bottom:80px}
+.block{display:none}
+.block.active{display:block}
+.block-intro{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;border:1px solid #e0e0e0}
+.block-intro h2{font-size:16px;margin-bottom:8px}
+.block-intro p{font-size:14px;color:#86868b}
+.scale-legend{display:flex;justify-content:space-between;font-size:11px;color:#86868b;padding:0 4px;margin-bottom:16px;flex-wrap:wrap;gap:2px}
+.item{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:12px;border:1px solid #e0e0e0;transition:border-color .2s,box-shadow .2s}
+.item.answered{border-color:#34c759}
+.item.focused{box-shadow:inset 4px 0 0 #007aff;background:#f0f7ff}
+.item-num{font-size:12px;color:#86868b;margin-bottom:4px}
+.item-text{font-size:15px;margin-bottom:12px}
+.options{display:flex;gap:6px}
+.opt{flex:1;text-align:center;padding:10px 4px;border-radius:8px;cursor:pointer;border:2px solid #e0e0e0;font-size:14px;font-weight:500;transition:all .15s;user-select:none;-webkit-user-select:none}
+.opt:hover{border-color:#007aff;background:#f0f7ff}
+.opt.selected{background:#007aff;color:#fff;border-color:#007aff}
+.vignette{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid #e0e0e0}
+.vignette.answered{border-color:#34c759}
+.v-title{font-size:13px;color:#007aff;font-weight:600;margin-bottom:6px}
+.v-scenario{font-size:15px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
+.v-sub{margin-bottom:14px;transition:box-shadow .2s}
+.v-sub:last-child{margin-bottom:0}
+.v-sub.focused{box-shadow:inset 4px 0 0 #007aff;background:#f0f7ff;border-radius:8px;padding:8px;margin-left:-8px}
+.v-sub-text{font-size:14px;margin-bottom:8px;color:#333}
+.nav-buttons{display:flex;justify-content:space-between;margin-top:24px;padding-bottom:40px}
+.btn{padding:12px 28px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;border:none;transition:all .2s}
+.btn-prev{background:#e0e0e0;color:#1d1d1f}
+.btn-next{background:#007aff;color:#fff}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.result-box{background:#1d1d1f;color:#0f0;border-radius:12px;padding:20px;font-family:'SF Mono','Menlo',monospace;font-size:12px;white-space:pre-wrap;word-break:break-all;max-height:400px;overflow-y:auto;margin:16px 0;-webkit-overflow-scrolling:touch}
+.copy-btn{background:#34c759;color:#fff;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;border:none;display:block;margin:0 auto;width:100%;max-width:320px}
+.copy-btn:hover{opacity:.85}
+.copy-btn:active{transform:scale(.97)}
+.unanswered-warning{background:#ff3b30;color:#fff;padding:10px 16px;border-radius:8px;margin-bottom:16px;font-size:14px;display:none}
+.shortcut-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(29,29,31,.92);color:rgba(255,255,255,.85);padding:6px 20px;padding-bottom:max(6px,env(safe-area-inset-bottom));font-size:11px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;z-index:100;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.shortcut-bar span{white-space:nowrap}
+kbd{background:rgba(255,255,255,.15);padding:1px 5px;border-radius:3px;font-family:inherit;font-size:11px;margin:0 1px}
+.reset-row{display:flex;gap:8px;margin-top:16px;justify-content:center}
+.btn-reset{background:#ff3b30;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;cursor:pointer;border:none}
+@media(max-width:480px){
+  .shortcut-bar{display:none}
+  .scale-legend{font-size:9px}
+  .opt{padding:8px 2px;font-size:13px}
+  .item{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>AI 개인화 심리측정 테스트</h1>
+<div class="tabs" id="tabs"></div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-text" id="progressText"></div>
+</div>
+<div class="container" id="container"></div>
+<div class="shortcut-bar">
+<span><kbd>1</kbd>~<kbd>7</kbd> 응답</span>
+<span><kbd>←</kbd><kbd>→</kbd> 점수 조정</span>
+<span><kbd>↓</kbd><kbd>Space</kbd> 다음</span>
+<span><kbd>↑</kbd> 이전</span>
+<span><kbd>Tab</kbd> 미응답</span>
+<span><kbd>Enter</kbd> 다음 블록</span>
+<span><kbd>Del</kbd> 이전 블록</span>
+</div>
+
+<script>
+// ─── DATA ───
+const BLOCKS = [
+  {
+    id:'pvqrr', name:'Block 1: 가치관', short:'가치관',
+    intro:'PVQ-RR 57문항. 각 문항은 어떤 사람을 묘사합니다. 그 사람이 나와 얼마나 같은지 평가해주세요.',
+    scale:6, scaleLabels:['전혀 같지 않다','같지 않다','조금 같다','어느 정도 같다','같다','매우 같다'],
+    type:'simple',
+    items:[
+      '독립적으로 자신의 관점을 형성하는 것이 그에게는 중요하다.',
+      '자신의 나라가 안전하고 안정되는 것이 그에게는 중요하다.',
+      '즐거운 시간을 보내는 것이 그에게는 중요하다.',
+      '다른 사람의 기분을 상하게 하는 것을 피하는 것이 그에게는 중요하다.',
+      '사회의 약자와 취약한 사람들이 보호를 받는 것이 그에게는 중요하다.',
+      '그가 하라고 한 것을 사람들이 하는 것이 그에게는 중요하다.',
+      '다른 사람들보다 그가 더 많은 것을 누릴만한 자격이 있다고 결코 생각하지 않는 것이 그에게는 중요하다.',
+      '자연을 보호하는 것이 그에게는 중요하다.',
+      '누구도 그를 결코 수치스럽게 하지 않는 것이 그에게는 중요하다.',
+      '할 수 있는 색다른 일을 항상 찾는 것이 그에게는 중요하다.',
+      '가까운 이들을 보살펴주는 것이 그에게는 중요하다.',
+      '돈이 가져다 줄 수 있는 힘을 갖는 것이 그에게는 중요하다.',
+      '질병을 피하고 건강을 지키는 것이 그에게는 매우 중요하다.',
+      '모든 종류의 사람과 집단에 대해 관대해지는 것이 그에게는 중요하다.',
+      '규칙이나 규율을 결코 위반하지 않는 것이 그에게는 중요하다.',
+      '자신의 삶에 대해 스스로 결정을 내리는 것이 그에게는 중요하다.',
+      '삶에서 야망을 갖는 것이 그에게는 중요하다.',
+      '전통적인 가치와 사고방식을 유지하는 것이 그에게는 중요하다.',
+      '그가 알고 있는 사람들이 자신에 대해 완전히 신뢰하는 것이 그에게는 중요하다.',
+      '부유해 지는 것이 그에게는 중요하다.',
+      '자연을 보호하는 활동에 참여하는 것이 그에게는 중요하다.',
+      '다른 사람을 결코 짜증나게 하지 않는 것이 그에게는 중요하다.',
+      '자신의 의견을 개발하는 것이 그에게는 중요하다.',
+      '대외적 이미지를 지키는 것이 그에게는 중요하다.',
+      '자신에게 소중한 사람들을 돕는 것이 그에게는 매우 중요하다.',
+      '개인적으로 안전하고 무사한 것이 그에게는 중요하다.',
+      '의지할 수 있고 믿을 수 있는 친구가 되는 것이 그에게는 중요하다.',
+      '삶을 흥분시키는 모험을 감수하는 것이 그에게는 중요하다.',
+      '그가 원하는 것을 사람들이 하도록 만드는 힘을 갖는 것이 그에게는 중요하다.',
+      '자신의 활동을 독립적으로 계획하는 것이 그에게는 중요하다.',
+      '지켜보는 사람이 없어도 규칙을 따르는 것이 그에게는 중요하다.',
+      '크게 성공하는 것이 그에게는 중요하다.',
+      '가족의 관례 또는 종교의 관습을 따르는 것이 그에게는 중요하다.',
+      '그와 다른 사람들에게도 귀를 기울이고 이해하는 것이 그에게는 중요하다.',
+      '국민들을 지킬 수 있는 강한 나라를 갖는 것이 그에게는 중요하다.',
+      '삶의 쾌감을 누리는 것이 그에게는 중요하다.',
+      '세상 사람들 각자가 삶에서 공평한 기회를 갖는 것이 그에게는 중요하다.',
+      '겸손한 것이 그에게는 중요하다.',
+      '사물의 이치를 스스로 알아가는 것이 그에게는 중요하다.',
+      '문화의 전통적 관습을 명예롭게 여기는 것이 그에게는 중요하다.',
+      '다른 사람이 무엇을 할지 지시하는 사람이 되는 것이 그에게는 중요하다.',
+      '모든 법을 준수하는 것이 그에게는 중요하다.',
+      '모든 종류의 새로운 경험을 하는 것이 그에게는 중요하다.',
+      '재력을 보여주는 비싼 물건을 소유하는 것이 그에게는 중요하다.',
+      '파괴나 오염으로부터 자연 환경을 보호하는 것이 그에게는 중요하다.',
+      '즐길 수 있는 모든 기회를 활용하는 것이 그에게는 중요하다.',
+      '자신이 소중히 여기는 사람들의 모든 필요에 관심을 기울이는 것이 그에게는 중요하다.',
+      '그가 성취한 것을 사람들이 인정해주는 것이 그에게는 중요하다.',
+      '결코 모욕 당하지 않는 것이 그에게는 중요하다.',
+      '자신의 나라가 모든 위협으로부터 국가 스스로를 지키는 일이 그에게는 중요하다.',
+      '다른 사람을 결코 화나게 만들지 않는 것이 그에게는 중요하다.',
+      '비록 모르는 사람일지라도 누구나 공정하게 대우 받는 것이 그에게는 중요하다.',
+      '위험한 어떤 것들이라도 피하는 것이 그에게는 중요하다.',
+      '자신이 가진 것에 만족하고 더 많은 것을 요구하지 않는 것이 그에게는 중요하다.',
+      '모든 친구나 가족들이 그에게 완전히 의지할 수 있는 것이 그에게는 중요하다.',
+      '할 일을 스스로 자유롭게 선택하는 것이 그에게는 중요하다.',
+      '사람들과 의견이 다를지라도 그들을 수용하는 것이 그에게는 중요하다.'
+    ]
+  },
+  {
+    id:'gcos', name:'Block 2: 동기 지향', short:'동기',
+    intro:'GCOS 17개 상황. 각 상황을 읽고, 3가지 반응 각각에 대해 "내가 이렇게 반응할 가능성"을 1~7점으로 평가해주세요.',
+    scale:7, scaleLabels:['매우 낮음','낮음','약간 낮음','보통','약간 높음','높음','매우 높음'],
+    type:'vignette',
+    items:[
+      {scenario:'당신이 오랫동안 일해온 회사에서 새로운 직책을 제안받았습니다. 가장 먼저 드는 생각은?',
+       subs:['새로운 책임을 감당할 수 있을까?','이 직책에서 더 많은 돈을 벌 수 있을까?','새로운 업무가 흥미로울지 궁금하다.']},
+      {scenario:'지원한 직장에서 면접을 봤지만 탈락했습니다.',
+       subs:['아는 사람이 중요한 거지, 실력이 아니야.','아마 나는 그 직업에 충분하지 않은 것 같다.','그들이 보기에 내 자격이 맞지 않았나 보다.']},
+      {scenario:'당신은 감독자인데, 직원들의 커피 브레이크 시간이 너무 길어져 업무에 지장이 생기고 있습니다.',
+       subs:['직원들에게 상황을 알리고 함께 스케줄을 짠다.','문제 방지를 위해 시간을 직접 배정한다.','상급자에게 어떻게 해야 하는지 물어보거나 전례를 따른다.']},
+      {scenario:'시험에서 성적이 좋지 않았습니다.',
+       subs:['"나는 아무것도 제대로 못해" — 슬프다.','"어떻게 이렇게 못했을까" — 실망한다.','"이 바보같은 시험은 아무것도 보여주지 않아" — 화난다.']},
+      {scenario:'토요일 저녁, 친구와 무엇을 할지 정해야 합니다.',
+       subs:['친구에게 맡긴다. 내 제안은 원하지 않을 것이다.','둘 다 아이디어를 내고 함께 결정한다.','친구를 설득하여 내가 원하는 것을 한다.']},
+      {scenario:'아는 사람이 거의 없는 파티에 갔습니다.',
+       subs:['잘 어울리려 노력하고 멋없어 보이지 않으려 한다.','교감할 수 있는 사람을 찾는다.','고립되고 주목받지 못하는 느낌이 들 것이다.']},
+      {scenario:'직원 소풍을 기획하는 위원장이 되었습니다.',
+       subs:['직접 주도하고 주요 결정을 내린다.','전례를 따른다. 능력이 안 되니 이전에 하던 대로.','참여를 구한다. 최종 결정 전 의견을 모은다.']},
+      {scenario:'기대했던 승진에서 누락되었습니다.',
+       subs:['예상했다. 자주 누락되니까.','상대방이 정치를 잘한 것이다.','누락 원인이 된 자신의 수행 요인을 살펴본다.']},
+      {scenario:'새로운 커리어를 시작하려고 합니다.',
+       subs:['감당이 안 될까 걱정된다.','그 일에 얼마나 관심이 있는지가 중요하다.','승진 가능성이 있는지가 중요하다.']},
+      {scenario:'당신의 직원 중 한 명의 업무 질이 떨어지고 있습니다.',
+       subs:['기대 이하라고 말하고 더 열심히 해야 한다고 한다.','문제가 무엇인지 물어보고 도울 수 있다고 알린다.','어떻게 해야 할지 모르겠다.']},
+      {scenario:'먼 곳으로의 승진 기회가 생겼습니다.',
+       subs:['새 도전에 관심이 생기고 약간 긴장된다.','높은 지위와 급여에 흥분된다.','다가올 변화에 스트레스와 불안을 느낀다.']},
+      {scenario:'시간을 보낼 친구를 선택한다면?',
+       subs:['가장 많은 아이디어와 감정을 교환하는 친구.','가장 인기 있는 친구.','가장 나를 필요로 하는 친구.']},
+      {scenario:'딸의 성적이 저조합니다.',
+       subs:['대화를 통해 문제를 더 이해한다.','꾸짖고 더 잘하길 바란다.','과제를 확인하고 더 열심히 해야 한다고 한다.']},
+      {scenario:'친구에게 거슬리는 습관이 있습니다.',
+       subs:['매번 지적한다. 그러면 멈출 수도 있으니.','무시한다. 말해봤자 소용없으니.','왜 그러는지, 왜 짜증나는지 이해하려 한다.']},
+      {scenario:'감정 기복이 있는 친구가 당신에게 화를 냈습니다.',
+       subs:['관찰한 것을 공유하고 무슨 일인지 알아본다.','무시한다. 할 수 있는 게 별로 없으니.','자기 감정을 조절할 때만 시간을 보내겠다고 한다.']},
+      {scenario:'친구의 여동생이 대학에서 부진하고 있습니다.',
+       subs:['대화를 통해 무슨 일인지 알아본다.','언급하지 않는다. 어차피 할 수 있는 게 없으니.','잘 해야 한다고 말하고 더 열심히 해야 한다고 한다.']},
+      {scenario:'친구가 당신에게 배려가 부족합니다.',
+       subs:['왜 그게 거슬리는지 설명한다. 인식 못할 수도 있으니.','아무 말 안 한다. 신경 썼다면 알아서 이해했을 것이다.','배려하라고 요구한다. 안 그러면 같은 식으로 대응하겠다.']}
+    ]
+  },
+  {
+    id:'ecrr', name:'Block 3: 애착', short:'애착',
+    intro:'ECR-R 36문항. 친밀한 관계(연인, 가까운 사람)에서의 감정과 행동에 대한 문항입니다. 현재 파트너가 없다면, 가장 최근의 관계나 친밀한 관계를 떠올리며 답해주세요.',
+    scale:7, scaleLabels:['매우 동의하지 않음','동의하지 않음','약간 동의하지 않음','보통','약간 동의','동의','매우 동의'],
+    type:'simple',
+    items:[
+      "상대방의 사랑을 잃을까 두렵다.",
+      "상대방이 나와 함께 있고 싶어하지 않을까 자주 걱정한다.",
+      "상대방이 나를 진심으로 사랑하지 않을까 자주 걱정한다.",
+      "상대방이 내가 그를 아끼는 만큼 나를 아끼지 않을까 걱정한다.",
+      "상대방의 감정이 내 감정만큼 강했으면 하고 바랄 때가 많다.",
+      "관계에 대해 많이 걱정한다.",
+      "상대방이 보이지 않으면, 다른 사람에게 관심을 가질까 걱정한다.",
+      "내 감정을 표현하면 상대방이 같은 감정을 느끼지 않을까 두렵다.",
+      "상대방이 나를 떠날까 걱정하는 일이 거의 없다.",
+      "상대방 때문에 나 자신을 의심하게 된다.",
+      "버림받을까 자주 걱정하지는 않는다.",
+      "상대방이 내가 원하는 만큼 가까이 오려 하지 않는다고 느낀다.",
+      "상대방이 뚜렷한 이유 없이 나에 대한 감정을 바꿀 때가 있다.",
+      "매우 가까워지고 싶은 내 욕구가 때때로 사람들을 멀어지게 한다.",
+      "상대방이 진짜 나를 알게 되면 좋아하지 않을까 두렵다.",
+      "필요한 애정과 지지를 받지 못해 화가 난다.",
+      "다른 사람들에 비해 내가 부족하지 않을까 걱정한다.",
+      "상대방은 내가 화가 났을 때만 나를 알아차리는 것 같다.",
+      "내 깊은 감정을 상대방에게 보여주지 않으려 한다.",
+      "사적인 생각과 감정을 상대방과 편하게 나눈다.",
+      "상대방에게 의존하는 것이 어렵다.",
+      "상대방과 매우 가까이 있는 것이 편하다.",
+      "상대방에게 마음을 여는 것이 편하지 않다.",
+      "상대방과 너무 가까워지는 것을 원하지 않는다.",
+      "상대방이 매우 가까이 오려 할 때 불편하다.",
+      "상대방과 가까워지는 것이 비교적 쉽다.",
+      "상대방과 가까워지는 것이 어렵지 않다.",
+      "보통 내 문제와 고민을 상대방과 이야기한다.",
+      "힘든 시기에 상대방에게 의지하면 도움이 된다.",
+      "상대방에게 거의 모든 것을 말한다.",
+      "상대방과 대화로 문제를 풀어간다.",
+      "상대방이 너무 가까이 올 때 긴장된다.",
+      "상대방에게 의존하는 것이 편하다.",
+      "상대방에게 의존하는 것이 쉽다.",
+      "상대방에게 다정하게 대하는 것이 쉽다.",
+      "상대방은 나와 내 필요를 정말로 이해한다."
+    ]
+  },
+  {
+    id:'rei', name:'Block 4: 인지 스타일', short:'인지',
+    intro:'REI 40문항. 평소 자신의 사고방식과 의사결정 스타일에 대해 답해주세요.',
+    scale:5, scaleLabels:['전혀 맞지 않다','맞지 않다','보통','맞다','확실히 맞다'],
+    type:'simple',
+    items:[
+      "복잡한 문제를 잘 풀어내는 편이 아니다.",
+      "신중한 논리적 분석이 필요한 문제를 잘 풀지 못한다.",
+      "분석적으로 사고하는 편이 아니다.",
+      "꼼꼼하게 추론하는 것은 내 장점이 아니다.",
+      "압박 속에서 추론을 잘 하지 못한다.",
+      "대부분의 사람들보다 논리적으로 문제를 파악하는 능력이 뛰어나다.",
+      "논리적인 사고방식을 가지고 있다.",
+      "논리를 사용하면 삶의 문제를 잘 해결할 수 있다.",
+      "깊이 생각하는 것에 문제가 없다.",
+      "내 결정에는 보통 명확하고 설명 가능한 이유가 있다.",
+      "깊이 생각해야 하는 상황을 피하려 한다.",
+      "많이 생각하는 것을 좋아하지 않는다.",
+      "지적인 도전을 즐긴다.",
+      "어려운 문제를 풀어야 하는 것을 즐긴다.",
+      "생각하는 것이 즐거운 활동은 아니다.",
+      "오래 깊이 생각하는 것에서 별로 만족을 느끼지 않는다.",
+      "단순한 문제보다 복잡한 문제를 선호한다.",
+      "이유를 이해하지 않아도 답을 아는 것으로 충분하다.",
+      "추상적으로 사고하는 것을 즐긴다.",
+      "새로운 사고방식을 배우는 것은 매우 매력적일 것이다.",
+      "직관력이 그다지 좋지 않다.",
+      "직감을 사용하면 문제를 잘 해결할 수 있다.",
+      "직관은 문제를 해결하는 매우 유용한 방법일 수 있다.",
+      "직감에 의존하면 실수를 자주 할 것이다.",
+      "내 순간적 판단은 대부분의 사람들만큼 좋지 않을 것이다.",
+      "설명할 수 없어도 누군가 옳은지 그른지 보통 느낄 수 있다.",
+      "가장 깊은 직감을 따르면 거의 틀리지 않는다.",
+      "직관적이라고 자처하는 사람에게 의존하고 싶지 않다.",
+      "설명 없이도 누군가 옳은지 그른지 보통 느낄 수 있다.",
+      "내 예감은 맞을 때만큼이나 자주 틀릴 것 같다.",
+      "직관적 인상에 의존하는 것을 좋아한다.",
+      "내 예감을 믿는다.",
+      "행동 방침을 정할 때 본능에 따르는 경우가 많다.",
+      "사람에 대한 첫 느낌을 신뢰한다.",
+      "사람을 믿을 때 보통 직감에 의존할 수 있다.",
+      "직관에 의존해야 할 때가 있다고 생각한다.",
+      "직관에 의존해야 하는 상황을 좋아하지 않는다.",
+      "느낌에 기반해 중요한 결정을 내리는 것은 어리석다고 생각한다.",
+      "중요한 결정에 직관을 의존하는 것은 좋지 않다고 생각한다.",
+      "결정을 내리는 데 느낌에 의존하지 않는 편이다."
+    ]
+  }
+];
+
+// ─── STATE ───
+const STORAGE_KEY = 'psych_test_answers';
+let currentBlock = 0;
+let focusIdx = 0;
+const answers = loadAnswers() || {
+  pvqrr: new Array(57).fill(null),
+  gcos: Array.from({length:17}, ()=>[null,null,null]),
+  ecrr: new Array(36).fill(null),
+  rei: new Array(40).fill(null)
+};
+
+function loadAnswers(){
+  try { const d = localStorage.getItem(STORAGE_KEY); return d ? JSON.parse(d) : null; }
+  catch(e){ return null; }
+}
+function saveAnswers(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(answers)); } catch(e){}
+}
+function resetAnswers(){
+  if(!confirm('모든 응답을 초기화하시겠습니까?')) return;
+  answers.pvqrr.fill(null);
+  answers.gcos = Array.from({length:17}, ()=>[null,null,null]);
+  answers.ecrr.fill(null);
+  answers.rei.fill(null);
+  saveAnswers();
+  renderBlock(0);
+}
+
+// ─── RENDER ───
+function renderTabs(){
+  const t = document.getElementById('tabs');
+  t.innerHTML = BLOCKS.map((b,i)=>{
+    const done = isBlockDone(i);
+    const cls = i===currentBlock?'tab active': done?'tab done':'tab';
+    return `<div class="${cls}" onclick="goBlock(${i})">${b.short}</div>`;
+  }).join('') + `<div class="tab" onclick="goBlock(4)" style="margin-left:auto;background:#ff9500;color:#fff;border-color:#ff9500">결과</div>`;
+}
+
+function isBlockDone(bi){
+  const b = BLOCKS[bi];
+  const a = answers[b.id];
+  if(b.type==='vignette') return a.every(v=>v.every(x=>x!==null));
+  return a.every(x=>x!==null);
+}
+
+function countAnswered(){
+  let done=0, total=184;
+  done += answers.pvqrr.filter(x=>x!==null).length;
+  answers.gcos.forEach(v=>v.forEach(x=>{if(x!==null)done++}));
+  done += answers.ecrr.filter(x=>x!==null).length;
+  done += answers.rei.filter(x=>x!==null).length;
+  return {done,total};
+}
+
+function updateProgress(){
+  const {done,total} = countAnswered();
+  document.getElementById('progressFill').style.width = (done/total*100)+'%';
+  document.getElementById('progressText').textContent = `${done} / ${total} 완료 (${Math.round(done/total*100)}%)`;
+}
+
+function renderBlock(bi){
+  currentBlock = bi;
+  focusIdx = 0;
+  const c = document.getElementById('container');
+  if(bi===4){ renderResult(); renderTabs(); updateProgress(); return; }
+  const b = BLOCKS[bi];
+  const a = answers[b.id];
+  let html = `<div class="block active">`;
+  html += `<div class="block-intro"><h2>${b.name}</h2><p>${b.intro}</p></div>`;
+  html += `<div class="scale-legend">`;
+  for(let i=0;i<b.scale;i++) html += `<span>${i+1}=${b.scaleLabels[i]}</span>`;
+  html += `</div>`;
+
+  if(b.type==='simple'){
+    b.items.forEach((item,idx)=>{
+      const ans = a[idx];
+      html += `<div class="item ${ans!==null?'answered':''}" id="item-${idx}">`;
+      html += `<div class="item-num">${idx+1} / ${b.items.length}</div>`;
+      html += `<div class="item-text">${item}</div>`;
+      html += `<div class="options">`;
+      for(let v=1;v<=b.scale;v++){
+        html += `<div class="opt ${ans===v?'selected':''}" onclick="answer('${b.id}',${idx},${v})">${v}</div>`;
+      }
+      html += `</div></div>`;
+    });
+  } else {
+    b.items.forEach((vig,vi)=>{
+      const va = a[vi];
+      const allDone = va.every(x=>x!==null);
+      html += `<div class="vignette ${allDone?'answered':''}" id="vig-${vi}">`;
+      html += `<div class="v-title">상황 ${vi+1} / ${b.items.length}</div>`;
+      html += `<div class="v-scenario">${vig.scenario}</div>`;
+      vig.subs.forEach((sub,si)=>{
+        html += `<div class="v-sub">`;
+        html += `<div class="v-sub-text">${String.fromCharCode(97+si)}) ${sub}</div>`;
+        html += `<div class="options">`;
+        for(let v=1;v<=b.scale;v++){
+          html += `<div class="opt ${va[si]===v?'selected':''}" onclick="answerVig(${vi},${si},${v})">${v}</div>`;
+        }
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+    });
+  }
+
+  html += `<div class="nav-buttons">`;
+  html += bi>0?`<button class="btn btn-prev" onclick="goBlock(${bi-1})">이전 블록</button>`:`<div></div>`;
+  html += bi<3?`<button class="btn btn-next" onclick="goBlock(${bi+1})">다음 블록</button>`:
+    `<button class="btn btn-next" style="background:#ff9500" onclick="goBlock(4)">결과 보기</button>`;
+  html += `</div></div>`;
+  c.innerHTML = html;
+  renderTabs();
+  updateProgress();
+  window.scrollTo(0,0);
+  setTimeout(updateFocus, 50);
+}
+
+function answer(blockId, idx, val){
+  answers[blockId][idx] = val;
+  saveAnswers();
+  const item = document.getElementById('item-'+idx);
+  item.classList.add('answered');
+  item.querySelectorAll('.opt').forEach(o=>{
+    o.classList.toggle('selected', parseInt(o.textContent)===val);
+  });
+  updateProgress();
+  renderTabs();
+  const next = document.getElementById('item-'+(idx+1));
+  if(next && answers[blockId][idx+1]===null){
+    setTimeout(()=>next.scrollIntoView({behavior:'smooth',block:'center'}),150);
+  }
+}
+
+function answerVig(vi, si, val){
+  answers.gcos[vi][si] = val;
+  saveAnswers();
+  const vig = document.getElementById('vig-'+vi);
+  const allDone = answers.gcos[vi].every(x=>x!==null);
+  if(allDone) vig.classList.add('answered');
+  vig.querySelectorAll('.v-sub')[si].querySelectorAll('.opt').forEach(o=>{
+    o.classList.toggle('selected', parseInt(o.textContent)===val);
+  });
+  updateProgress();
+  renderTabs();
+}
+
+function goBlock(bi){ renderBlock(bi); }
+
+function renderResult(){
+  const c = document.getElementById('container');
+  const {done,total} = countAnswered();
+  const allDone = done===total;
+  const result = {
+    pvqrr: answers.pvqrr,
+    gcos: answers.gcos,
+    ecrr: answers.ecrr,
+    rei: answers.rei,
+    timestamp: new Date().toISOString(),
+    complete: allDone
+  };
+  const json = JSON.stringify(result, null, 2);
+
+  let missing = '';
+  if(!allDone){
+    missing = '<div class="unanswered-warning" style="display:block">미응답 문항이 있습니다: ';
+    const parts = [];
+    const pMiss = answers.pvqrr.reduce((a,v,i)=>v===null?[...a,i+1]:a,[]);
+    if(pMiss.length) parts.push(`가치관 ${pMiss.join(',')}`);
+    const gMiss = [];
+    answers.gcos.forEach((v,i)=>v.forEach((x,j)=>{if(x===null)gMiss.push(`${i+1}${String.fromCharCode(97+j)}`)}));
+    if(gMiss.length) parts.push(`동기 ${gMiss.join(',')}`);
+    const eMiss = answers.ecrr.reduce((a,v,i)=>v===null?[...a,i+1]:a,[]);
+    if(eMiss.length) parts.push(`애착 ${eMiss.join(',')}`);
+    const rMiss = answers.rei.reduce((a,v,i)=>v===null?[...a,i+1]:a,[]);
+    if(rMiss.length) parts.push(`인지 ${rMiss.join(',')}`);
+    missing += parts.join(' | ') + '</div>';
+  }
+
+  c.innerHTML = `
+    <div class="block active">
+      <div class="block-intro">
+        <h2>결과 (${done}/${total})</h2>
+        <p>${allDone?'모든 문항 응답 완료. 아래 JSON을 복사해서 Claude에 붙여넣으세요.':'미완료 문항이 있습니다. 돌아가서 완료하거나, 현재 상태로 결과를 복사할 수 있습니다.'}</p>
+      </div>
+      ${missing}
+      <div class="result-box" id="resultJson">${json}</div>
+      <button class="copy-btn" onclick="copyResult()">클립보드에 복사</button>
+      <p style="text-align:center;margin-top:12px;color:#86868b;font-size:13px" id="copyMsg"></p>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="resetAnswers()">전체 초기화</button>
+      </div>
+      <div class="nav-buttons"><button class="btn btn-prev" onclick="goBlock(3)">이전 블록</button><div></div></div>
+    </div>`;
+  renderTabs();
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function copyResult(){
+  const text = document.getElementById('resultJson').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    document.getElementById('copyMsg').textContent = '복사됨! Claude에 붙여넣으세요.';
+  }).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('copyMsg').textContent = '복사됨!';
+  });
+}
+
+// ─── FOCUS & KEYBOARD ───
+function getMaxIdx(){
+  const b = BLOCKS[currentBlock];
+  if(!b) return 0;
+  return b.type==='simple' ? b.items.length-1 : b.items.length*3-1;
+}
+
+function updateFocus(){
+  document.querySelectorAll('.focused').forEach(el=>el.classList.remove('focused'));
+  if(currentBlock===4) return;
+  const b = BLOCKS[currentBlock];
+  if(b.type==='simple'){
+    const el = document.getElementById('item-'+focusIdx);
+    if(el){ el.classList.add('focused'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+  } else {
+    const vi = Math.floor(focusIdx/3), si = focusIdx%3;
+    const vig = document.getElementById('vig-'+vi);
+    if(vig){
+      const sub = vig.querySelectorAll('.v-sub')[si];
+      if(sub){ sub.classList.add('focused'); sub.scrollIntoView({behavior:'smooth',block:'center'}); }
+    }
+  }
+}
+
+function adjustAnswer(delta){
+  const b = BLOCKS[currentBlock];
+  let cur;
+  if(b.type==='simple'){
+    cur = answers[b.id][focusIdx];
+  } else {
+    cur = answers.gcos[Math.floor(focusIdx/3)][focusIdx%3];
+  }
+  let nv = (cur||0)+delta;
+  if(nv<1) nv=1; if(nv>b.scale) nv=b.scale;
+  if(b.type==='simple') answer(b.id, focusIdx, nv);
+  else answerVig(Math.floor(focusIdx/3), focusIdx%3, nv);
+}
+
+function findNextUnanswered(){
+  const b = BLOCKS[currentBlock];
+  const max = getMaxIdx();
+  for(let i=focusIdx+1;i<=max;i++){
+    if(b.type==='simple'){
+      if(answers[b.id][i]===null) return i;
+    } else {
+      if(answers.gcos[Math.floor(i/3)][i%3]===null) return i;
+    }
+  }
+  for(let i=0;i<=focusIdx;i++){
+    if(b.type==='simple'){
+      if(answers[b.id][i]===null) return i;
+    } else {
+      if(answers.gcos[Math.floor(i/3)][i%3]===null) return i;
+    }
+  }
+  return focusIdx;
+}
+
+document.addEventListener('keydown', e=>{
+  if(currentBlock===4) return;
+  const b = BLOCKS[currentBlock];
+  const max = getMaxIdx();
+
+  if(e.key>='1' && e.key<='9'){
+    const val = parseInt(e.key);
+    if(val>b.scale) return;
+    e.preventDefault();
+    if(b.type==='simple') answer(b.id, focusIdx, val);
+    else answerVig(Math.floor(focusIdx/3), focusIdx%3, val);
+    if(focusIdx<max){ focusIdx++; updateFocus(); }
+    return;
+  }
+
+  switch(e.key){
+    case 'ArrowDown':
+    case ' ':
+      e.preventDefault();
+      if(focusIdx<max){ focusIdx++; updateFocus(); }
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      if(focusIdx>0){ focusIdx--; updateFocus(); }
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      adjustAnswer(1);
+      break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      adjustAnswer(-1);
+      break;
+    case 'Enter':
+      e.preventDefault();
+      if(currentBlock<3) goBlock(currentBlock+1);
+      else goBlock(4);
+      break;
+    case 'Backspace':
+    case 'Delete':
+      e.preventDefault();
+      if(currentBlock>0) goBlock(currentBlock-1);
+      break;
+    case 'Tab':
+      e.preventDefault();
+      focusIdx = findNextUnanswered();
+      updateFocus();
+      break;
+  }
+});
+
+// ─── SERVICE WORKER ───
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+// ─── INIT ───
+renderBlock(0);
+</script>
+</body>
+</html>
