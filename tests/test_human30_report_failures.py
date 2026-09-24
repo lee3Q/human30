@@ -1,6 +1,7 @@
 """Reject resume verdicts that exceed or misstate the local evidence."""
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -43,3 +44,18 @@ def test_cli_rejects_invalid_verdict(tmp_path, verdict, monkeypatch, capsys):
 
     assert report.main() == 1
     assert "FAIL: unsupported claim: provider_reproducibility" in capsys.readouterr().err
+
+
+def test_optimized_python_still_rejects_unsupported_claim(tmp_path, verdict):
+    verdict["claims"]["provider_reproducibility"]["status"] = "verified"
+    path = tmp_path / "invalid_verdict.json"
+    path.write_text(json.dumps(verdict), encoding="utf-8")
+
+    run = subprocess.run(
+        [sys.executable, "-O", str(report.ROOT / "scripts" / "verify_human30_report.py"),
+         "--verdict", str(path)],
+        cwd=report.ROOT, capture_output=True, text=True, check=False,
+    )
+    assert run.returncode == 1
+    assert run.stdout == ""
+    assert "FAIL: unsupported claim: provider_reproducibility" in run.stderr

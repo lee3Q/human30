@@ -29,84 +29,86 @@ class RepeatMismatch(AssertionError):
     """An arm's independently generated raw UTF-8 responses differ."""
 
 
+def require(condition: bool, message: str) -> None:
+    """Keep evidence checks active when Python runs with optimization enabled."""
+    if not condition:
+        raise AssertionError(message)
+
+
 def verify_axis(root: Path, axis: str) -> None:
     folder = root / axis
     manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
     receipt = json.loads((folder / "receipt.json").read_text(encoding="utf-8"))
-    assert manifest["axis"] == receipt["axis"] == axis, f"{axis}: axis mismatch"
-    assert manifest["scenario"] == SCENARIO
-    assert manifest["scenario_sha256"] == sha(canonical(SCENARIO))
+    require(manifest["axis"] == receipt["axis"] == axis, f"{axis}: axis mismatch")
+    require(manifest["scenario"] == SCENARIO, "evidence check failed")
+    require(manifest["scenario_sha256"] == sha(canonical(SCENARIO)), "evidence check failed")
     conditions = [BASELINE, {**BASELINE, axis: CHANGED[axis]}]
-    assert manifest["condition_vectors"] == conditions
-    assert manifest["condition_sha256"] == [sha(canonical(c)) for c in conditions]
-    assert manifest["prompt_version"] == PROMPT_VERSION
-    assert manifest["prompt_template_sha256"] == sha(PROMPT_TEMPLATE.encode("utf-8"))
+    require(manifest["condition_vectors"] == conditions, "evidence check failed")
+    require(manifest["condition_sha256"] == [sha(canonical(c)) for c in conditions], "evidence check failed")
+    require(manifest["prompt_version"] == PROMPT_VERSION, "evidence check failed")
+    require(manifest["prompt_template_sha256"] == sha(PROMPT_TEMPLATE.encode("utf-8")), "evidence check failed")
 
     model = manifest["model_provenance"]
-    assert model["id"] == MODEL_ID and model["revision"] == MODEL_REVISION
-    assert set(model["files"]) == set(MODEL_FILES)
-    assert model["directory"] == "model"
-    assert model["files"]["model.safetensors"] == PINNED_MODEL_SHA256, f"{axis}: model pin mismatch"
-    assert model["acquisition"] == {
+    require(model["id"] == MODEL_ID and model["revision"] == MODEL_REVISION, "evidence check failed")
+    require(set(model["files"]) == set(MODEL_FILES), "evidence check failed")
+    require(model["directory"] == "model", "evidence check failed")
+    require(model["files"]["model.safetensors"] == PINNED_MODEL_SHA256, f"{axis}: model pin mismatch")
+    require(model["acquisition"] == {
         "method": "HTTPS GET from immutable Hugging Face revision; verify every SHA-256 before use",
         "url_template": MODEL_URL_TEMPLATE,
         "command": "uv run --group dev python scripts/acquire_human30_model.py",
-    }, f"{axis}: model acquisition mismatch"
+    }, f"{axis}: model acquisition mismatch")
     model_dir = root / model["directory"]
     for name in MODEL_FILES:
-        assert sha((model_dir / name).read_bytes()) == model["files"][name], f"{axis}: model hash mismatch: {name}"
+        require(sha((model_dir / name).read_bytes()) == model["files"][name], f"{axis}: model hash mismatch: {name}")
 
     execution = manifest["execution_provenance"]
-    assert execution["runner"] == "scripts/run_local_human30_pairs.py"
-    assert sha(Path(execution["runner"]).read_bytes()) == execution["runner_sha256"]
-    assert execution["device"] == "cpu"
-    assert execution["threads"] == 1
-    assert execution["deterministic_algorithms"] is True
+    require(execution["runner"] == "scripts/run_local_human30_pairs.py", "evidence check failed")
+    require(sha(Path(execution["runner"]).read_bytes()) == execution["runner_sha256"], "evidence check failed")
+    require(execution["device"] == "cpu", "evidence check failed")
+    require(execution["threads"] == 1, "evidence check failed")
+    require(execution["deterministic_algorithms"] is True, "evidence check failed")
     seed = execution["effective_seed"]
-    assert type(seed) is int and execution["rng"] == (
+    require(type(seed) is int and execution["rng"] == (
         "torch.manual_seed(seed) per independent CPU run; torch.get_rng_state before/after"
-    ), f"{axis}: effective seed not confirmed"
-    assert seed == 42 and execution["torch"] == "2.10.0", (
-        f"{axis}: no independent CPU RNG reference for seed or torch version"
-    )
-    assert execution["sampling"] == {
+    ), f"{axis}: effective seed not confirmed")
+    require(seed == 42 and execution["torch"] == "2.10.0", f"{axis}: no independent CPU RNG reference for seed or torch version")
+    require(execution["sampling"] == {
         "do_sample": True,
         "temperature": 0.7,
         "top_p": 0.9,
         "max_new_tokens": 24,
-    }, f"{axis}: sampling settings mismatch"
-    assert receipt["status"] == "PASS" and len(receipt["runs"]) == 4
-    assert receipt["invocation"] and receipt["actual_output"] == (
+    }, f"{axis}: sampling settings mismatch")
+    require(receipt["status"] == "PASS" and len(receipt["runs"]) == 4, "evidence check failed")
+    require(receipt["invocation"] and receipt["actual_output"] == (
         f"{axis}: PASS, both arms repeated identical raw UTF-8 bytes"
-    )
+    ), "evidence check failed")
     for arm, condition in enumerate(conditions):
         prompt = PROMPT_TEMPLATE.format(
             scenario=SCENARIO["stimulus"],
             condition=json.dumps(condition, ensure_ascii=False, sort_keys=True),
         ).encode("utf-8")
-        assert (folder / f"arm_{arm}.prompt.txt").read_bytes() == prompt
-        assert manifest["prompt_sha256"][arm] == sha(prompt)
+        require((folder / f"arm_{arm}.prompt.txt").read_bytes() == prompt, "evidence check failed")
+        require(manifest["prompt_sha256"][arm] == sha(prompt), "evidence check failed")
         raws = []
         starts = []
         for repetition in range(2):
             run = receipt["runs"][2 * arm + repetition]
-            assert run["arm"] == arm and run["repetition"] == repetition
-            assert run["effective_seed"] == seed, f"{axis} arm {arm}: seed mismatch"
-            assert run["prompt_sha256"] == sha(prompt)
+            require(run["arm"] == arm and run["repetition"] == repetition, "evidence check failed")
+            require(run["effective_seed"] == seed, f"{axis} arm {arm}: seed mismatch")
+            require(run["prompt_sha256"] == sha(prompt), "evidence check failed")
             name = f"arm_{arm}.repeat_{repetition}.raw.txt"
-            assert run["raw_response"] == name
+            require(run["raw_response"] == name, "evidence check failed")
             raw = (folder / name).read_bytes()
             raw.decode("utf-8", errors="strict")
-            assert raw.strip(), f"{axis} arm {arm} repeat {repetition}: empty raw response"
-            assert run["raw_sha256"] == sha(raw), f"{axis} arm {arm} repeat {repetition}: raw hash mismatch"
-            assert isinstance(run["generated_token_ids"], list) and run["generated_token_ids"]
-            assert len(run["rng_state_before_sha256"]) == len(run["rng_state_after_sha256"]) == 64
-            assert run["rng_state_before_sha256"] == PINNED_RNG_START_SHA256, (
-                f"{axis} arm {arm} repeat {repetition}: seed not applied to CPU RNG"
-            )
+            require(raw.strip(), f"{axis} arm {arm} repeat {repetition}: empty raw response")
+            require(run["raw_sha256"] == sha(raw), f"{axis} arm {arm} repeat {repetition}: raw hash mismatch")
+            require(isinstance(run["generated_token_ids"], list) and run["generated_token_ids"], "evidence check failed")
+            require(len(run["rng_state_before_sha256"]) == len(run["rng_state_after_sha256"]) == 64, "evidence check failed")
+            require(run["rng_state_before_sha256"] == PINNED_RNG_START_SHA256, f"{axis} arm {arm} repeat {repetition}: seed not applied to CPU RNG")
             raws.append(raw)
             starts.append(run["rng_state_before_sha256"])
-        assert starts[0] == starts[1], f"{axis} arm {arm}: RNG start mismatch"
+        require(starts[0] == starts[1], f"{axis} arm {arm}: RNG start mismatch")
         if raws[0] != raws[1]:
             raise RepeatMismatch(f"{axis} arm {arm}: repeated raw UTF-8 bytes differ")
 
