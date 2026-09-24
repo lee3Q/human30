@@ -1,0 +1,40 @@
+{
+  "axis": "memory",
+  "prompt_version": "public-synthetic-v1",
+  "model": {
+    "id": "human30.curated-example",
+    "version": "1",
+    "source": "hand_authored_synthetic"
+  },
+  "seed": 42,
+  "settings": {
+    "generation": "curated",
+    "temperature": null
+  },
+  "environment": {
+    "generation_context": "hand_authored_fixture_v1"
+  },
+  "scenario_sha256": "a03ed2f4803d1e96e5446aa790965d8baeca5c9d91029d629f39def402d4ba49",
+  "condition_vectors": [
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    },
+    {
+      "body": "rested",
+      "memory": "remembers_receiving_help_at_shelter",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    }
+  ],
+  "output_sha256": [
+    "89f7b3d30477c8007ce93e921b38615a64a1aa56e9f81626b806b2fa3e71cfcf",
+    "d1d69db8bc10f54f0a2209182d891695e81b53c6923b956dfa3cad2897ac6089"
+  ],
+  "retries": [
+    0,
+    0
+  ]
+}

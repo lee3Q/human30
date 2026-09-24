@@ -90,3 +90,6 @@ python3 scripts/card.py 1 all          # 30명 카드 출력
 ## 미학적 좌표
 
 Ari Aster · Gaspar Noé · 다자이 오사무 · 카뮈. 정화 없는 관찰. 구원 없는 결말. 외부자의 냉정한 시선.
+# Paired counterfactual experiment
+
+The public, one-condition-at-a-time experiment and its independent evaluation are documented in [runs/public_counterfactual/README.md](runs/public_counterfactual/README.md). The example set distinguishes hand-authored fixtures from five recorded actual-model pairs and states the seed-control and repeatability limits explicitly.

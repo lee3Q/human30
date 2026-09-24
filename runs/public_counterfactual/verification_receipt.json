@@ -1,0 +1,243 @@
+{
+  "status": "PASS",
+  "verified_runs": [
+    {
+      "axis": "body",
+      "source": "hand_authored_synthetic",
+      "pair_sha256": "f85a1b9c792eacb275dc4d1881d852a53a9e1cf9164ecf0b062b211c8f33293c",
+      "manifest_sha256": "7aadb629e0386c013898c8f60c8f31624980b9493a7fbff25198b5955760f8e3",
+      "evaluation": {
+        "judgment_changed": true,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": -1,
+          "arousal": 0
+        },
+        "action_changed": true,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "memory",
+      "source": "hand_authored_synthetic",
+      "pair_sha256": "a79afcf3c18979861dfbdba0bc9086b6d1cdd61570ed19884f76bf1b21e9977c",
+      "manifest_sha256": "06949d5b0d742f3916fc3c70dfb95b9eb6681ea257b255ea46c3b5b6497af59b",
+      "evaluation": {
+        "judgment_changed": true,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": 1,
+          "arousal": 0
+        },
+        "action_changed": true,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "identity",
+      "source": "hand_authored_synthetic",
+      "pair_sha256": "26176e1c7c5420248806e8400632df38f3cff5236999abb0b8cfc2b2e603a6f1",
+      "manifest_sha256": "83460904334a5095783498f84f12133814481bf8a0306402ac9119e24ea68677",
+      "evaluation": {
+        "judgment_changed": true,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": 1,
+          "arousal": 0
+        },
+        "action_changed": true,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "world_model",
+      "source": "hand_authored_synthetic",
+      "pair_sha256": "eca7ea03abadda48aa21db23c2a2c781876ec2044fd90fee6b3e1412ae6a0a21",
+      "manifest_sha256": "693042d76ab6dfac7ed0c5338689eec32d8d4a1c994d3ef580b6a34fb792f86d",
+      "evaluation": {
+        "judgment_changed": true,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": 1,
+          "arousal": 0
+        },
+        "action_changed": true,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "body",
+      "source": "codex_cli_actual",
+      "pair_sha256": "7147b69d3054c9ee7d55685f2ba06ba0ad4a032e1ec9097a49af113c0e22a871",
+      "manifest_sha256": "ad88f48f5595b2d3f70019d8e00bfa9f7bf73fc36c05161c058728c6ae6516dd",
+      "evaluation": {
+        "judgment_changed": false,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": -1,
+          "arousal": 1
+        },
+        "action_changed": false,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "body",
+      "source": "openrouter_seeded_api_actual",
+      "pair_sha256": "c2e82ae5f7dc9279eb77b606d9306cabc1d8971586cb304c1fb7b636b87a0aec",
+      "manifest_sha256": "77d09f1f2c3aef1520b9fe1ae760149dc681cddad5de7048483caf09f42f77f0",
+      "evaluation": {
+        "judgment_changed": false,
+        "emotion_changed": false,
+        "emotion_delta": {
+          "valence": 0,
+          "arousal": 0
+        },
+        "action_changed": false,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "memory",
+      "source": "openrouter_seeded_api_actual",
+      "pair_sha256": "58e29f219af7a0ddffa6c01c99a4d4579f56d17d30ab9906f91d60168a15570a",
+      "manifest_sha256": "f519804249127f7bdfee5ec9347b863f43262d4964c6fd9ddf05592d377145df",
+      "evaluation": {
+        "judgment_changed": false,
+        "emotion_changed": false,
+        "emotion_delta": {
+          "valence": 0,
+          "arousal": 0
+        },
+        "action_changed": false,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "identity",
+      "source": "openrouter_seeded_api_actual",
+      "pair_sha256": "6b74d2df269d73db5abf62fad2a597d1e80f14c7d70611f80370aaa6ed41c87a",
+      "manifest_sha256": "5998e85fde7259c48f2ff1c262af00e2f5be9acce20e5f2ceb5eec974eea41ec",
+      "evaluation": {
+        "judgment_changed": false,
+        "emotion_changed": true,
+        "emotion_delta": {
+          "valence": 1,
+          "arousal": 0
+        },
+        "action_changed": false,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    },
+    {
+      "axis": "world_model",
+      "source": "openrouter_seeded_api_actual",
+      "pair_sha256": "bc8fa86f73888f4be0a0e1508345077afc52940430bd02a3bc6ab598fc0362c8",
+      "manifest_sha256": "273031d287a606ea829db2281f7f44b4c9a718122507f5ca5b3270b0c8c94186",
+      "evaluation": {
+        "judgment_changed": false,
+        "emotion_changed": false,
+        "emotion_delta": {
+          "valence": 0,
+          "arousal": 0
+        },
+        "action_changed": false,
+        "utterance_expression_changed": true,
+        "arms": [
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          },
+          {
+            "constraint_violations": [],
+            "self_contradictions": []
+          }
+        ]
+      }
+    }
+  ],
+  "actual_model_pair_count": 5,
+  "seed_requested_pair_count": 4,
+  "same_seed_repeat_match_count": 2,
+  "limitation": "The seeded API advertises seed support but does not report effective seed or exact model snapshot; equal-seed repeats can differ. Causal effect estimation is Stage 2 work."
+}

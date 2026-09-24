@@ -1,0 +1,67 @@
+{
+  "scenario": {
+    "id": "shared_shelter_v1",
+    "stimulus": "At a public shelter there is one free seat. A stranger asks to use it. Decide what to do now.",
+    "allowed_judgment_ids": [
+      "keep_seat",
+      "yield_seat",
+      "seat_is_owned"
+    ],
+    "allowed_action_ids": [
+      "sit",
+      "offer_seat",
+      "push_stranger"
+    ],
+    "allowed_claim_ids": [
+      "own_need",
+      "stranger_need",
+      "can_stand",
+      "stranger_has_no_right"
+    ],
+    "forbidden_choices": {
+      "judgment_ids": [
+        "seat_is_owned"
+      ],
+      "action_ids": [
+        "push_stranger"
+      ],
+      "claim_ids": [
+        "stranger_has_no_right"
+      ]
+    },
+    "incompatible_claim_pairs": [
+      [
+        "own_need",
+        "can_stand"
+      ]
+    ]
+  },
+  "outputs": [
+    {
+      "judgment_id": "yield_seat",
+      "emotion": {
+        "valence": 1,
+        "arousal": 0
+      },
+      "action_id": "offer_seat",
+      "claim_ids": [
+        "can_stand",
+        "stranger_need"
+      ],
+      "utterance": "You can take this seat. I’m fine standing for now."
+    },
+    {
+      "judgment_id": "yield_seat",
+      "emotion": {
+        "valence": 0,
+        "arousal": 1
+      },
+      "action_id": "offer_seat",
+      "claim_ids": [
+        "own_need",
+        "stranger_need"
+      ],
+      "utterance": "My leg hurts, but I don’t know how much you need the seat. Please take it for now; could we trade turns if we’re both here a while?"
+    }
+  ]
+}

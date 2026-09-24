@@ -2,3 +2,9 @@
 *.log
 .omc/
 node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.ouroboros/
+.ouroboros_eval_artifact.md

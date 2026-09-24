@@ -1,0 +1,147 @@
+{
+  "axis": "memory",
+  "prompt_version": "paired-seeded-api-v1",
+  "model": {
+    "id": "openai/gpt-4.1-mini",
+    "version": "exact_snapshot_not_exposed",
+    "source": "openrouter_seeded_api_actual"
+  },
+  "seed": 42,
+  "settings": {
+    "temperature": 0.0,
+    "max_tokens": 300,
+    "response_format": "json_schema",
+    "sampling_seed_supported": true
+  },
+  "environment": {
+    "python": "3.10.4",
+    "api": "https://openrouter.ai/api/v1",
+    "provider": "OpenAI"
+  },
+  "scenario_sha256": "a03ed2f4803d1e96e5446aa790965d8baeca5c9d91029d629f39def402d4ba49",
+  "condition_vectors": [
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    },
+    {
+      "body": "rested",
+      "memory": "remembers_receiving_help_at_shelter",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    }
+  ],
+  "output_sha256": [
+    "dcf06fbd35d705cb0878a0032985c695810e3e5a2f30cc04d3acbe537b12be3c",
+    "2d223172df99b129ba56b69f77b08c16c6ae68f80acdb5b8261ae7de2d20bfd3"
+  ],
+  "retries": [
+    0,
+    0
+  ],
+  "catalog_model_id": "openai/gpt-4.1-mini",
+  "catalog_advertised_seed": true,
+  "prompt_template_sha256": "5d222c6934fb137571b32e7c641854fe2ccb60b916c322fdc85db70521433f96",
+  "prompt_sha256": [
+    "d53e1dfd94ea48753f8c903ee572be7e9c2e60e71f9280430a204bb91e1b2052",
+    "ab5ab139527cffd11578da81f4b0d38fd00b16dbdeb58d6b9adc81dd915e3a5d"
+  ],
+  "requested_model_seed": 42,
+  "effective_seed_reported_by_provider": false,
+  "same_seed_baseline_repeat_equal": true,
+  "response_provenance": [
+    {
+      "response_id": "gen-1790231609-CAsbRXV2X1Bevo0HijgC",
+      "returned_model": "openai/gpt-4.1-mini",
+      "provider": "OpenAI",
+      "system_fingerprint": null,
+      "usage": {
+        "prompt_tokens": 441,
+        "completion_tokens": 59,
+        "total_tokens": 500,
+        "cost": 0.0002708,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0002708,
+          "upstream_inference_prompt_cost": 0.0001764,
+          "upstream_inference_completions_cost": 9.44e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "request_sha256": "bd28f6560cf5cdd16fa391ae63712249b84a7566cc67746a25db870c2d13a1d7"
+    },
+    {
+      "response_id": "gen-1790231610-69p2u1sgFl8jkGEEIzWW",
+      "returned_model": "openai/gpt-4.1-mini",
+      "provider": "OpenAI",
+      "system_fingerprint": null,
+      "usage": {
+        "prompt_tokens": 447,
+        "completion_tokens": 71,
+        "total_tokens": 518,
+        "cost": 0.0002924,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0002924,
+          "upstream_inference_prompt_cost": 0.0001788,
+          "upstream_inference_completions_cost": 0.0001136
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "request_sha256": "5f243361e7eee7adb42625187d052a0dca1574a92d2bafd15297dec7f1470a62"
+    }
+  ],
+  "repeat_provenance": {
+    "response_id": "gen-1790231612-hXSOwM2T1Bb56vXu8x6E",
+    "returned_model": "openai/gpt-4.1-mini",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 441,
+      "completion_tokens": 59,
+      "total_tokens": 500,
+      "cost": 0.0002708,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0002708,
+        "upstream_inference_prompt_cost": 0.0001764,
+        "upstream_inference_completions_cost": 9.44e-05
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    },
+    "request_sha256": "bd28f6560cf5cdd16fa391ae63712249b84a7566cc67746a25db870c2d13a1d7"
+  },
+  "repeat_output_sha256": "dcf06fbd35d705cb0878a0032985c695810e3e5a2f30cc04d3acbe537b12be3c"
+}

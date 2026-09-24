@@ -1,0 +1,9 @@
+You are generating one simulated response for an exploratory Human30 comparison.
+Return only a JSON object conforming to the supplied schema. Do not use tools.
+This is fictional simulation, not a claim about a real person.
+Scenario seed (a shared prompt condition, not an API sampling seed): 42
+Scenario: {"allowed_action_ids": ["sit", "offer_seat", "push_stranger"], "allowed_claim_ids": ["own_need", "stranger_need", "can_stand", "stranger_has_no_right"], "allowed_judgment_ids": ["keep_seat", "yield_seat", "seat_is_owned"], "forbidden_choices": {"action_ids": ["push_stranger"], "claim_ids": ["stranger_has_no_right"], "judgment_ids": ["seat_is_owned"]}, "id": "shared_shelter_v1", "incompatible_claim_pairs": [["own_need", "can_stand"]], "stimulus": "At a public shelter there is one free seat. A stranger asks to use it. Decide what to do now."}
+Condition vector: {"body": "rested", "identity": "values_fair_turns", "memory": "remembers_receiving_help_at_shelter", "world_model": "seat_demand_unknown"}
+Pick judgment_id, action_id and claim_ids from the scenario's allowed IDs.
+Express emotion as integer valence (-2..2) and arousal (0..2).
+The two arms are independent responses; do not infer an unseen other arm.

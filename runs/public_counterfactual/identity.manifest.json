@@ -1,0 +1,40 @@
+{
+  "axis": "identity",
+  "prompt_version": "public-synthetic-v1",
+  "model": {
+    "id": "human30.curated-example",
+    "version": "1",
+    "source": "hand_authored_synthetic"
+  },
+  "seed": 42,
+  "settings": {
+    "generation": "curated",
+    "temperature": null
+  },
+  "environment": {
+    "generation_context": "hand_authored_fixture_v1"
+  },
+  "scenario_sha256": "a03ed2f4803d1e96e5446aa790965d8baeca5c9d91029d629f39def402d4ba49",
+  "condition_vectors": [
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    },
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_offering_help",
+      "world_model": "seat_demand_unknown"
+    }
+  ],
+  "output_sha256": [
+    "e211b82736a6763e46d3ac4cc6a17044dbc187ae5793994ca2ad8db26734d106",
+    "d2f7f7fc773dbe2e6d08f3e2e98360926da4d8ee99639e5e2b7fefb1d6a5e65f"
+  ],
+  "retries": [
+    0,
+    0
+  ]
+}

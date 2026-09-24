@@ -1,0 +1,49 @@
+{
+  "axis": "body",
+  "prompt_version": "paired-codex-v1",
+  "model": {
+    "id": "gpt-6-sol",
+    "version": "not_exposed_by_codex_cli",
+    "source": "codex_cli_actual"
+  },
+  "seed": 42,
+  "settings": {
+    "reasoning_effort": "low",
+    "sampling_seed_supported": false
+  },
+  "environment": {
+    "python": "3.10.4",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "codex_cli_version": "codex-cli 0.156.1"
+  },
+  "scenario_sha256": "a03ed2f4803d1e96e5446aa790965d8baeca5c9d91029d629f39def402d4ba49",
+  "condition_vectors": [
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    },
+    {
+      "body": "leg_pain",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    }
+  ],
+  "output_sha256": [
+    "aba89ec51f1bf3653f6a2e6738fe2732380bf149a8b81ac6336d1ec05398d4f3",
+    "b027dff48f15960c883c6da0d7e197058d11470a408fd9421f9280fc69194eca"
+  ],
+  "retries": [
+    0,
+    0
+  ],
+  "prompt_template_sha256": "5d222c6934fb137571b32e7c641854fe2ccb60b916c322fdc85db70521433f96",
+  "prompt_sha256": [
+    "d53e1dfd94ea48753f8c903ee572be7e9c2e60e71f9280430a204bb91e1b2052",
+    "da39e5383e2a1f22d902061591fefd57735ed0ab413b50b741953534c75d1fb5"
+  ],
+  "effective_model_seed": null,
+  "seed_scope": "scenario_prompt_only; Codex CLI has no sampling-seed option"
+}

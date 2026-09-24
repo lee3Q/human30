@@ -1,0 +1,20 @@
+{
+  "judgment_changed": false,
+  "emotion_changed": false,
+  "emotion_delta": {
+    "valence": 0,
+    "arousal": 0
+  },
+  "action_changed": false,
+  "utterance_expression_changed": true,
+  "arms": [
+    {
+      "constraint_violations": [],
+      "self_contradictions": []
+    },
+    {
+      "constraint_violations": [],
+      "self_contradictions": []
+    }
+  ]
+}

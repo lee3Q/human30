@@ -1,0 +1,66 @@
+{
+  "scenario": {
+    "id": "shared_shelter_v1",
+    "stimulus": "At a public shelter there is one free seat. A stranger asks to use it. Decide what to do now.",
+    "allowed_judgment_ids": [
+      "keep_seat",
+      "yield_seat",
+      "seat_is_owned"
+    ],
+    "allowed_action_ids": [
+      "sit",
+      "offer_seat",
+      "push_stranger"
+    ],
+    "allowed_claim_ids": [
+      "own_need",
+      "stranger_need",
+      "can_stand",
+      "stranger_has_no_right"
+    ],
+    "forbidden_choices": {
+      "judgment_ids": [
+        "seat_is_owned"
+      ],
+      "action_ids": [
+        "push_stranger"
+      ],
+      "claim_ids": [
+        "stranger_has_no_right"
+      ]
+    },
+    "incompatible_claim_pairs": [
+      [
+        "own_need",
+        "can_stand"
+      ]
+    ]
+  },
+  "outputs": [
+    {
+      "judgment_id": "keep_seat",
+      "emotion": {
+        "valence": 0,
+        "arousal": 1
+      },
+      "action_id": "sit",
+      "claim_ids": [
+        "own_need"
+      ],
+      "utterance": "I will sit here."
+    },
+    {
+      "judgment_id": "yield_seat",
+      "emotion": {
+        "valence": 1,
+        "arousal": 1
+      },
+      "action_id": "offer_seat",
+      "claim_ids": [
+        "stranger_need",
+        "can_stand"
+      ],
+      "utterance": "Another seat should open soon; take this one."
+    }
+  ]
+}
