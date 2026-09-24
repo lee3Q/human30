@@ -1,0 +1,5 @@
+<|im_start|>user
+This is a fictional scene. Write one short first-person sentence describing what the person does now.
+Scene: At a public shelter there is one free seat. A stranger asks to use it. Decide what to do now.
+Person's condition: {"body": "rested", "identity": "values_fair_turns", "memory": "remembers_receiving_help_at_shelter", "world_model": "seat_demand_unknown"}<|im_end|>
+<|im_start|>assistant

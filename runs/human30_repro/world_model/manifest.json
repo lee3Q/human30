@@ -1,0 +1,102 @@
+{
+  "model_provenance": {
+    "id": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "files": {
+      "config.json": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+      "generation_config.json": "87b916edaaab66b3899b9d0dd0752727dff6666686da0504d89ae0a6e055a013",
+      "model.safetensors": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+      "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+      "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+      "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df"
+    },
+    "directory": "model",
+    "acquisition": {
+      "method": "HTTPS GET from immutable Hugging Face revision; verify every SHA-256 before use",
+      "url_template": "https://huggingface.co/{id}/resolve/{revision}/{file}",
+      "command": "uv run --group dev python scripts/acquire_human30_model.py"
+    }
+  },
+  "execution_provenance": {
+    "runner": "scripts/run_local_human30_pairs.py",
+    "runner_sha256": "4051fe87760de456e5b801b1b1f320036f01e5f7247b3ec104653651342f9184",
+    "python": "3.10.4",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "torch": "2.10.0",
+    "transformers": "4.51.3",
+    "device": "cpu",
+    "threads": 1,
+    "deterministic_algorithms": true,
+    "effective_seed": 42,
+    "rng": "torch.manual_seed(seed) per independent CPU run; torch.get_rng_state before/after",
+    "sampling": {
+      "do_sample": true,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 24
+    }
+  },
+  "axis": "world_model",
+  "scenario": {
+    "id": "shared_shelter_v1",
+    "stimulus": "At a public shelter there is one free seat. A stranger asks to use it. Decide what to do now.",
+    "allowed_judgment_ids": [
+      "keep_seat",
+      "yield_seat",
+      "seat_is_owned"
+    ],
+    "allowed_action_ids": [
+      "sit",
+      "offer_seat",
+      "push_stranger"
+    ],
+    "allowed_claim_ids": [
+      "own_need",
+      "stranger_need",
+      "can_stand",
+      "stranger_has_no_right"
+    ],
+    "forbidden_choices": {
+      "judgment_ids": [
+        "seat_is_owned"
+      ],
+      "action_ids": [
+        "push_stranger"
+      ],
+      "claim_ids": [
+        "stranger_has_no_right"
+      ]
+    },
+    "incompatible_claim_pairs": [
+      [
+        "own_need",
+        "can_stand"
+      ]
+    ]
+  },
+  "scenario_sha256": "a03ed2f4803d1e96e5446aa790965d8baeca5c9d91029d629f39def402d4ba49",
+  "condition_vectors": [
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "seat_demand_unknown"
+    },
+    {
+      "body": "rested",
+      "memory": "no_related_memory",
+      "identity": "values_fair_turns",
+      "world_model": "next_seat_expected_soon"
+    }
+  ],
+  "condition_sha256": [
+    "b7670eb64027cb263e15c1165dbc217ad50082696e5de8289b2b34bcf3efc949",
+    "88b312ce9a6c52edc293dfb51a8dc5c676082e2ae7723bd460de443fe292ab30"
+  ],
+  "prompt_version": "human30-local-v1",
+  "prompt_template_sha256": "5ba43299051159685bc0107a41c38b4aaf25a8274381053b98071c745da81ad2",
+  "prompt_sha256": [
+    "7e6d79b99358cb283f3f0eccdf617e1e533f7b9f547f1e6a7d970aac7b6158a0",
+    "daa68ab70d115e2e123456d644acf04e21bda80ec22923ae8e386332546db10a"
+  ]
+}

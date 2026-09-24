@@ -8,3 +8,5 @@ __pycache__/
 .venv/
 .ouroboros/
 .ouroboros_eval_artifact.md
+runs/human30_repro/model/model.safetensors
+runs/human30_repro/model/.cache/

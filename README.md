@@ -93,3 +93,23 @@ Ari Aster · Gaspar Noé · 다자이 오사무 · 카뮈. 정화 없는 관찰.
 # Paired counterfactual experiment
 
 The public, one-condition-at-a-time experiment and its independent evaluation are documented in [runs/public_counterfactual/README.md](runs/public_counterfactual/README.md). The example set distinguishes hand-authored fixtures from five recorded actual-model pairs and states the seed-control and repeatability limits explicitly.
+
+## Local CPU model reproduction
+
+The four-axis [local run evidence](runs/human30_repro/README.md) uses the exact
+SmolLM2-135M-Instruct model commit `12fd25f77366fa6b3b4b768ec3050bf629380bac`
+and checks the SHA-256 of every downloaded model file. From the repository root:
+
+```sh
+uv run --group dev python scripts/acquire_human30_model.py
+uv run --no-project --python 3.10 --with torch==2.10.0 --with transformers==4.51.3 --with safetensors==0.5.3 python -m scripts.run_local_human30_pairs --axes body memory identity world_model
+uv run --group dev python scripts/build_human30_report.py
+uv run --group dev python scripts/verify_human30_repro.py
+uv run --group dev python scripts/verify_human30_report.py
+uv run --group dev python -m pytest -q
+```
+
+The runner applies seed 42 to each independent CPU generation and stores two
+raw responses for each arm. The model weight is downloaded at the pinned commit
+and excluded from Git. This local result does not establish provider seed
+application, personal prediction, or a causal effect on people.

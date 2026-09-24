@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "claims": {
+    "local_cpu_four_axis_pairs": {
+      "status": "verified",
+      "scope": "Four fictional-scenario axes have locally generated baseline and condition responses, each repeated with identical UTF-8 bytes under the recorded CPU model and applied seed."
+    },
+    "local_manifest_integrity": {
+      "status": "verified",
+      "scope": "The local model, scenario, prompts, runner, seed receipts, and raw response hashes pass the reproducibility verifier."
+    },
+    "provider_reproducibility": {
+      "status": "unverified",
+      "scope": "The local CPU runs do not establish OpenRouter or provider seed application or model snapshot control."
+    },
+    "personal_prediction": {
+      "status": "unverified",
+      "scope": "The fictional shelter scenario contains no observed personal choices against which to test predictive accuracy."
+    },
+    "causal_effect": {
+      "status": "unverified",
+      "scope": "Paired generated responses alone do not establish a causal effect beyond this local setup."
+    }
+  },
+  "evidence_sha256": {
+    "runs/human30_repro/body/manifest.json": "28f7173a7c808ce913f1e59ee4fe1402309fd3f6a71a7b9b0bf64bc875eb48e6",
+    "runs/human30_repro/body/receipt.json": "2a1af3646c2330ea38bf813bb2d11243d69797c929256a3a75ed8eb878b63beb",
+    "runs/human30_repro/memory/manifest.json": "d962bd75a5312f54872a1d067016ad1bda1704c3aa0524d4fed7b0940f94f641",
+    "runs/human30_repro/memory/receipt.json": "1db0f9a5d1dd2cb253b5e75237456d0ededbf3566de6d977759d1abbde6b760b",
+    "runs/human30_repro/identity/manifest.json": "4e15f01d9dc7865f1a10941745d51c5c609f03f2e8d700c468977de2630d1603",
+    "runs/human30_repro/identity/receipt.json": "7c3168c5f0a7dc7ef75c997eb2a5e7d9f0ee60ecdb7f152259ab5d413c86c536",
+    "runs/human30_repro/world_model/manifest.json": "d8672b658876355b2d5374d8b77a1640a4a682fcebb4413a8ff255eb1219e061",
+    "runs/human30_repro/world_model/receipt.json": "7f38f29cf4d81b08f3b1a3083c0284805988f3ab4b98c6d085a8a3f0072e10a9"
+  }
+}
