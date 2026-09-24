@@ -22,6 +22,22 @@ from scripts.run_local_human30_pairs import MODEL_FILES, MODEL_ID, MODEL_REVISIO
 # receipt hashes from being mistaken for evidence that the seed was applied.
 PINNED_RNG_START_SHA256 = "5feb54a46230d321d888e9b43cf5a57492665f199e4377408d79ee460e36679c"
 PINNED_MODEL_SHA256 = "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c"
+PINNED_MODEL_FILES = {
+    "config.json": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+    "generation_config.json": "87b916edaaab66b3899b9d0dd0752727dff6666686da0504d89ae0a6e055a013",
+    "model.safetensors": PINNED_MODEL_SHA256,
+    "special_tokens_map.json": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+    "tokenizer.json": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+    "tokenizer_config.json": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df",
+}
+PINNED_RUNNER_SHA256 = "4051fe87760de456e5b801b1b1f320036f01e5f7247b3ec104653651342f9184"
+PINNED_SCENARIO_SOURCE_SHA256 = "4e3aa4959c8cf958889cc4b03c3c152853061afcfeba8fed1a3eb540bc80dad9"
+PINNED_COMMON_RAW_SHA256 = "8953f2e796caf282fe298995cd1e9ce83871265ea1f606312e0ae5ef7cf89b11"
+PINNED_WORLD_CHANGED_RAW_SHA256 = "e673cc53e111766d1b47ab74a5eabf90d5004cd73bdb0ea9a948482b2ff31db3"
+PINNED_COMMON_TOKENS_SHA256 = "9c92daef27287836468d53be3c28971f9a4b978ae42c722ea22f78c1fdb253c9"
+PINNED_WORLD_CHANGED_TOKENS_SHA256 = "b5c7783120daa7079026717c8bcdf630c1377f3301880acd711d99323b4e48d5"
+PINNED_COMMON_RNG_END_SHA256 = "bfa9ba76fab5dbb67cb77c96a1f0b1e92e452e7ea59d51af453ad5cc0b07d8d0"
+PINNED_WORLD_CHANGED_RNG_END_SHA256 = "9e343f87be3751b4c93b6d6b66de2e0eca45dd8358e5b24fd0495519c5725d84"
 MODEL_URL_TEMPLATE = "https://huggingface.co/{id}/resolve/{revision}/{file}"
 
 
@@ -36,6 +52,8 @@ def require(condition: bool, message: str) -> None:
 
 
 def verify_axis(root: Path, axis: str) -> None:
+    require(sha((ROOT / "scripts/build_public_pairs.py").read_bytes()) == PINNED_SCENARIO_SOURCE_SHA256,
+            "scenario source pin mismatch")
     folder = root / axis
     manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
     receipt = json.loads((folder / "receipt.json").read_text(encoding="utf-8"))
@@ -50,9 +68,9 @@ def verify_axis(root: Path, axis: str) -> None:
 
     model = manifest["model_provenance"]
     require(model["id"] == MODEL_ID and model["revision"] == MODEL_REVISION, "evidence check failed")
+    require(model["files"] == PINNED_MODEL_FILES, f"{axis}: model file pin mismatch")
     require(set(model["files"]) == set(MODEL_FILES), "evidence check failed")
     require(model["directory"] == "model", "evidence check failed")
-    require(model["files"]["model.safetensors"] == PINNED_MODEL_SHA256, f"{axis}: model pin mismatch")
     require(model["acquisition"] == {
         "method": "HTTPS GET from immutable Hugging Face revision; verify every SHA-256 before use",
         "url_template": MODEL_URL_TEMPLATE,
@@ -64,7 +82,8 @@ def verify_axis(root: Path, axis: str) -> None:
 
     execution = manifest["execution_provenance"]
     require(execution["runner"] == "scripts/run_local_human30_pairs.py", "evidence check failed")
-    require(sha(Path(execution["runner"]).read_bytes()) == execution["runner_sha256"], "evidence check failed")
+    require(execution["runner_sha256"] == PINNED_RUNNER_SHA256, f"{axis}: runner pin mismatch")
+    require(sha(Path(execution["runner"]).read_bytes()) == PINNED_RUNNER_SHA256, "evidence check failed")
     require(execution["device"] == "cpu", "evidence check failed")
     require(execution["threads"] == 1, "evidence check failed")
     require(execution["deterministic_algorithms"] is True, "evidence check failed")
@@ -79,11 +98,16 @@ def verify_axis(root: Path, axis: str) -> None:
         "top_p": 0.9,
         "max_new_tokens": 24,
     }, f"{axis}: sampling settings mismatch")
+    require(len(manifest["prompt_sha256"]) == 2, f"{axis}: prompt hash count mismatch")
     require(receipt["status"] == "PASS" and len(receipt["runs"]) == 4, "evidence check failed")
     require(receipt["invocation"] and receipt["actual_output"] == (
         f"{axis}: PASS, both arms repeated identical raw UTF-8 bytes"
     ), "evidence check failed")
     for arm, condition in enumerate(conditions):
+        changed_world = axis == "world_model" and arm == 1
+        expected_raw = PINNED_WORLD_CHANGED_RAW_SHA256 if changed_world else PINNED_COMMON_RAW_SHA256
+        expected_tokens = PINNED_WORLD_CHANGED_TOKENS_SHA256 if changed_world else PINNED_COMMON_TOKENS_SHA256
+        expected_rng_end = PINNED_WORLD_CHANGED_RNG_END_SHA256 if changed_world else PINNED_COMMON_RNG_END_SHA256
         prompt = PROMPT_TEMPLATE.format(
             scenario=SCENARIO["stimulus"],
             condition=json.dumps(condition, ensure_ascii=False, sort_keys=True),
@@ -103,14 +127,20 @@ def verify_axis(root: Path, axis: str) -> None:
             raw.decode("utf-8", errors="strict")
             require(raw.strip(), f"{axis} arm {arm} repeat {repetition}: empty raw response")
             require(run["raw_sha256"] == sha(raw), f"{axis} arm {arm} repeat {repetition}: raw hash mismatch")
-            require(isinstance(run["generated_token_ids"], list) and run["generated_token_ids"], "evidence check failed")
+            token_ids = run["generated_token_ids"]
+            require(isinstance(token_ids, list) and 1 <= len(token_ids) <= 24
+                    and all(type(token) is int and token >= 0 for token in token_ids),
+                    f"{axis} arm {arm}: invalid generated token IDs")
+            require(sha(canonical(token_ids)) == expected_tokens, f"{axis} arm {arm}: token pin mismatch")
             require(len(run["rng_state_before_sha256"]) == len(run["rng_state_after_sha256"]) == 64, "evidence check failed")
             require(run["rng_state_before_sha256"] == PINNED_RNG_START_SHA256, f"{axis} arm {arm} repeat {repetition}: seed not applied to CPU RNG")
+            require(run["rng_state_after_sha256"] == expected_rng_end, f"{axis} arm {arm}: RNG end pin mismatch")
             raws.append(raw)
             starts.append(run["rng_state_before_sha256"])
         require(starts[0] == starts[1], f"{axis} arm {arm}: RNG start mismatch")
         if raws[0] != raws[1]:
             raise RepeatMismatch(f"{axis} arm {arm}: repeated raw UTF-8 bytes differ")
+        require(sha(raws[0]) == expected_raw, f"{axis} arm {arm}: raw output pin mismatch")
 
 
 def main() -> int:

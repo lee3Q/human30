@@ -85,7 +85,7 @@ python3 scripts/card.py 1 all          # 30명 카드 출력
 
 ## 의존성 정책
 
-**외부 패키지 0** (공급망 공격 방어). stdlib만 사용. 언어 무관.
+기본 시드·카드 파이프라인은 **외부 패키지 0**이며 stdlib만 사용한다. 아래의 선택적 로컬 모델 재현 경로는 `torch`, `transformers`, `safetensors`를 사용한다.
 
 ## 미학적 좌표
 
@@ -111,5 +111,8 @@ uv run --group dev python -m pytest -q
 
 The runner applies seed 42 to each independent CPU generation and stores two
 raw responses for each arm. The model weight is downloaded at the pinned commit
-and excluded from Git. This local result does not establish provider seed
+and excluded from Git. The verifier pins the model files, scenario source,
+runner, and observed output hashes; it rejects coordinated edits to a run and
+its manifest. The pinned outputs are a reproducibility check for this local
+environment, not evidence of a general behavioral effect. This local result does not establish provider seed
 application, personal prediction, or a causal effect on people.
