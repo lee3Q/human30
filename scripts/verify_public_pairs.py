@@ -23,17 +23,25 @@ def load(path: Path) -> dict:
 def verify(pair_path: Path, manifest_path: Path, receipt_path: Path, expected_axis: str) -> dict:
     pair, manifest = load(pair_path), load(manifest_path)
     conditions = manifest["condition_vectors"]
-    assert len(conditions) == 2 and all(set(item) == set(AXES) for item in conditions)
+    if not (len(conditions) == 2 and all(set(item) == set(AXES) for item in conditions)):
+        raise AssertionError("public pair evidence check failed")
     changed = [axis for axis in AXES if conditions[0][axis] != conditions[1][axis]]
-    assert changed == [expected_axis] == [manifest["axis"]]
-    assert manifest["scenario_sha256"] == digest(pair["scenario"])
-    assert len(pair["outputs"]) == len(manifest["output_sha256"]) == 2
-    assert manifest["output_sha256"] == [digest(item) for item in pair["outputs"]]
-    assert manifest["retries"] and len(manifest["retries"]) == 2
-    assert all(manifest.get(key) for key in ("prompt_version", "model", "settings", "environment"))
+    if not (changed == [expected_axis] == [manifest["axis"]]):
+        raise AssertionError("public pair evidence check failed")
+    if not (manifest["scenario_sha256"] == digest(pair["scenario"])):
+        raise AssertionError("public pair evidence check failed")
+    if not (len(pair["outputs"]) == len(manifest["output_sha256"]) == 2):
+        raise AssertionError("public pair evidence check failed")
+    if not (manifest["output_sha256"] == [digest(item) for item in pair["outputs"]]):
+        raise AssertionError("public pair evidence check failed")
+    if not (manifest["retries"] and len(manifest["retries"]) == 2):
+        raise AssertionError("public pair evidence check failed")
+    if not (all(manifest.get(key) for key in ("prompt_version", "model", "settings", "environment"))):
+        raise AssertionError("public pair evidence check failed")
     calculated = evaluate(pair)
     if receipt_path.exists():
-        assert load(receipt_path) == calculated
+        if not (load(receipt_path) == calculated):
+            raise AssertionError("public pair evidence check failed")
     return {
         "axis": expected_axis,
         "source": manifest["model"]["source"],
@@ -60,28 +68,40 @@ def main() -> int:
         actual / "pair.json", actual / "manifest.json", actual / "receipt.json", "body",
     ))
     actual_manifest = load(actual / "manifest.json")
-    assert actual_manifest["model"]["source"] == "codex_cli_actual"
-    assert actual_manifest["settings"]["sampling_seed_supported"] is False
-    assert actual_manifest["effective_model_seed"] is None
+    if not (actual_manifest["model"]["source"] == "codex_cli_actual"):
+        raise AssertionError("public pair evidence check failed")
+    if not (actual_manifest["settings"]["sampling_seed_supported"] is False):
+        raise AssertionError("public pair evidence check failed")
+    if not (actual_manifest["effective_model_seed"] is None):
+        raise AssertionError("public pair evidence check failed")
     prompts = [(actual / f"arm_{index}.prompt.txt").read_text(encoding="utf-8") for index in range(2)]
-    assert actual_manifest["prompt_sha256"] == [digest(prompt) for prompt in prompts]
+    if not (actual_manifest["prompt_sha256"] == [digest(prompt) for prompt in prompts]):
+        raise AssertionError("public pair evidence check failed")
     seeded = PUBLIC / "actual_seeded"
     repeat_matches = 0
     for axis in AXES:
         folder = seeded / axis
         verified.append(verify(folder / "pair.json", folder / "manifest.json", folder / "receipt.json", axis))
         manifest = load(folder / "manifest.json")
-        assert manifest["model"]["source"] == "openrouter_seeded_api_actual"
-        assert manifest["catalog_advertised_seed"] is True
-        assert manifest["requested_model_seed"] == manifest["seed"] == 42
-        assert manifest["settings"]["sampling_seed_supported"] is True
-        assert manifest["effective_seed_reported_by_provider"] is False
-        assert manifest["model"]["version"] == "exact_snapshot_not_exposed"
-        assert len(manifest["response_provenance"]) == 2
+        if not (manifest["model"]["source"] == "openrouter_seeded_api_actual"):
+            raise AssertionError("public pair evidence check failed")
+        if not (manifest["catalog_advertised_seed"] is True):
+            raise AssertionError("public pair evidence check failed")
+        if not (manifest["requested_model_seed"] == manifest["seed"] == 42):
+            raise AssertionError("public pair evidence check failed")
+        if not (manifest["settings"]["sampling_seed_supported"] is True):
+            raise AssertionError("public pair evidence check failed")
+        if not (manifest["effective_seed_reported_by_provider"] is False):
+            raise AssertionError("public pair evidence check failed")
+        if not (manifest["model"]["version"] == "exact_snapshot_not_exposed"):
+            raise AssertionError("public pair evidence check failed")
+        if not (len(manifest["response_provenance"]) == 2):
+            raise AssertionError("public pair evidence check failed")
         pair = load(folder / "pair.json")
         for index in range(2):
             prompt = (folder / f"arm_{index}.prompt.txt").read_text(encoding="utf-8")
-            assert digest(prompt) == manifest["prompt_sha256"][index]
+            if not (digest(prompt) == manifest["prompt_sha256"][index]):
+                raise AssertionError("public pair evidence check failed")
             request = {
                 "model": manifest["model"]["id"],
                 "messages": [{"role": "user", "content": prompt}],
@@ -93,11 +113,15 @@ def main() -> int:
                 }},
             }
             source = manifest["response_provenance"][index]
-            assert source["request_sha256"] == digest(request)
-            assert source["returned_model"] == manifest["model"]["id"]
-            assert source["response_id"] and source["provider"] == "OpenAI"
+            if not (source["request_sha256"] == digest(request)):
+                raise AssertionError("public pair evidence check failed")
+            if not (source["returned_model"] == manifest["model"]["id"]):
+                raise AssertionError("public pair evidence check failed")
+            if not (source["response_id"] and source["provider"] == "OpenAI"):
+                raise AssertionError("public pair evidence check failed")
         repeated = manifest["repeat_output_sha256"] == manifest["output_sha256"][0]
-        assert repeated == manifest["same_seed_baseline_repeat_equal"]
+        if not (repeated == manifest["same_seed_baseline_repeat_equal"]):
+            raise AssertionError("public pair evidence check failed")
         repeat_matches += int(repeated)
     result = {
         "status": "PASS",
