@@ -83,7 +83,7 @@ def verify_axis(root: Path, axis: str) -> None:
     execution = manifest["execution_provenance"]
     require(execution["runner"] == "scripts/run_local_human30_pairs.py", "evidence check failed")
     require(execution["runner_sha256"] == PINNED_RUNNER_SHA256, f"{axis}: runner pin mismatch")
-    require(sha(Path(execution["runner"]).read_bytes()) == PINNED_RUNNER_SHA256, "evidence check failed")
+    require(sha((ROOT / execution["runner"]).read_bytes()) == PINNED_RUNNER_SHA256, "evidence check failed")
     require(execution["device"] == "cpu", "evidence check failed")
     require(execution["threads"] == 1, "evidence check failed")
     require(execution["deterministic_algorithms"] is True, "evidence check failed")
