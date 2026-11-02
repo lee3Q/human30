@@ -70,3 +70,15 @@ def test_optimized_python_still_rejects_mismatched_raw_bytes(body_run):
     assert run.returncode == 1
     assert run.stdout == ""
     assert run.stderr == "FAIL human30_repro: repeated raw responses differ\n"
+
+
+def test_verifier_accepts_absolute_evidence_from_another_working_directory(body_run, tmp_path):
+    root = SOURCE.parents[1]
+    run = subprocess.run(
+        [sys.executable, str(root / 'scripts' / 'verify_human30_repro.py'),
+         '--out', str(body_run), '--axes', 'body'],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert run.returncode == 0, run.stderr
+    assert run.stdout == 'PASS human30_repro\n'
+    assert run.stderr == ''
