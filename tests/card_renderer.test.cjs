@@ -79,3 +79,27 @@ test('failed import preserves cards, stats, filters and last good JSON source',(
   assert.equal(nodes.get('modalContent').textContent,'');
   nodes.get('resetBtn').events.click();assert.equal(nodes.get('grid').children.length,30);
 });
+
+
+test('file chooser resets before async read so the same file can be retried',()=>{
+  const {context,nodes}=setup();const good=fixture();context.loadSeed(good);
+  const alerts=[];const readers=[];context.alert=message=>alerts.push(message);
+  context.FileReader=class {
+    constructor(){readers.push(this);}
+    readAsText(file){this.file=file;}
+  };
+  const input=nodes.get('fileInput');const file={name:'seed.json'};
+  input.files=[file];input.value='seed.json';
+  input.events.change({target:input});
+  assert.equal(input.value,'');assert.equal(readers[0].file,file);
+  readers[0].result='{broken';readers[0].onload();
+  assert.match(alerts.pop(),/JSON/);
+  input.value='seed.json';input.events.change({target:input});
+  assert.equal(input.value,'');assert.equal(readers[1].file,file);
+  readers[1].result=JSON.stringify(good);readers[1].onload();
+  assert.equal(nodes.get('grid').children.length,30);
+  input.value='seed.json';input.events.change({target:input});readers[2].onerror();
+  assert.equal(input.value,'');assert.match(alerts.pop(),/파일/);
+  input.value='';input.files=[];input.events.change({target:input});
+  assert.equal(readers.length,3);assert.equal(alerts.length,0);
+});

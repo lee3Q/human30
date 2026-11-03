@@ -226,6 +226,7 @@ window.showJson=function(id){
 
 $('fileInput').addEventListener('change',e=>{
   const f=e.target.files[0];
+  e.target.value=''; // Allow selecting the same file again after success or failure.
   if(!f)return;
   const r=new FileReader();
   r.onload=()=>{
