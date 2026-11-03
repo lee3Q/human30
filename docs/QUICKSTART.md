@@ -55,7 +55,7 @@ python3 scripts/generate_seed.py 7
 ### Claude Code (터미널)
 
 ```bash
-cd ~/pp/30p/play && cc
+cd play && cc   # 저장소 루트에서
 # "play 시드 1 캐릭터 5 ..." 입력
 ```
 
@@ -91,4 +91,4 @@ cd ~/pp/30p/play && cc
 
 ---
 
-*버전: 2026-04-24. 문의: `~/pp/30p/docs/` 폴더의 상세 문서 참조.*
+*버전: 2026-04-24. 문의: 이 폴더(`docs/`)의 상세 문서 참조.*
