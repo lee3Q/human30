@@ -1,0 +1,12 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');const path=require('node:path');
+function setup(selected='other',uploadFailure=false){
+ const source=fs.readFileSync(path.join(__dirname,'../product/index.html'),'utf8').match(/async function startDiscover\([^]*?\n}/)[0];const calls=[];const shown=[];const alerts=[];
+ const context=vm.createContext({uploadedFile:{synthetic:true},state:{sessionId:'old',meta:{me:'first'}},document:{getElementById:()=>({value:selected})},FormData:class{append(){}},fetch:async(url,opts)=>{calls.push(['upload',url]);if(uploadFailure)throw Error('synthetic offline');return {ok:true,json:async()=>({session_id:'new',detected_me:selected,meta:{me:selected},users:[]})}},api:async(url,body)=>{calls.push(['discover',body]);return {discoveries:[{}]}},renderMeta:data=>calls.push(['render',data.meta.me]),renderLoop:()=>{},show:id=>shown.push(id),alert:m=>alerts.push(m)});
+ vm.runInContext(source,context);return {context,calls,shown,alerts};
+}
+test('changed person is reuploaded and analyzed before discovery with new session',async()=>{const {context,calls}=setup();await context.startDiscover();assert.deepEqual(calls.map(c=>c[0]),['upload','render','discover']);assert.equal(calls[2][1].session_id,'new');assert.equal(context.state.meta.me,'other');});
+test('failed reanalysis keeps old session and does not call discovery',async()=>{const {context,calls,shown,alerts}=setup('other',true);await context.startDiscover();assert.deepEqual(calls.map(c=>c[0]),['upload']);assert.equal(context.state.sessionId,'old');assert.equal(alerts.length,1);assert.equal(shown.at(-1),'step-meta');});
+test('unchanged person calls discovery without another upload',async()=>{const {context,calls}=setup('first');await context.startDiscover();assert.deepEqual(calls.map(c=>c[0]),['discover']);assert.equal(calls[0][1].session_id,'old');});
+test('failed identity confirmation prevents discovery and missing file gives retry path',async()=>{
+ for(const missingFile of [false,true]){const {context,calls,shown,alerts}=setup();if(missingFile)context.uploadedFile=null;else context.fetch=async()=>({ok:true,json:async()=>({detected_me:'wrong'})});await context.startDiscover();assert.equal(calls.some(c=>c[0]==='discover'),false);assert.equal(context.state.sessionId,'old');assert.equal(alerts.length,1);assert.equal(shown.at(-1),'step-meta');}
+});
