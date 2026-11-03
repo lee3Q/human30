@@ -9,6 +9,24 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
 
+def education_distributions(chars):
+    """Keep school types, current tiers and past tiers in separate age groups."""
+    groups = {}
+    for c in chars:
+        age = c.get("age")
+        if age is None:
+            label, field = "대학 tier (나이 미기록)", "university_tier"
+        elif age <= 18:
+            label, field = "학교 유형 (18세 이하)", "school_type"
+        elif age >= 26:
+            label, field = "과거 대학 tier (26세 이상)", "university_tier_past"
+        else:
+            label, field = "대학 tier (19~25세)", "university_tier"
+        counts = groups.setdefault(label, Counter())
+        counts[c["korea"]["education"][field]] += 1
+    return groups
+
+
 def main():
     seed = int(sys.argv[1]) if len(sys.argv) >= 2 else 1
     path = ROOT / "runs" / f"seed_{seed:03d}.json"
@@ -40,10 +58,10 @@ def main():
     for k, n in reflex.most_common():
         print(f"  {k}: {n}")
 
-    tier = Counter(c["korea"]["education"]["university_tier"] for c in chars)
-    print("대학 tier:")
-    for k, n in tier.most_common():
-        print(f"  {k}: {n}")
+    for label, counts in education_distributions(chars).items():
+        print(f"{label}:")
+        for k, n in counts.most_common():
+            print(f"  {k}: {n}")
 
     orient = Counter(c["identity"]["sexuality"]["orientation"] for c in chars)
     print("Sexual orientation:")
