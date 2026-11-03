@@ -1,5 +1,6 @@
 """Reject resume verdicts that exceed or misstate the local evidence."""
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -29,11 +30,14 @@ def test_rejects_promoted_unsupported_claim(verdict, claim):
         report.verify_verdict(verdict)
 
 
-def test_rejects_changed_evidence_hash(verdict):
+def test_rejects_changed_evidence_hash(repro_root, verdict):
+    base = repro_root.parents[1]
+    for path in report.evidence_files():
+        verdict["evidence_sha256"][path.as_posix()] = hashlib.sha256((base / path).read_bytes()).hexdigest()
     path = next(iter(verdict["evidence_sha256"]))
     verdict["evidence_sha256"][path] = "0" * 64
     with pytest.raises(AssertionError, match="evidence hash mismatch"):
-        report.verify_verdict(verdict)
+        report.verify_verdict(verdict, root=base)
 
 
 def test_cli_rejects_invalid_verdict(tmp_path, verdict, monkeypatch, capsys):
