@@ -316,7 +316,7 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         session = sessions[session_id]
-        if index >= len(session["discoveries"]):
+        if type(index) is not int or not 0 <= index < len(session["discoveries"]):
             self.json_response({"error": "인덱스 초과"}, status=400)
             return
 
