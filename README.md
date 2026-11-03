@@ -9,11 +9,11 @@
 
 ## 빠른 시작
 
-**1분 안에 실행**: [`docs/QUICKSTART.md`](docs/QUICKSTART.md)
+**1분 안에 실행**: [`docs/QUICKSTART.md`](docs/QUICKSTART.md) · English: [`docs/QUICKSTART_EN.md`](docs/QUICKSTART_EN.md)
 
 ```bash
-python3 scripts/generate_seed.py 1    # 시드 생성 → runs/seed_001.json
-python3 scripts/card.py 1 all          # 30명 카드 출력
+python3 scripts/card.py 1 all          # 포함된 시드 1의 30명 카드 바로 출력
+python3 scripts/generate_seed.py 7     # 내 시드 생성 → runs/seed_007.json (포함된 번호 1·2·3·42·999는 거부, --force로 덮어쓰기)
 ```
 
 시뮬레이션 실행: [`docs/PORTABLE_PROMPT.md`](docs/PORTABLE_PROMPT.md)를 아무 LLM에 붙여넣기. Claude·GPT-4o·Gemini 어디든 동작.
