@@ -786,6 +786,7 @@ async function startDeeper() {
 }
 
 async function finishSession() {
+  state.exportData = null;
   const answer = document.getElementById('deeperAnswer')?.value?.trim() || '';
 
   try {
@@ -794,9 +795,13 @@ async function finishSession() {
     }
     // 세션 데이터를 서버에서 가져와 로컬 다운로드 준비
     const result = await api('/api/save', { session_id: state.sessionId });
+    if (!result.session_data || typeof result.session_data !== 'object' || Array.isArray(result.session_data)) {
+      throw new Error('세션 결과를 확인할 수 없습니다.');
+    }
     state.exportData = result.session_data;
   } catch (e) {
-    // 실패해도 완료 표시
+    alert('결과를 준비하지 못했습니다. 화면의 답변은 유지됩니다. 세션 마치기를 눌러 다시 시도하세요.');
+    return;
   }
 
   show('step-complete');
