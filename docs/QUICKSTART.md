@@ -13,6 +13,8 @@ python3 scripts/generate_seed.py 1
 
 출력: `runs/seed_001.json` (30명 분량)
 
+같은 번호로 다시 실행하면 기존 시드를 보호하기 위해 거부됩니다 (종료 코드 2). 덮어쓰려면 `python3 scripts/generate_seed.py 1 --force`를 사용하세요.
+
 다른 시드 번호는 다른 샘플을 만듭니다. 같은 코드·표·Python 환경에서 같은 번호로 생성하면 캐릭터와 생성 조건은 같습니다. 다만 `generated_at`은 실제 생성 시각이므로, 다른 시각에 생성한 JSON 파일 전체의 바이트는 같지 않습니다.
 
 ## 2단계: 캐릭터 카드 보기 (10초)
