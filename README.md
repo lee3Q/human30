@@ -47,7 +47,7 @@ python3 scripts/card.py 1 all          # 30명 카드 출력
 │   ├── generation_protocol.md   ← 시드 생성 규칙
 │   └── operating.md         ← 운영 매뉴얼
 ├── scripts/
-│   ├── generate_seed.py     ← 시드 생성 (stdlib, 비트 재현)
+│   ├── generate_seed.py     ← 시드 생성 (stdlib, 고정 시드 샘플링)
 │   ├── card.py              ← 캐릭터 카드 터미널 출력
 │   ├── card_renderer.html   ← 브라우저 카드 렌더링
 │   ├── summarize_seed.py    ← 30명 1줄 요약
@@ -116,3 +116,14 @@ runner, and observed output hashes; it rejects coordinated edits to a run and
 its manifest. The pinned outputs are a reproducibility check for this local
 environment, not evidence of a general behavioral effect. This local result does not establish provider seed
 application, personal prediction, or a causal effect on people.
+
+
+## Seed reproducibility scope
+
+For the same code, input tables and Python environment, a fixed seed repeats
+the sampled character content and generation conditions. The `generated_at`
+field records the actual generation time, so files generated at different
+times are not byte-identical. Compare parsed content excluding that field when
+checking sampling repeatability; keep the timestamp in the original records.
+This does not promise identical sampling across Python versions or establish
+that the fictional characters predict real people.
