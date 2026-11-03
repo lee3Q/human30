@@ -4,25 +4,28 @@
 
 ---
 
-## 1단계: 시드 생성 (30초)
+## 1단계: 캐릭터 카드 보기 (10초)
 
-```bash
-cd ~/pp/30p
-python3 scripts/generate_seed.py 1
-```
-
-출력: `runs/seed_001.json` (30명 분량)
-
-같은 번호로 다시 실행하면 기존 시드를 보호하기 위해 거부됩니다 (종료 코드 2). 덮어쓰려면 `python3 scripts/generate_seed.py 1 --force`를 사용하세요.
-
-다른 시드 번호는 다른 샘플을 만듭니다. 같은 코드·표·Python 환경에서 같은 번호로 생성하면 캐릭터와 생성 조건은 같습니다. 다만 `generated_at`은 실제 생성 시각이므로, 다른 시각에 생성한 JSON 파일 전체의 바이트는 같지 않습니다.
-
-## 2단계: 캐릭터 카드 보기 (10초)
+저장소에는 시드 1이 이미 포함되어 있습니다 (`runs/seed_001.json`). 클론 직후 바로 볼 수 있습니다:
 
 ```bash
 python3 scripts/card.py 1 all       # 30명 전체 카드
 python3 scripts/card.py 1 5         # 5번 캐릭터만
 ```
+
+## 2단계: 내 시드 생성 (30초)
+
+새 번호로 직접 생성합니다:
+
+```bash
+python3 scripts/generate_seed.py 7
+```
+
+출력: `runs/seed_007.json` (30명 분량). `python3 scripts/card.py 7 all`로 확인하세요. (저장소에는 시드 1·2·3·42·999가 이미 포함되어 있습니다.)
+
+이미 존재하는 번호로 실행하면 기존 시드를 보호하기 위해 거부됩니다 (종료 코드 2). 예를 들어 `python3 scripts/generate_seed.py 1`은 포함된 시드 1을 덮지 않습니다. 덮어쓰려면 `--force`를 붙이세요: `python3 scripts/generate_seed.py 1 --force`.
+
+다른 시드 번호는 다른 샘플을 만듭니다. 같은 코드·표·Python 환경에서 같은 번호로 생성하면 캐릭터와 생성 조건은 같습니다. 다만 `generated_at`은 실제 생성 시각이므로, 다른 시각에 생성한 JSON 파일 전체의 바이트는 같지 않습니다.
 
 ## 3단계: LLM에서 시뮬레이션 실행 (2분)
 
@@ -61,7 +64,7 @@ cd ~/pp/30p/play && cc
 ## 최소 경로 요약
 
 ```
-시드 생성 → 카드 확인 → PORTABLE_PROMPT를 LLM에 붙여넣기 → play 호출 → 관찰
+카드 확인 → (선택) 내 시드 생성 → PORTABLE_PROMPT를 LLM에 붙여넣기 → play 호출 → 관찰
 ```
 
 ## 보조 스크립트
