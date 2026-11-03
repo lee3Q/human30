@@ -102,6 +102,51 @@ def indent(text, level=1):
     return "\n".join(prefix + line for line in text.split("\n"))
 
 
+def age_label(c):
+    age = c.get("age")
+    return f"{age}세" if age is not None else "나이 미기록"
+
+
+def education_context(c):
+    """Read the age-specific stored education fields without inventing a tier."""
+    age = c.get("age")
+    ed = c["korea"]["education"]
+    if age is not None and age <= 18:
+        return {
+            "lines": [f"학교: {ed['current_status']} / {ed['school_type']}.",
+                      f"학업 평가: {ed['academic_performance']}. 사교육 강도: {ed['private_education']}.",
+                      f"부모 압력: {ed['parental_pressure']}."],
+            "summary": [f"학교 {ed['current_status']} / {ed['school_type']}",
+                        f"학업 평가 {ed['academic_performance']}"],
+            "narrative": f"학교는 {ed['current_status']} / {ed['school_type']}. 학업 평가는 {ed['academic_performance']}.",
+            "tier": "", "self_concept": "",
+        }
+    if age is not None and age >= 26:
+        return {
+            "lines": [f"최종 학력: {ed['final_education']}. 과거 대학: {ed['university_tier_past']} ({ed['major_past']}).",
+                      f"현재 상태: {ed['current_status']}.",
+                      f"학업 자기 인식: {ed['academic_self_concept']}."],
+            "summary": [f"최종 학력 {ed['final_education']}",
+                        f"과거 대학 {ed['university_tier_past']}",
+                        f"현재 상태 {ed['current_status']}",
+                        f"학업 자기 인식 {ed['academic_self_concept']}"],
+            "narrative": f"최종 학력은 {ed['final_education']}. 과거 대학: {ed['university_tier_past']} ({ed['major_past']}). 현재 상태: {ed['current_status']}.",
+            "tier": ed["university_tier_past"], "self_concept": ed["academic_self_concept"],
+        }
+    trajectory = f"학력 궤적: {ed['high_school']} → 수능 {ed['suneung_grade']} → {ed['university_tier']} ({ed['major']})."
+    narrative = f"학력 궤적은 {ed['high_school']} → 수능 {ed['suneung_grade']} → {ed['university_tier']} ({ed['major']})"
+    if ed["retake"] != "재수 없음":
+        narrative += f", {ed['retake']}"
+    return {
+        "lines": [trajectory,
+                  f"재수 경험: {ed['retake']}. 사교육 강도: {ed['private_education']}.",
+                  f"학업 자기 인식: {ed['academic_self_concept']}. 부모 압력: {ed['parental_pressure']}."],
+        "summary": [f"현재 {ed['university_tier']}", f"학업 자기 인식 {ed['academic_self_concept']}"],
+        "narrative": narrative + ".",
+        "tier": ed["university_tier"], "self_concept": ed["academic_self_concept"],
+    }
+
+
 # ---------------- 섹션 렌더러 ----------------
 
 def render_header(c):
@@ -111,7 +156,7 @@ def render_header(c):
     bar = "━" * 60
     return (
         f"{bar}\n"
-        f"  #{c['id']:02d}  ·  {sex_k}  ·  20세  ·  {region} 출생\n"
+        f"  #{c['id']:02d}  ·  {sex_k}  ·  {age_label(c)}  ·  {region} 출생\n"
         f"  {labels}\n"
         f"{bar}"
     )
@@ -364,14 +409,13 @@ def render_impulse(c, rk):
 
 def render_korea(c):
     k = c["korea"]
-    ed = k["education"]
     ap = k["appearance_experience"]
     rv = k["region_voice"]
 
     lines = ["■ 한국 사회 맥락"]
-    lines.append(f"  학력 궤적: {ed['high_school']} → 수능 {ed['suneung_grade']} → {ed['university_tier']} ({ed['major']}).")
-    lines.append(f"    재수 경험: {ed['retake']}. 사교육 강도: {ed['private_education']}.")
-    lines.append(f"    학업 자기 인식: {ed['academic_self_concept']}. 부모 압력: {ed['parental_pressure']}.")
+    education = education_context(c)
+    for index, line in enumerate(education["lines"]):
+        lines.append(("  " if index == 0 else "    ") + line)
     lines.append("")
     lines.append(f"  외모 차별 경험: {ap['discrimination_frequency']}.")
     if ap["discrimination_domain"]:
@@ -395,16 +439,14 @@ def render_summary(c, rk):
     iq = c["identity"]["cognitive"]["iq"]
     att = c["memory"]["attachment"]["style"]
     reflex = c["memory"]["default_reflex"]["primary"]
-    tier = c["korea"]["education"]["university_tier"]
-    self_concept = c["korea"]["education"]["academic_self_concept"]
+    education = education_context(c)
 
     beats = []
-    beats.append(f"20세 {sex_k}, 키 {r['height'][2]:.0f}cm, IQ {iq}({iq_label(iq)})")
+    beats.append(f"{age_label(c)} {sex_k}, 키 {r['height'][2]:.0f}cm, IQ {iq}({iq_label(iq)})")
     beats.append(f"ACE {ace}점")
     beats.append(f"애착은 {att}")
     beats.append(f"위협 반사는 {reflex}")
-    beats.append(f"현재 {tier}")
-    beats.append(f"학업 자기 인식 {self_concept}")
+    beats.extend(education["summary"])
 
     extras = []
     if c["memory"]["csa"]:
@@ -464,7 +506,7 @@ def render_narrative(c, rk):
         face_desc = f"외모 {face_rank}/15위, 눈에 띄지 않는 편"
 
     sentences.append(
-        f"20세 {sex_k}. 키 {height:.0f}cm (전체 {r['height'][0]}/30위), "
+        f"{age_label(c)} {sex_k}. 키 {height:.0f}cm (전체 {r['height'][0]}/30위), "
         f"{bmi_desc} 체형, {face_desc}."
     )
 
@@ -553,16 +595,10 @@ def render_narrative(c, rk):
     sentences.append(iq_line + ".")
 
     # --- 학력 ---
-    ed = kor["education"]
-    tier = ed["university_tier"]
-    self_concept = ed["academic_self_concept"]
-    grade = ed["suneung_grade"]
-    retake = ed["retake"]
-
-    edu_line = f"학력 궤적은 {ed['high_school']} → 수능 {grade} → {tier} ({ed['major']})"
-    if retake != "재수 없음":
-        edu_line += f", {retake}"
-    sentences.append(edu_line + ".")
+    education = education_context(c)
+    tier = education["tier"]
+    self_concept = education["self_concept"]
+    sentences.append(education["narrative"])
 
     if "패배자" in self_concept:
         sentences.append("학업 자기 인식은 패배자 정체성으로 굳어진 상태.")
@@ -700,7 +736,10 @@ def render_narrative(c, rk):
     if height >= 167 and c["sex"] == "F":
         surface.append(f"키 {height:.0f}cm")
     if "SKY" in tier or "성균관" in tier:
-        surface.append(tier.split(" ")[0] if "SKY" in tier else "상위권 대학")
+        tier_label = tier.split(" ")[0] if "SKY" in tier else "상위권 대학"
+        if c.get("age") is not None and c["age"] >= 26:
+            tier_label = "과거 " + tier_label
+        surface.append(tier_label)
 
     if ace_n >= 4:
         depth.append("고ACE")
