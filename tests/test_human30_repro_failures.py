@@ -2,6 +2,7 @@
 
 import json
 import shutil
+import sys
 from pathlib import Path
 
 import pytest
@@ -14,14 +15,9 @@ SOURCE = Path(__file__).resolve().parents[1] / "runs" / "human30_repro"
 
 
 @pytest.fixture
-def body_run(tmp_path):
-    shutil.copytree(SOURCE / "body", tmp_path / "body")
-    model = tmp_path / "model"
-    model.mkdir()
-    for name in MODEL_FILES:
-        (model / name).symlink_to(SOURCE / "model" / name)
-    verify_axis(tmp_path, "body")
-    return tmp_path
+def body_run(repro_root):
+    verify_axis(repro_root, "body")
+    return repro_root
 
 
 def rewrite_json(path, value):
@@ -140,3 +136,35 @@ def test_rejects_run_with_unconfirmed_seed(body_run):
     rewrite_json(receipt_file, receipt)
     with pytest.raises(AssertionError, match="body arm 0: seed mismatch"):
         verify_axis(body_run, "body")
+
+
+def copy_body_with_weights(tmp_path, weights):
+    root = tmp_path / "runs" / "human30_repro"
+    model = root / "model"
+    model.mkdir(parents=True)
+    shutil.copytree(SOURCE / "body", root / "body")
+    for name in MODEL_FILES:
+        if name == "model.safetensors":
+            if weights is not None:
+                (model / name).write_bytes(weights)
+        else:
+            (model / name).symlink_to(SOURCE / "model" / name)
+    return root
+
+
+def test_default_pins_reject_synthetic_weights(tmp_path):
+    """No test override: the shipped pins reject any other weights bytes."""
+    root = copy_body_with_weights(tmp_path, b"human30 synthetic test weights\n")
+    with pytest.raises(AssertionError, match="model hash mismatch: model.safetensors"):
+        verify_axis(root, "body")
+
+
+def test_default_pins_reject_missing_weights(tmp_path, monkeypatch, capsys):
+    """No test override: the shipped CLI fails when the real weights are absent."""
+    from scripts.verify_human30_repro import main
+    root = copy_body_with_weights(tmp_path, None)
+    monkeypatch.setattr(sys, "argv", ["verify_human30_repro.py", "--out", str(root), "--axes", "body"])
+    assert main() == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "model.safetensors" in captured.err
