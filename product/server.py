@@ -9,6 +9,7 @@ stdlib만 사용. python3 server.py [--port 8000]
 import json
 import os
 import sys
+import uuid
 import urllib.request
 import urllib.error
 from datetime import datetime
@@ -225,8 +226,7 @@ class Handler(SimpleHTTPRequestHandler):
         stats = analyze_all(messages, me_name)
 
         # 세션 생성 (메모리 전용, 디스크 저장 안 함)
-        ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        session_id = ts
+        session_id = uuid.uuid4().hex
         sessions[session_id] = {
 
             "stats": stats,
