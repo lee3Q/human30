@@ -10,6 +10,13 @@ SEED="${1:-99}"
 PADDED="$(printf '%03d' "$SEED")"
 SEED_FILE="$ROOT/runs/seed_${PADDED}.json"
 
+# This smoke test regenerates its seed and may delete the default seed on exit.
+# Never use an existing path as scratch output, including dangling links.
+if [ -e "$SEED_FILE" ] || [ -L "$SEED_FILE" ]; then
+  echo "기존 시드 경로를 보호하기 위해 중단: $SEED_FILE" >&2
+  exit 2
+fi
+
 PASS=0; FAIL=0; WARN=0
 p() { echo "  ✅ $1"; PASS=$((PASS+1)); }
 f() { echo "  ❌ $1"; FAIL=$((FAIL+1)); }
