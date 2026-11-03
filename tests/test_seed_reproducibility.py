@@ -22,6 +22,7 @@ def test_same_seed_repeats_content_but_records_actual_generation_time(tmp_path, 
     first_bytes = path.read_bytes()
     first = json.loads(first_bytes)
     Clock.value = '2026-11-03T11:00:01+09:00'
+    monkeypatch.setattr(generator.sys, 'argv', ['generate_seed.py', '99', '--force'])
     generator.main()
     second_bytes = path.read_bytes()
     second = json.loads(second_bytes)

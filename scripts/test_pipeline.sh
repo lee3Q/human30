@@ -145,7 +145,7 @@ d = json.load(open('$SEED_FILE'))
 d.pop('generated_at', None)
 print(json.dumps(d, sort_keys=True, ensure_ascii=False))
 ")
-  python3 "$SCRIPTS/generate_seed.py" "$SEED" > /dev/null 2>&1
+  python3 "$SCRIPTS/generate_seed.py" "$SEED" --force > /dev/null 2>&1
   BODY2=$(python3 -c "
 import json
 d = json.load(open('$SEED_FILE'))

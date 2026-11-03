@@ -13,8 +13,10 @@ Usage:
 
 import json
 import math
+import os
 import random
 import sys
+import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -781,15 +783,50 @@ def compute_sex_rank(characters):
             c["body"]["face_attractiveness"]["sex_rank"] = rank
 
 
+def write_seed(out_path, payload, *, force):
+    """시드 파일 쓰기.
+
+    기본: 배타적 생성 (O_EXCL) — 기존 파일·디렉터리·심링크(깨진 것 포함)가
+    있으면 FileExistsError로 거부. exists() 검사와 달리 검사-쓰기 사이
+    경합(TOCTOU)이 없고, 댕글링 심링크를 따라 runs/ 밖을 쓰지 않는다.
+    --force: 같은 디렉터리 임시 파일에 쓴 뒤 os.replace로 원자적 교체.
+    replace는 심링크 자체를 교체하므로 target을 건드리지 않는다.
+    """
+    if force:
+        fd, tmp_name = tempfile.mkstemp(
+            dir=out_path.parent, prefix=out_path.name + ".", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                stream.write(payload)
+            os.replace(tmp_name, out_path)
+        except BaseException:
+            try:
+                os.unlink(tmp_name)
+            except OSError:
+                pass
+            raise
+        return
+    with out_path.open("x", encoding="utf-8") as stream:
+        stream.write(payload)
+
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 generate_seed.py <seed_number>", file=sys.stderr)
+        print("Usage: python3 generate_seed.py <seed_number> [--force]", file=sys.stderr)
         sys.exit(1)
     try:
         seed = int(sys.argv[1])
     except ValueError:
         print(f"Invalid seed: {sys.argv[1]}", file=sys.stderr)
         sys.exit(1)
+
+    unknown = [arg for arg in sys.argv[2:] if arg != "--force"]
+    if unknown:
+        print(f"Unknown option: {unknown[0]}", file=sys.stderr)
+        print("Usage: python3 generate_seed.py <seed_number> [--force]", file=sys.stderr)
+        sys.exit(1)
+    force = "--force" in sys.argv[2:]
+    out_path = RUNS_DIR / f"seed_{seed:03d}.json"
 
     random.seed(seed)
 
@@ -835,8 +872,15 @@ def main():
     }
 
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = RUNS_DIR / f"seed_{seed:03d}.json"
-    out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    payload = json.dumps(result, ensure_ascii=False, indent=2)
+    try:
+        write_seed(out_path, payload, force=force)
+    except FileExistsError:
+        print(f"{out_path} 이미 존재합니다. 덮어쓰지 않았습니다. 덮어쓰려면 --force를 붙이세요.")
+        sys.exit(2)
+    except IsADirectoryError:
+        print(f"{out_path} 경로에 디렉터리가 있어 쓸 수 없습니다. 옮긴 뒤 다시 시도하세요.")
+        sys.exit(2)
     print(f"Wrote {out_path}")
 
 
