@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kakao-v1';
+const CACHE_NAME = 'kakao-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -33,6 +33,26 @@ self.addEventListener('fetch', (event) => {
   // API 요청은 항상 네트워크 (분석/LLM 호출은 캐시 불가)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // 페이지는 네트워크 우선: 새 배포를 받고, 오프라인일 때만 저장된 페이지 사용
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then(async (response) => {
+        if (response.ok) {
+          try {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(event.request, response.clone());
+          } catch (_) { /* 캐시 실패가 온라인 페이지를 막지 않음 */ }
+        }
+        return response;
+      }).catch(async (error) => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        throw error;
+      })
+    );
     return;
   }
 
