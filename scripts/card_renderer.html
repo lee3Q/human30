@@ -119,21 +119,46 @@ function pickAttrs(c){
   return rows.slice(0,12);
 }
 
+// Imported JSON is data, never HTML or executable event-handler source.
+function element(tag,className,text){
+  const node=document.createElement(tag);
+  if(className)node.className=className;
+  if(text!==undefined)node.textContent=String(text);
+  return node;
+}
+
 function renderCard(c){
-  const attrs=pickAttrs(c);
-  const tags=(c.post_hoc_label||[]).map(t=>`<span class="tag">${t}</span>`).join('');
-  const sexClass=c.sex==='M'?'m':'f';
-  const sexLabel=c.sex==='M'?'남':'여';
-  return `<div class="card" data-idx="${c.id}" data-sex="${c.sex}" data-bmi="${getAttr(c,'body.body_composition.bmi')||0}" data-height="${getAttr(c,'body.height_cm')||0}">
-    <div class="card-top">
-      <div class="avatar ${sexClass}">${c.id}</div>
-      <span class="card-id">#${c.id}</span>
-      <span class="card-age-sex">${c.age}세 · ${sexLabel}</span>
-    </div>
-    <div class="card-body">${attrs.map(([l,v])=>`<div class="attr-row"><span class="attr-label">${l}</span><span class="attr-val">${v}</span></div>`).join('')}</div>
-    ${tags?`<div class="tag-list">${tags}</div>`:''}
-    <div class="card-footer"><span>시드 ${data.seed||'?'}</span><span class="highlight" style="cursor:pointer" onclick="showJson(${c.id})">상세 ↓</span></div>
-  </div>`;
+  const card=element('div','card');
+  card.dataset.idx=String(c.id);
+  card.dataset.sex=String(c.sex);
+  card.dataset.bmi=String(getAttr(c,'body.body_composition.bmi')||0);
+  card.dataset.height=String(getAttr(c,'body.height_cm')||0);
+  const top=element('div','card-top');
+  top.append(
+    element('div',`avatar ${c.sex==='M'?'m':'f'}`,c.id),
+    element('span','card-id',`#${c.id}`),
+    element('span','card-age-sex',`${c.age}세 · ${c.sex==='M'?'남':'여'}`)
+  );
+  const body=element('div','card-body');
+  for(const [label,value] of pickAttrs(c)){
+    const row=element('div','attr-row');
+    row.append(element('span','attr-label',label),element('span','attr-val',value));
+    body.append(row);
+  }
+  card.append(top,body);
+  if(c.post_hoc_label&&c.post_hoc_label.length){
+    const tags=element('div','tag-list');
+    for(const tag of c.post_hoc_label)tags.append(element('span','tag',tag));
+    card.append(tags);
+  }
+  const footer=element('div','card-footer');
+  const detail=element('button','highlight','상세 ↓');
+  detail.type='button';
+  detail.style.cssText='cursor:pointer;background:none;border:0;font:inherit';
+  detail.addEventListener('click',()=>showJson(c.id));
+  footer.append(element('span','',`시드 ${data.seed??'?'}`),detail);
+  card.append(footer);
+  return card;
 }
 
 function getFiltered(){
@@ -167,8 +192,8 @@ function getFiltered(){
 
 function render(){
   const chars=getFiltered();
-  if(!chars.length){$('grid').innerHTML='<div class="empty">해당 조건의 캐릭터가 없습니다</div>';return;}
-  $('grid').innerHTML=chars.map(renderCard).join('');
+  if(!chars.length){$('grid').replaceChildren(element('div','empty','해당 조건의 캐릭터가 없습니다'));return;}
+  $('grid').replaceChildren(...chars.map(renderCard));
 }
 
 window.showJson=function(id){
