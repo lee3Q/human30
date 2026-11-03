@@ -22,8 +22,9 @@ def repro_root(tmp_path, monkeypatch):
     """Four-axis evidence tree with synthetic weights and matching model pins.
 
     Returns the tree root; the overridden pin JSON sits at root/PIN_FILE for
-    subprocess verifier runs via --model-files-pin. In-process callers are
-    covered by the monkeypatched PINNED_MODEL_FILES.
+    subprocess verifier runs, which load it through a PINNED_MODEL_FILES
+    override preamble (see test_human30_repro_cli.py). In-process callers
+    are covered by the monkeypatched PINNED_MODEL_FILES.
     """
     root = tmp_path / "runs" / "human30_repro"
     model = root / "model"
