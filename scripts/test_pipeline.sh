@@ -136,14 +136,14 @@ if [ -f "$SEED_FILE" ]; then
 import json
 d = json.load(open('$SEED_FILE'))
 d.pop('generated_at', None)
-json.dumps(d, sort_keys=True, ensure_ascii=False)
+print(json.dumps(d, sort_keys=True, ensure_ascii=False))
 ")
   python3 "$SCRIPTS/generate_seed.py" "$SEED" > /dev/null 2>&1
   BODY2=$(python3 -c "
 import json
 d = json.load(open('$SEED_FILE'))
 d.pop('generated_at', None)
-json.dumps(d, sort_keys=True, ensure_ascii=False)
+print(json.dumps(d, sort_keys=True, ensure_ascii=False))
 ")
   if [ "$BODY1" = "$BODY2" ]; then
     p "재현성 확인 (generated_at 제외 후 동일)"
