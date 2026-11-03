@@ -294,6 +294,15 @@ class Handler(SimpleHTTPRequestHandler):
         stats_json = json.dumps(session["stats"], ensure_ascii=False)
         raw = call_claude(SYSTEM_PROMPT, make_user_prompt(stats_json))
         discoveries = parse_discoveries(raw)
+        if not discoveries or any(
+            not isinstance(item, dict) or any(
+                not isinstance(item.get(field), str) or not item[field].strip()
+                for field in ("title", "data", "meaning", "surprise")
+            ) or ("question" in item and not isinstance(item["question"], str))
+            for item in discoveries
+        ):
+            self.json_response({"error": "발견 결과를 확인할 수 없습니다. 다시 시도해주세요."}, status=502)
+            return
 
         session["discoveries"] = discoveries
         session["responses"] = [{"action": "pending"} for _ in discoveries]

@@ -13,7 +13,7 @@ def test_web_provider_payload_and_session_lifecycle(monkeypatch):
     monkeypatch.setattr(sys, 'path', list(sys.path))
     spec.loader.exec_module(server)
     calls = []
-    discovery = {'title': 'synthetic discovery', 'data': 'count 2', 'meaning': 'synthetic meaning'}
+    discovery = {'title': 'synthetic discovery', 'data': 'count 2', 'meaning': 'synthetic meaning', 'surprise': 'synthetic surprise'}
     def model(system, prompt):
         calls.append(prompt)
         return json.dumps([discovery]) if len(calls) == 1 else 'synthetic followup'
