@@ -230,9 +230,13 @@ class Handler(SimpleHTTPRequestHandler):
             if text.replace("\r\n", "\n").strip() != expected.strip():
                 self.json_response({"error": "데모에서는 제공된 합성 CSV만 사용할 수 있습니다. 개인 대화를 업로드하지 마세요."}, status=400)
                 return
-        messages = parse_text(text)
+        try:
+            messages = parse_text(text)
+        except ValueError:
+            self.json_response({"error": "CSV 형식이나 날짜를 확인하세요. 날짜,이름,메시지 열과 지원 형식이 필요합니다."}, status=400)
+            return
         if not messages:
-            self.json_response({"error": "메시지를 파싱할 수 없습니다."}, status=400)
+            self.json_response({"error": "CSV에서 메시지를 읽지 못했습니다. 날짜,이름,메시지 열과 지원 형식을 확인하세요."}, status=400)
             return
 
         user_counts = detect_users(messages)

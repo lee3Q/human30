@@ -158,7 +158,7 @@ def _parse_lines(text, fmt):
                     messages[-1] = (dt, user, prev_msg + "\n" + line)
             i += 1
     else:
-        raise RuntimeError(f"CSV 포맷 감지 실패: {path}")
+        raise ValueError("지원하지 않는 CSV 형식입니다. 날짜,이름,메시지 열의 예시 형식을 확인하세요.")
 
     return messages
 
