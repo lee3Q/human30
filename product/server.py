@@ -32,6 +32,7 @@ from prompt import (
 # 설정
 # ============================================================
 
+DEMO_MODE = False  # Explicit --demo only; never selected by missing credentials.
 API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL = "https://api.anthropic.com/v1/messages"
 MODEL = "claude-sonnet-4-20250514"
@@ -62,6 +63,18 @@ def cleanup_expired_sessions():
 # ============================================================
 
 def call_claude(system: str, user_message: str) -> str:
+    if DEMO_MODE:
+        if system == SYSTEM_PROMPT:
+            return json.dumps([{
+                "title": "[합성 데모] 대화 기록 다시 보기",
+                "data": "가상 나와 가상 친구가 각각 2개 메시지를 보낸 고정 예시입니다.",
+                "meaning": "동작 확인용 고정 문장입니다. 개인이나 관계를 분석한 결과가 아닙니다.",
+                "surprise": "메시지 수만으로 마음이나 성격을 알 수 없습니다.",
+                "question": "이 가상 기록에서 추가로 필요한 맥락은 무엇인가요?",
+            }], ensure_ascii=False)
+        if system == REBUTTAL_SYSTEM:
+            return "[합성 데모] 반박 저장과 다음 단계 이동을 확인하는 고정 응답입니다. 다른 맥락은 무엇일까요?"
+        return "[합성 데모] 동작 확인을 마쳤습니다. 기록만으로 알 수 없는 점은 무엇인가요?"
     if not API_KEY:
         return '[{"title":"API 키 미설정","data":"ANTHROPIC_API_KEY 환경변수를 설정해주세요","meaning":"서버 시작 전에 export ANTHROPIC_API_KEY=sk-... 실행","surprise":"API 키 없이는 발견을 생성할 수 없습니다","question":"API 키를 설정하셨나요?"}]'
 
@@ -134,7 +147,9 @@ class Handler(SimpleHTTPRequestHandler):
             filename, content_type = self.STATIC_FILES[parsed.path]
             self.serve_file(filename, content_type)
         elif parsed.path == "/api/status":
-            self.json_response({"ok": True, "has_api_key": bool(API_KEY)})
+            self.json_response({"ok": True, "has_api_key": bool(API_KEY) and not DEMO_MODE, "demo": DEMO_MODE})
+        elif parsed.path == "/demo.csv" and DEMO_MODE:
+            self.serve_file("demo.csv", "text/csv")
         else:
             self.send_error(404)
 
@@ -209,6 +224,12 @@ class Handler(SimpleHTTPRequestHandler):
 
         # 메모리에서 직접 파싱 — 디스크에 저장하지 않음
         text = try_decode(csv_data)
+        if DEMO_MODE:
+            with open(os.path.join(PRODUCT_DIR, "demo.csv"), encoding="utf-8") as fixture:
+                expected = fixture.read()
+            if text.replace("\r\n", "\n").strip() != expected.strip():
+                self.json_response({"error": "데모에서는 제공된 합성 CSV만 사용할 수 있습니다. 개인 대화를 업로드하지 마세요."}, status=400)
+                return
         messages = parse_text(text)
         if not messages:
             self.json_response({"error": "메시지를 파싱할 수 없습니다."}, status=400)
@@ -393,6 +414,8 @@ class Handler(SimpleHTTPRequestHandler):
             "deeper_answer": session.get("deeper_answer"),
         }
 
+        if DEMO_MODE:
+            save_data["demo"] = True
         # 서버 디스크에 저장하지 않음 — 데이터를 클라이언트에 반환
         self.json_response({"session_data": save_data})
 
@@ -406,12 +429,17 @@ class Handler(SimpleHTTPRequestHandler):
 # ============================================================
 
 def main():
+    global DEMO_MODE
     import argparse
     parser = argparse.ArgumentParser(description="카톡 분석 웹앱 서버")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--demo", action="store_true", help="Network-disabled fixed synthetic walkthrough; only bundled demo.csv is accepted.")
     args = parser.parse_args()
+    DEMO_MODE = args.demo
 
-    if not API_KEY:
+    if DEMO_MODE:
+        print("합성 데모: 외부 AI 호출 없음. 제공된 demo.csv만 사용합니다.")
+    elif not API_KEY:
         print("⚠️  ANTHROPIC_API_KEY 미설정. 발견 생성이 작동하지 않습니다.")
         print("   export ANTHROPIC_API_KEY=sk-ant-... 후 재시작하세요.")
         print()

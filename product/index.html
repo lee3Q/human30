@@ -386,6 +386,11 @@ h1 {
 <body>
 
 <div class="container">
+  <div id="demoNotice" class="security-notice" hidden>
+    <strong>합성 데모 · 외부 AI 호출 없음</strong>
+    <p>모든 해석은 고정된 동작 확인용 예시입니다. 개인 분석이 아닙니다. 제공된 합성 CSV만 사용할 수 있습니다.</p>
+    <button class="btn btn-primary" id="btnDemo" type="button">가상 대화로 시작</button>
+  </div>
 
   <!-- ============ STEP 1: 업로드 ============ -->
   <div id="step-upload" class="step active">
@@ -393,7 +398,7 @@ h1 {
     <p class="subtitle">카톡을 넣으면, 네가 몰랐던 너를 숫자로 보여준다.</p>
 
     <div class="security-notice">
-      <strong>보안 안내</strong>
+      <strong>일반 모드 데이터 안내 (합성 데모는 외부 AI를 호출하지 않습니다)</strong>
       <ul>
         <li>CSV는 이 페이지를 제공하는 서버로 전송되어 메모리에서 분석됩니다. 기본 실행 서버는 이 기기(localhost)이며, 앱은 업로드 파일을 디스크에 저장하지 않습니다.</li>
         <li>발견 생성 시 참가자 이름과 통계가 Anthropic API로 전송됩니다. 반박을 적으면 그 내용도 후속 해석과 깊은 질문 생성에 전송됩니다. 원문 전체를 API에 보내는 기능은 없습니다.</li>
@@ -845,7 +850,21 @@ function downloadSession() {
   try {
     const resp = await fetch('/api/status');
     const data = await resp.json();
-    if (!data.has_api_key) {
+    if (data.demo) {
+      document.getElementById('demoNotice').hidden = false;
+      document.querySelector('.subtitle').textContent = '합성 CSV로 전체 흐름을 체험하세요. 실제 분석 결과가 아닙니다.';
+      document.getElementById('btnDemo').addEventListener('click', async () => {
+        const button = document.getElementById('btnDemo');
+        button.disabled = true;
+        try {
+          const response = await fetch('/demo.csv');
+          if (!response.ok) throw new Error('합성 CSV를 읽지 못했습니다.');
+          await handleFile(new File([await response.text()], 'demo.csv', {type:'text/csv'}));
+          if (state.sessionId) button.style.display = 'none';
+        } catch (error) { showError('uploadError', error.message); }
+        finally { button.disabled = false; }
+      });
+    } else if (!data.has_api_key) {
       document.querySelector('.subtitle').textContent =
         '⚠️ API 키 미설정 — 서버에 ANTHROPIC_API_KEY를 설정해주세요';
     }
