@@ -103,3 +103,22 @@ test('file chooser resets before async read so the same file can be retried',()=
   input.value='';input.files=[];input.events.change({target:input});
   assert.equal(readers.length,3);assert.equal(alerts.length,0);
 });
+
+
+test('late callbacks from superseded file selections cannot replace or alert',()=>{
+  const {context,nodes}=setup();const good=fixture();context.loadSeed(good);
+  const alerts=[];const readers=[];context.alert=message=>alerts.push(message);
+  context.FileReader=class {constructor(){readers.push(this);}readAsText(){}};
+  const input=nodes.get('fileInput');
+  const choose=()=>{input.files=[{}];input.events.change({target:input});return readers.at(-1);};
+  const first=choose(),second=choose();
+  const newer=fixture();newer.seed='newer';second.result=JSON.stringify(newer);second.onload();
+  first.result=JSON.stringify(good);first.onload();first.onerror();
+  assert.match(nodes.get('stats').textContent,/newer/);assert.equal(alerts.length,0);
+  const third=choose(),fourth=choose();fourth.result='{invalid';fourth.onload();
+  assert.equal(alerts.length,1);third.result=JSON.stringify(good);third.onload();
+  assert.match(nodes.get('stats').textContent,/newer/);
+  const pending=choose();input.files=[];input.events.change({target:input});
+  pending.result=JSON.stringify(good);pending.onload();
+  assert.match(nodes.get('stats').textContent,/시드 1/);
+});

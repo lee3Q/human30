@@ -224,17 +224,20 @@ window.showJson=function(id){
   $('modalBg').classList.add('active');
 };
 
+let importVersion=0;
 $('fileInput').addEventListener('change',e=>{
   const f=e.target.files[0];
   e.target.value=''; // Allow selecting the same file again after success or failure.
   if(!f)return;
+  const version=++importVersion;
   const r=new FileReader();
   r.onload=()=>{
+    if(version!==importVersion)return;
     let parsed;
     try{parsed=JSON.parse(r.result)}catch{alert('JSON 파싱 오류: 파일 형식을 확인하세요');return;}
     try{loadSeed(parsed)}catch{alert('시드 불러오기 실패: 캐릭터 데이터 형식을 확인하세요. 이전 화면은 유지됩니다.');}
   };
-  r.onerror=()=>alert('파일을 읽지 못했습니다. 이전 화면은 유지됩니다.');
+  r.onerror=()=>{if(version===importVersion)alert('파일을 읽지 못했습니다. 이전 화면은 유지됩니다.');};
   r.readAsText(f);
 });
 
