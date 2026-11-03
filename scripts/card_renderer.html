@@ -73,11 +73,23 @@ let data=null;
 const $=id=>document.getElementById(id);
 
 function loadSeed(json){
-  if(!json.characters||!Array.isArray(json.characters))return alert('유효하지 않은 시드 JSON');
+  if(!json||typeof json!=='object'||!Array.isArray(json.characters)){
+    throw new Error('characters 배열이 필요합니다');
+  }
+  // Build every card before replacing any visible state, including filtered-out cards.
+  const cards=new Map();
+  for(const c of json.characters){
+    if(!c||typeof c!=='object'||Array.isArray(c))throw new Error('캐릭터는 객체여야 합니다');
+    cards.set(c,renderCard(c,json.seed));
+  }
+  const chars=getFiltered(json);
+  const nodes=chars.length?chars.map(c=>cards.get(c)):[element('div','empty','해당 조건의 캐릭터가 없습니다')];
+  $('grid').replaceChildren(...nodes);
   data=json;
   $('controls').style.display='flex';
-  $('stats').textContent=`시드 ${json.seed||'?'} · ${json.characters.length}명`;
-  render();
+  $('stats').textContent=`시드 ${json.seed??'?'} · ${json.characters.length}명`;
+  $('modalBg').classList.remove('active');
+  $('modalContent').textContent='';
 }
 
 function getAttr(c,path){
@@ -136,7 +148,7 @@ function element(tag,className,text){
   return node;
 }
 
-function renderCard(c){
+function renderCard(c,seed=data.seed){
   const card=element('div','card');
   card.dataset.idx=String(c.id);
   card.dataset.sex=String(c.sex);
@@ -165,14 +177,14 @@ function renderCard(c){
   detail.type='button';
   detail.style.cssText='cursor:pointer;background:none;border:0;font:inherit';
   detail.addEventListener('click',()=>showJson(c.id));
-  footer.append(element('span','',`시드 ${data.seed??'?'}`),detail);
+  footer.append(element('span','',`시드 ${seed??'?'}`),detail);
   card.append(footer);
   return card;
 }
 
-function getFiltered(){
-  if(!data)return[];
-  let chars=data.characters;
+function getFiltered(source=data){
+  if(!source)return[];
+  let chars=source.characters;
   const sex=$('filterSex').value;
   if(sex)chars=chars.filter(c=>c.sex===sex);
   const hf=$('filterHeight').value;
@@ -202,7 +214,7 @@ function getFiltered(){
 function render(){
   const chars=getFiltered();
   if(!chars.length){$('grid').replaceChildren(element('div','empty','해당 조건의 캐릭터가 없습니다'));return;}
-  $('grid').replaceChildren(...chars.map(renderCard));
+  $('grid').replaceChildren(...chars.map(c=>renderCard(c)));
 }
 
 window.showJson=function(id){
@@ -216,7 +228,12 @@ $('fileInput').addEventListener('change',e=>{
   const f=e.target.files[0];
   if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{loadSeed(JSON.parse(r.result))}catch(er){alert('JSON 파싱 오류: '+er.message)}};
+  r.onload=()=>{
+    let parsed;
+    try{parsed=JSON.parse(r.result)}catch{alert('JSON 파싱 오류: 파일 형식을 확인하세요');return;}
+    try{loadSeed(parsed)}catch{alert('시드 불러오기 실패: 캐릭터 데이터 형식을 확인하세요. 이전 화면은 유지됩니다.');}
+  };
+  r.onerror=()=>alert('파일을 읽지 못했습니다. 이전 화면은 유지됩니다.');
   r.readAsText(f);
 });
 

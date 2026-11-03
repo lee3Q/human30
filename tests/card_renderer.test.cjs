@@ -54,3 +54,28 @@ test('imported labels, attributes, IDs, ages and seed stay literal text/data',()
   nodes.get('filterSex').value='M';nodes.get('filterSex').events.change();
   assert.ok(texts(grid).includes('해당 조건의 캐릭터가 없습니다'));
 });
+
+
+test('failed import preserves cards, stats, filters and last good JSON source',()=>{
+  const {context,nodes}=setup();const good=fixture();context.loadSeed(good);
+  nodes.get('filterSex').value='M';nodes.get('filterSex').events.change();
+  const cards=nodes.get('grid').children;const stats=nodes.get('stats').textContent;
+  for(const invalid of [null,{}, {characters:[null]}, ...['bmi','labels','secret'].map(kind=>{
+    const seed=fixture();seed.seed='rejected';
+    if(kind==='bmi')seed.characters[0].body.body_composition.bmi='bad';
+    if(kind==='labels')seed.characters[0].post_hoc_label={length:1};
+    if(kind==='secret')seed.characters[0].memory.secret={length:40};
+    return seed;
+  })]){
+    assert.throws(()=>context.loadSeed(invalid));
+    assert.equal(nodes.get('grid').children,cards);
+    assert.equal(nodes.get('stats').textContent,stats);
+    assert.equal(nodes.get('filterSex').value,'M');
+    nodes.get('expandAll').events.click();
+    assert.deepEqual(JSON.parse(nodes.get('modalContent').textContent),good);
+  }
+  const replacement=fixture();replacement.seed=0;context.loadSeed(replacement);
+  assert.match(nodes.get('stats').textContent,/시드 0/);
+  assert.equal(nodes.get('modalContent').textContent,'');
+  nodes.get('resetBtn').events.click();assert.equal(nodes.get('grid').children.length,30);
+});
