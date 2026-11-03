@@ -570,9 +570,9 @@ function renderMeta(data) {
   const card = document.getElementById('metaCard');
   card.innerHTML = `
     <div class="stat"><span class="label">총 메시지</span><span class="value">${m.total_messages.toLocaleString()}건</span></div>
-    <div class="stat"><span class="label">${m.me}</span><span class="value">${m.me_messages.toLocaleString()}건</span></div>
-    <div class="stat"><span class="label">${m.partner}</span><span class="value">${m.other_messages.toLocaleString()}건</span></div>
-    <div class="stat"><span class="label">기간</span><span class="value">${m.start_date} ~ ${m.end_date}</span></div>
+    <div class="stat"><span class="label">${esc(m.me)}</span><span class="value">${m.me_messages.toLocaleString()}건</span></div>
+    <div class="stat"><span class="label">${esc(m.partner)}</span><span class="value">${m.other_messages.toLocaleString()}건</span></div>
+    <div class="stat"><span class="label">기간</span><span class="value">${esc(m.start_date)} ~ ${esc(m.end_date)}</span></div>
     <div class="stat"><span class="label">일수</span><span class="value">${m.total_days}일</span></div>
   `;
 
