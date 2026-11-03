@@ -46,6 +46,8 @@ def main():
     for c in chars[:10]:
         print(f"  #{c['id']:02d} {c['sex']} → {c['body']['self_image']['focused_concern']}")
 
+    return 1 if errors else 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
