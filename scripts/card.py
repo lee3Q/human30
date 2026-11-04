@@ -8,6 +8,7 @@
 
 출력: 의학 차트 카드 스타일의 자연어 프로필.
 """
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -799,27 +800,34 @@ def make_card(c, rk):
 # ---------------- main ----------------
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: python3 scripts/card.py <seed> <id1> [id2 ...|all]", file=sys.stderr)
-        sys.exit(1)
-    seed = int(sys.argv[1])
-    ids_arg = sys.argv[2:]
-
-    data = json.loads((ROOT / "runs" / f"seed_{seed:03d}.json").read_text(encoding="utf-8"))
+    parser = argparse.ArgumentParser(description="로컬 시드의 캐릭터 카드를 읽습니다. 파일을 바꾸지 않습니다.")
+    parser.add_argument("seed", type=int, help="시드 번호")
+    parser.add_argument("ids", nargs="+", help="캐릭터 번호 또는 all")
+    args = parser.parse_args()
+    if args.seed < 0:
+        parser.error("시드 번호는 0 이상이어야 합니다.")
+    try:
+        target_ids = None if args.ids == ["all"] else [int(value) for value in args.ids]
+    except ValueError:
+        parser.error("캐릭터 번호는 정수로 입력하거나 all만 사용하세요.")
+    path = ROOT / "runs" / f"seed_{args.seed:03d}.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        parser.error(f"시드 {args.seed} 파일이 없습니다. 포함된 시드 1을 사용하거나 scripts/generate_seed.py로 먼저 생성하세요.")
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        parser.error(f"시드 {args.seed} 파일을 읽지 못했습니다. 파일 권한과 JSON 내용을 확인하세요. 기존 파일은 바꾸지 않았습니다.")
     chars = data["characters"]
     rk = compute_rankings(chars)
     by_id = {c["id"]: c for c in chars}
-
-    if ids_arg == ["all"]:
+    if target_ids is None:
         target_ids = [c["id"] for c in chars]
-    else:
-        target_ids = [int(x) for x in ids_arg]
+    missing = [cid for cid in target_ids if cid not in by_id]
+    if missing:
+        parser.error("캐릭터 번호를 찾지 못했습니다: " + ", ".join(map(str, missing)) + ". all로 사용 가능한 카드를 확인하세요.")
 
     for cid in target_ids:
-        c = by_id.get(cid)
-        if not c:
-            print(f"id={cid} 없음", file=sys.stderr)
-            continue
+        c = by_id[cid]
         print(make_card(c, rk))
         print()
 
