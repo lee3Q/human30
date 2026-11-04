@@ -30,7 +30,7 @@ python3 scripts/card.py 1 all          # 포함된 시드 1의 30명 카드 바�
 python3 scripts/generate_seed.py 7     # 내 시드 생성 → runs/seed_007.json (포함된 번호 1·2·3·42·999는 거부, --force로 덮어쓰기)
 ```
 
-시뮬레이션 실행: [`docs/PORTABLE_PROMPT.md`](docs/PORTABLE_PROMPT.md)를 아무 LLM에 붙여넣기. Claude·GPT-4o·Gemini 어디든 동작.
+시뮬레이션은 [`docs/PORTABLE_PROMPT.md`](docs/PORTABLE_PROMPT.md)와 가상 캐릭터 데이터를 사용자가 선택한 LLM에 수동으로 제공하는 경로입니다. 카드·시드 도구가 시뮬레이션을 실행하거나 LLM과 연결하는 것은 아닙니다. 제공자별 호환성·출력 품질은 보장하지 않으며 이 수동 경로는 CI에서 검증하지 않습니다. 계정 설정·외부 전송·비용을 먼저 확인하고 실제 사람의 개인정보 대신 가상 데이터만 사용하세요.
 
 ## 무엇이 아닌가
 
@@ -86,7 +86,7 @@ python3 scripts/generate_seed.py 7     # 내 시드 생성 → runs/seed_007.jso
 |---|---|
 | 시드 생성 | 완료. `generate_seed.py` 안정 동작 |
 | 카드 출력 | 완료. 터미널(card.py) + 브라우저(card_renderer.html) |
-| PORTABLE_PROMPT | 완료. Claude/GPT/Gemini 독립 실행 가능 |
+| PORTABLE_PROMPT | 수동 실행용 문서 포함. 제공자별 호환성·실제 출력 품질은 별도 확인 필요 |
 | 파이프라인 테스트 | 완료. `test_pipeline.sh` 전체 동작 검증 |
 | identity v0.3 | 완료. 성소수자 분포 정상화 + IQ 하위 꼬리 축소 |
 | region 버그 | 수정. roll_korea가 slot region override |
