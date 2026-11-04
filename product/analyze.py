@@ -86,6 +86,20 @@ def parse_text(text):
     return _parse_lines(text, fmt)
 
 
+def parse_text_with_diagnostics(text):
+    """Report parser events, not a physical-row/message loss estimate.
+
+    Continuations may be valid multiline content or unrecognized text. Counts
+    do not establish complete compatibility or validate every original row.
+    """
+    fmt = detect_format(text)
+    quality = dict(format=fmt, parsed_messages=0, rejected_records=0,
+                   unrecognized_lines=0, continuation_lines=0)
+    messages = _parse_lines(text, fmt, quality)
+    quality['parsed_messages'] = len(messages)
+    return messages, quality
+
+
 def parse_file(path):
     """카톡 CSV 파싱 → [(datetime, user, message), ...]"""
     text = try_read(path)
@@ -93,7 +107,7 @@ def parse_file(path):
     return _parse_lines(text, fmt)
 
 
-def _parse_lines(text, fmt):
+def _parse_lines(text, fmt, quality=None):
     """내부 파싱 로직"""
     lines = text.split("\n")
     messages = []
@@ -121,8 +135,13 @@ def _parse_lines(text, fmt):
                         if len(row) >= 3:
                             dt = parse_datetime_a(row[0])
                             messages.append((dt, row[1], ",".join(row[2:])))
+                        elif quality is not None:
+                            quality['rejected_records'] += 1
                     except Exception:
-                        pass
+                        if quality is not None:
+                            quality['rejected_records'] += 1
+            elif quality is not None:
+                quality['unrecognized_lines'] += 1
             i += 1
 
     elif fmt == "B":
@@ -151,8 +170,11 @@ def _parse_lines(text, fmt):
                             msg = msg[1:-1]
                         messages.append((dt, user, msg))
                     except Exception:
-                        pass
+                        if quality is not None:
+                            quality['rejected_records'] += 1
             else:
+                if quality is not None:
+                    quality['continuation_lines' if messages else 'unrecognized_lines'] += 1
                 if messages:
                     dt, user, prev_msg = messages[-1]
                     messages[-1] = (dt, user, prev_msg + "\n" + line)
