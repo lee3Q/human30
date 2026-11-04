@@ -27,14 +27,14 @@ python3 scripts/generate_seed.py 7
 
 다른 시드 번호는 다른 샘플을 만듭니다. 같은 코드·표·Python 환경에서 같은 번호로 생성하면 캐릭터와 생성 조건은 같습니다. 다만 `generated_at`은 실제 생성 시각이므로, 다른 시각에 생성한 JSON 파일 전체의 바이트는 같지 않습니다.
 
-## 3단계: LLM에서 시뮬레이션 실행 (2분)
+## 3단계: LLM에서 수동 시뮬레이션 시도
+
+앞 단계는 로컬 캐릭터 준비이며 시뮬레이션을 실행하지 않습니다. 아래 경로는 CI에서 검증하지 않습니다. 출력 품질·내용 정책·계정별 입력 방식은 선택한 서비스에 따라 다르며, 설정 이름이나 호환성을 보장하지 않습니다. 외부 전송과 비용을 확인하고 가상 캐릭터 데이터만 제공하세요. 개인·타인의 실제 정보나 API 키를 프롬프트에 넣지 마세요.
 
 ### Claude 웹 / ChatGPT / Gemini
 
-1. `docs/PORTABLE_PROMPT.md` 전체를 복사해서 **시스템 프롬프트**에 붙여넣기
-   - Claude 웹: "Custom Instructions" 또는 첫 메시지에 "시스템 프롬프트로 써:" 뒤에 붙여넣기
-   - ChatGPT: "Customize ChatGPT" → Instructions에 붙여넣기
-   - Gemini: "System Instructions"에 붙여넣기
+1. `docs/PORTABLE_PROMPT.md`를 먼저 읽고 선택한 LLM의 현재 안내에 따라 새 대화나 해당 서비스가 지원하는 프롬프트 입력란에 제공합니다.
+   - 모든 서비스에 같은 시스템 프롬프트 입력 기능이 있는 것은 아닙니다. 기존 대화·계정 전체 지침을 바꿀 필요는 없습니다.
 
 2. 캐릭터 데이터 제공:
    - `runs/seed_001.json`을 열어서 관찰할 캐릭터 부분을 복사해 대화에 붙여넣기
@@ -79,7 +79,7 @@ cd play && cc   # 저장소 루트에서
 
 - Python 3 (stdlib만, 외부 패키지 불필요)
 - `tables/` 폴더에 4개 JSON (body·memory·identity·korea)
-- 시뮬레이션 실행을 위한 LLM 접근 (Claude·GPT·Gemini 중任何一个)
+- 시뮬레이션 실행을 위한 LLM 접근 (사용자가 선택한 서비스, 호환성은 직접 확인)
 
 ## 시나리오 예시
 
