@@ -587,6 +587,15 @@ function renderMeta(data) {
     <div class="stat"><span class="label">일수</span><span class="value">${m.total_days}일</span></div>
   `;
 
+  const quality = data.parse_quality;
+  if (quality && Number.isInteger(quality.rejected_records) && Number.isInteger(quality.unrecognized_lines) && Number.isInteger(quality.continuation_lines)) {
+    const note = document.createElement('p');
+    note.id = 'parseQuality';
+    note.style.cssText = 'margin-top:16px;color:var(--text-dim);font-size:14px;line-height:1.6';
+    note.textContent = `읽은 메시지 ${m.total_messages.toLocaleString()}건 · 읽지 못한 날짜/형식 기록 ${quality.rejected_records}건 · 인식하지 못한 줄 ${quality.unrecognized_lines}줄 · 이전 메시지에 이어 붙인 줄 ${quality.continuation_lines}줄. 이어 붙인 줄은 정상 줄바꿈일 수도 있습니다. 모든 행 검증 결과나 누락 총계는 아닙니다. 참가자·메시지·기간이 원본과 맞지 않으면 진행하지 마세요.`;
+    card.appendChild(note);
+  }
+
   const select = document.getElementById('meSelect');
   select.innerHTML = '';
   data.users.forEach(u => {
