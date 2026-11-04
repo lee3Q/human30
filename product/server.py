@@ -18,7 +18,7 @@ from urllib.parse import urlparse, parse_qs
 
 # 같은 디렉토리 모듈
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze import parse_file, parse_text, try_decode, detect_users, guess_me, analyze_all
+from analyze import parse_file, parse_text, parse_text_with_diagnostics, try_decode, detect_users, guess_me, analyze_all
 from prompt import (
     SYSTEM_PROMPT,
     make_user_prompt,
@@ -231,7 +231,7 @@ class Handler(SimpleHTTPRequestHandler):
                 self.json_response({"error": "데모에서는 제공된 합성 CSV만 사용할 수 있습니다. 개인 대화를 업로드하지 마세요."}, status=400)
                 return
         try:
-            messages = parse_text(text)
+            messages, parse_quality = parse_text_with_diagnostics(text)
         except ValueError:
             self.json_response({"error": "CSV 형식이나 날짜를 확인하세요. 날짜,이름,메시지 열과 지원 형식이 필요합니다."}, status=400)
             return
@@ -270,6 +270,7 @@ class Handler(SimpleHTTPRequestHandler):
             "meta": stats["meta"],
             "users": users,
             "detected_me": me_name,
+            "parse_quality": parse_quality,
         })
 
     def _parse_multipart(self, body, boundary):
