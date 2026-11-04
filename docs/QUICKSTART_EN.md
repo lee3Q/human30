@@ -49,13 +49,11 @@ tables, and Python environment produce the same characters and generation
 metadata, except `generated_at`, which is the actual generation time — so two
 files generated at different times are not byte-identical.
 
-## Step 3: Run the simulation in an LLM (2 minutes)
+## Step 3: Try the manual LLM simulation
 
-Works with Claude, GPT-4o, Gemini, or any comparable LLM:
+The local tools above prepare characters; they do not run a simulation or connect to an LLM. This manual path is not tested by CI. Check the selected service's current input instructions, data handling and possible costs. Use fictional character data only, never real people's private information or API keys.
 
-1. Copy the full text of `docs/PORTABLE_PROMPT.md` into the LLM's system
-   prompt (Claude: Custom Instructions; ChatGPT: Customize ChatGPT ->
-   Instructions; Gemini: System Instructions).
+1. Read `docs/PORTABLE_PROMPT.md`, then provide it in a new conversation or a prompt field the selected service supports. Not every service exposes the same system-prompt controls. You do not need to change existing conversations or account-wide instructions.
 2. Provide character data: open `runs/seed_001.json` and paste the section
    for the character you want to observe, or paste `card.py` output.
 3. Call play in natural language (Korean commands shown; the prompt is
@@ -72,9 +70,7 @@ Works with Claude, GPT-4o, Gemini, or any comparable LLM:
    (`x-ray #N`, `phone #N`, `subconscious #N` are the canonical forms;
    `sub N` and Korean forms like `5번 무의식` are aliases.)
 
-Note: this LLM-driven step is documented but not continuously tested by this
-repository's CI. Output quality and content-policy behavior depend on the LLM
-you choose.
+Output quality, compatibility and content-policy behavior depend on the LLM and account you choose; the project does not guarantee them.
 
 ---
 
