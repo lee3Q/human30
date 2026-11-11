@@ -129,6 +129,10 @@ def parse_discoveries(text: str) -> list:
 # HTTP 핸들러
 # ============================================================
 
+class InvalidJSONBody(ValueError):
+    """A malformed JSON request or a non-object top-level value."""
+
+
 class Handler(SimpleHTTPRequestHandler):
     # 정적 파일 MIME 매핑
     STATIC_FILES = {
@@ -168,6 +172,8 @@ class Handler(SimpleHTTPRequestHandler):
                 self.handle_save()
             else:
                 self.send_error(404)
+        except InvalidJSONBody:
+            self.json_response({"error": "JSON 객체 형식의 요청이 필요합니다."}, status=400)
         except Exception as e:
             # 내부 에러 상세를 클라이언트에 노출하지 않음
             sys.stderr.write(f"[ERROR] {e}\n")
@@ -176,6 +182,15 @@ class Handler(SimpleHTTPRequestHandler):
     def read_body(self):
         length = int(self.headers.get("Content-Length", 0))
         return self.rfile.read(length)
+
+    def read_json_object(self):
+        try:
+            data = json.loads(self.read_body())
+        except (json.JSONDecodeError, UnicodeDecodeError) as error:
+            raise InvalidJSONBody() from error
+        if not isinstance(data, dict):
+            raise InvalidJSONBody()
+        return data
 
     def json_response(self, data, status=200):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -218,7 +233,7 @@ class Handler(SimpleHTTPRequestHandler):
             csv_data, me_name = self._parse_multipart(body, boundary)
         else:
             # JSON body (파일 내용 직접)
-            data = json.loads(self.read_body())
+            data = self.read_json_object()
             csv_data = data.get("csv_content", "")
             me_name = data.get("me", "")
 
@@ -302,7 +317,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     # ---- 발견 생성 ----
     def handle_discover(self):
-        data = json.loads(self.read_body())
+        data = self.read_json_object()
         session_id = data.get("session_id", "")
 
         if session_id not in sessions:
@@ -340,7 +355,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     # ---- 반박 처리 ----
     def handle_rebut(self):
-        data = json.loads(self.read_body())
+        data = self.read_json_object()
         session_id = data.get("session_id", "")
         index = data.get("index", 0)
         action = data.get("action", "skip")  # agree | rebut | skip
@@ -378,7 +393,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     # ---- 깊은 질문 ----
     def handle_deeper(self):
-        data = json.loads(self.read_body())
+        data = self.read_json_object()
         session_id = data.get("session_id", "")
         answer = data.get("answer", "")
 
@@ -403,7 +418,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     # ---- 세션 내보내기 (디스크 저장 안 함 — 클라이언트에서 다운로드) ----
     def handle_save(self):
-        data = json.loads(self.read_body())
+        data = self.read_json_object()
         session_id = data.get("session_id", "")
 
         if session_id not in sessions:
