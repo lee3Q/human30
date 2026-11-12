@@ -463,6 +463,12 @@ h1 {
       <p>세션을 종합하고 있습니다...</p>
     </div>
     <div id="deeperContent" style="display:none"></div>
+    <div id="sessionLost" class="security-notice" role="alert" hidden>
+      <strong>이 세션을 서버에서 찾을 수 없습니다.</strong>
+      <p>서버의 세션 기록이 없어 다시 시도해도 이어서 저장할 수 없습니다. 화면의 답변은 아직 남아 있습니다. 필요한 답변을 직접 복사해 두세요.</p>
+      <p>새 분석을 시작하면 화면의 답변과 현재 진행 상태가 사라집니다.</p>
+      <button class="btn btn-outline" type="button" onclick="restartLostSession()">새 분석 시작 (현재 화면 초기화)</button>
+    </div>
   </div>
 
   <!-- ============ STEP 7: 완료 ============ -->
@@ -510,7 +516,11 @@ async function api(path, body) {
     body: JSON.stringify(body),
   });
   const data = await resp.json();
-  if (data.error) throw new Error(data.error);
+  if (!resp.ok || data.error) {
+    const error = new Error(data.error || '요청을 완료하지 못했습니다.');
+    error.status = resp.status;
+    throw error;
+  }
   return data;
 }
 
@@ -822,6 +832,7 @@ async function startDeeper() {
 
 async function finishSession() {
   state.exportData = null;
+  document.getElementById('sessionLost').hidden = true;
   const answer = document.getElementById('deeperAnswer')?.value?.trim() || '';
 
   try {
@@ -835,11 +846,21 @@ async function finishSession() {
     }
     state.exportData = result.session_data;
   } catch (e) {
+    if (e.status === 404) {
+      document.getElementById('sessionLost').hidden = false;
+      return;
+    }
     alert('결과를 준비하지 못했습니다. 화면의 답변은 유지됩니다. 세션 마치기를 눌러 다시 시도하세요.');
     return;
   }
 
   show('step-complete');
+}
+
+function restartLostSession() {
+  if (confirm('새 분석을 시작하면 현재 화면의 답변과 진행 상태가 사라집니다. 필요한 답변을 복사해 두셨나요? 초기화할까요?')) {
+    location.reload();
+  }
 }
 
 function downloadSession() {
