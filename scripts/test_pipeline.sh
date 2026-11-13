@@ -168,7 +168,7 @@ echo " 결과: PASS=$PASS  FAIL=$FAIL  WARN=$WARN"
 if [ "$FAIL" -eq 0 ]; then
   echo " 🟢 전체 통과"
 else
-  echo " 🔴 실패 $FAIL건 — 수정 필요"
+  echo " 🔴 실패 ${FAIL}건 — 수정 필요"
 fi
 echo "========================================"
 

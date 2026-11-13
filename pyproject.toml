@@ -1,17 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "cls30"
-version = "0.1.0"
+name = "human30"
+version = "2.0.0"
+description = "Empirical 4-Layer Human Cohort Generator & Dual-Surface Multi-Agent Behavioral Simulator (Zero Dependencies)"
+readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.11"
-dependencies = [
-    "anthropic>=0.89.0",
-    "python-dotenv>=1.2.2",
-    "textual>=8.2.3",
-]
+dependencies = []
+keywords = ["multi-agent", "simulation", "persona", "psychology", "llm", "counterfactual", "korean"]
+
+[project.scripts]
+human30 = "human30.cli:main"
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.1",
+    "pytest>=8.0.0",
 ]
+
+[tool.setuptools.packages.find]
+include = ["human30*"]
+
+[tool.setuptools.package-data]
+human30 = ["web/*.html"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

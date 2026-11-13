@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUMAN 30 — 4-Layer Empirical Cohort & Multi-Agent Behavioral Simulator</title>
+  <style>
+    :root {
+      --bg: #090b10;
+      --bg-panel: #10141d;
+      --bg-card: #151b26;
+      --bg-card-hover: #1b2332;
+      --border: #232c3d;
+      --border-accent: #38bdf8;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan: #38bdf8;
+      --amber: #f59e0b;
+      --crimson: #f43f5e;
+      --emerald: #10b981;
+      --violet: #a855f7;
+      --mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 11, 16, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: #fff;
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+      background: var(--bg-card);
+    }
+    .tab-btn.active {
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    .seed-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    select, input, textarea, button {
+      font-family: inherit;
+      font-size: 13px;
+    }
+    select, input, textarea {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 11px;
+      border-radius: 6px;
+      outline: none;
+    }
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--cyan);
+    }
+    .btn {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 13px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover {
+      border-color: var(--text-muted);
+      background: var(--bg-card-hover);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      border-color: #38bdf8;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.1);
+    }
+    .btn-amber {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+    }
+    .container {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 20px 24px 60px;
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .kpi-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .kpi-val {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Highlights & Filters */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .chip strong {
+      color: var(--amber);
+      font-family: var(--mono);
+    }
+
+    /* Main Split Layout */
+    .split-cohort {
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 1180px) {
+      .split-cohort { grid-template-columns: 1fr; }
+    }
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+    }
+    .char-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .char-card:hover {
+      border-color: var(--text-muted);
+      background: var(--bg-card);
+    }
+    .char-card.selected {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 1px var(--cyan);
+      background: rgba(56, 189, 248, 0.06);
+    }
+    .char-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .char-id {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--cyan);
+    }
+    .badge {
+      font-size: 11px;
+      font-family: var(--mono);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .badge-danger {
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.4);
+      background: rgba(244, 63, 94, 0.12);
+    }
+    .badge-warn {
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.12);
+    }
+    .badge-ok {
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.12);
+    }
+    .badge-violet {
+      color: #d8b4fe;
+      border-color: rgba(168, 85, 247, 0.4);
+      background: rgba(168, 85, 247, 0.12);
+    }
+    .dossier-box {
+      position: sticky;
+      top: 72px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      max-height: calc(100vh - 96px);
+      overflow-y: auto;
+    }
+    pre.clinical-pre {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #07090d;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      color: #cbd5e1;
+      margin-top: 10px;
+    }
+
+    /* Simulator Layout */
+    .sim-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .control-group label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .control-group select, .control-group input {
+      width: 100%;
+    }
+    .split-sim {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 1120px) {
+      .split-sim { grid-template-columns: 1fr; }
+    }
+    .participant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 760px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .p-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .p-row:hover {
+      border-color: var(--text-muted);
+    }
+    .p-row.selected {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .lens-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      .lens-grid { grid-template-columns: 1fr; }
+    }
+    .lens-card {
+      background: #0b0e15;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .lens-card h4 {
+      font-size: 12px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .lens-surface { border-left: 3px solid var(--cyan); }
+    .lens-xray { border-left: 3px solid var(--amber); }
+    .lens-phone { border-left: 3px solid var(--emerald); }
+    .lens-sub { border-left: 3px solid var(--crimson); }
+    .tally-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tally-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .tally-item:hover {
+      border-color: var(--cyan);
+    }
+    .cf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (max-width: 960px) {
+      .cf-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-badge">HUMAN 30</div>
+      <div>
+        <div class="brand-title">인간30 — 4층 군상 생성 & 다중 에이전트 행동 시뮬레이터</div>
+        <div class="brand-sub">Body · Memory · Identity · Context (28 Empirical Tables) × 4 Observation Lenses</div>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('cohort')">01. 군상 탐색 & 차트</button>
+      <button class="tab-btn" onclick="switchTab('sim')">02. 무대 시뮬레이터 & 4-렌즈</button>
+      <button class="tab-btn" onclick="switchTab('cf')">03. 반사실적 단일축 실험실</button>
+      <button class="tab-btn" onclick="switchTab('prompt')">04. 포터블 프롬프트 번들</button>
+    </div>
+
+    <div class="seed-bar">
+      <label style="font-size:12px;color:var(--text-muted);">현재 시드:</label>
+      <select id="globalSeedSelect" onchange="onSeedChange()"></select>
+      <input id="newSeedInput" type="number" min="1" max="9999" placeholder="새 시드 번호 (예: 7)" style="width:140px;" />
+      <select id="newSeedAgeMode" style="width:130px;">
+        <option value="default">기본 나이(20세)</option>
+        <option value="diverse">다연령(17~35세)</option>
+        <option value="youth">청년(16~22세)</option>
+        <option value="adult">성인(25~35세)</option>
+      </select>
+      <button class="btn btn-primary" onclick="generateNewSeed()">+ 시드 생성</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- TAB 1: COHORT & DOSSIERS -->
+    <section id="tab-cohort" class="tab-pane active">
+      <div class="kpi-grid" id="cohortKpis"></div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <span>특이 케이스 자동 탐지 (Outlier Highlights — 클릭 시 해당 캐릭터 차트 열람)</span>
+          <span id="cohortMetaNote" style="font-family:var(--mono);font-size:11px;"></span>
+        </div>
+        <div class="chips" id="highlightChips"></div>
+      </div>
+
+      <div class="panel" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+          <input id="charSearch" type="text" placeholder="검색 (#번호, 직업, 지역, 특성...)" oninput="renderCohortGrid()" style="width:220px;" />
+          <select id="filterSex" onchange="renderCohortGrid()">
+            <option value="">성별 전체</option>
+            <option value="M">남성 (M)</option>
+            <option value="F">여성 (F)</option>
+          </select>
+          <select id="filterReflex" onchange="renderCohortGrid()">
+            <option value="">위협 반사 전체</option>
+            <option value="대결형">대결형 (Fight)</option>
+            <option value="도피형">도피형 (Flight)</option>
+            <option value="얼어붙음형">얼어붙음형 (Freeze)</option>
+            <option value="과잉">과잉 사회성형 (Fawn)</option>
+            <option value="균형">균형·차분형 (Regulated)</option>
+          </select>
+          <select id="filterAce" onchange="renderCohortGrid()">
+            <option value="">ACE 점수 전체</option>
+            <option value="high">고위험 (ACE 4+)</option>
+            <option value="mid">중간 (ACE 1~3)</option>
+            <option value="zero">ACE 0</option>
+          </select>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);" id="filteredCountLabel"></div>
+      </div>
+
+      <div class="split-cohort">
+        <div class="char-grid" id="charGrid"></div>
+        <div class="dossier-box" id="dossierBox">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <h3 id="dossierTitle" style="font-size:15px;">캐릭터 임상 차트</h3>
+            <div style="display:flex;gap:6px;">
+              <button class="btn" onclick="jumpToSimInterrogate()">무대/심문으로 이동</button>
+              <button class="btn btn-amber" onclick="jumpToCounterfactual()">반사실 실험</button>
+            </div>
+          </div>
+          <pre class="clinical-pre" id="dossierPre">캐릭터 카드를 불러오는 중...</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SIMULATOR & 4-LENS -->
+    <section id="tab-sim" class="tab-pane">
+      <div class="panel">
+        <div class="sim-controls">
+          <div class="control-group">
+            <label>무대 (Stage)</label>
+            <select id="simStageSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>시나리오 / 사건 (Scenario)</label>
+            <select id="simScenarioSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>실행 엔진 (Provider)</label>
+            <select id="simProviderSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>시뮬레이션 시드 / Tick</label>
+            <div style="display:flex;gap:6px;">
+              <input id="simSeedInput" type="number" value="42" style="width:90px;" title="Simulation Seed" />
+              <input id="simTickInput" type="number" value="1" min="1" max="20" style="width:70px;" title="Tick" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
+          <input id="customStimulusInput" type="text" placeholder="선택사항: 직접 사건/자극 입력 (비워두면 선택한 시나리오의 기본 자극 사용)" style="flex:1;min-width:260px;" />
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="runSimulation(1)">▶ 시뮬레이션 실행 (Run Tick)</button>
+            <button class="btn btn-amber" onclick="runSimulation(5)">▶×5 다중 실행 분산 비교 (5 Runs)</button>
+            <button class="btn" onclick="runNextTick()">⏭ 다음 Tick 이어하기 (+득표 압박)</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="simSummaryPanel" class="panel" style="display:none;"></div>
+      <div id="multiRunPanel" class="panel" style="display:none;"></div>
+
+      <div class="split-sim">
+        <div class="panel" style="margin-bottom:0;">
+          <div class="panel-title">
+            <span>참가자 30인 반응 목록</span>
+            <select id="simSortSelect" onchange="renderSimParticipants()" style="padding:3px 8px;font-size:12px;">
+              <option value="id">번호순 (#01~#30)</option>
+              <option value="stress">스트레스 높은순</option>
+              <option value="target">지목 표적순</option>
+            </select>
+          </div>
+          <div class="participant-list" id="simParticipantList"></div>
+        </div>
+
+        <div class="panel" style="margin-bottom:0;" id="simInspectorPanel">
+          <div id="simCharInspector">시뮬레이션을 실행하면 30명 각각의 외피(Surface), 속마음(X-Ray), 디지털 발자국(Phone), 무의식(Subconscious) 4개 렌즈와 1:1 심문 콘솔이 이곳에 표시됩니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: COUNTERFACTUAL LAB -->
+    <section id="tab-cf" class="tab-pane">
+      <div class="panel">
+        <div class="panel-title">
+          <span>반사실적 단일축 실험실 (Single-Axis Counterfactual Audit)</span>
+          <span style="font-size:12px;color:var(--text-muted);">4개 층위 중 딱 1개 축만 변이시켜 판단·감정·행동·발화의 변화를 독립 검증합니다</span>
+        </div>
+        <div class="sim-controls">
+          <div class="control-group">
+            <label>실험 대상 캐릭터 (#01~#30)</label>
+            <select id="cfCharSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>단독 변이시킬 층위 (Mutated Axis)</label>
+            <select id="cfAxisSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>무대 (Stage)</label>
+            <select id="cfStageSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>시나리오 (Scenario)</label>
+            <select id="cfScenarioSelect"></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="runCounterfactualLab()">⚡ 단일축 반사실 비교 실행 (Compare Baseline vs Counterfactual)</button>
+      </div>
+
+      <div id="cfResultArea"></div>
+    </section>
+
+    <!-- TAB 4: PROMPT COMPILER -->
+    <section id="tab-prompt" class="tab-pane">
+      <div class="panel">
+        <div class="panel-title">
+          <span>포터블 LLM 프롬프트 번들 컴파일러 (Claude / ChatGPT / Gemini / Codex 호환)</span>
+          <span style="font-size:12px;color:var(--text-muted);">수천 줄의 원본 JSON을 수동 복사할 필요 없이 원하는 무대·시나리오·캐릭터를 단일 프롬프트로 압축합니다</span>
+        </div>
+        <div class="sim-controls">
+          <div class="control-group">
+            <label>무대 (Stage)</label>
+            <select id="prStageSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>시나리오 (Scenario)</label>
+            <select id="prScenarioSelect"></select>
+          </div>
+          <div class="control-group">
+            <label>포함할 캐릭터 번호 (비워두면 30명 전원, 예: 1,4,9,13,21)</label>
+            <input id="prCharsInput" type="text" placeholder="전체 30명 (또는 1,4,9,21)" />
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-primary" onclick="compilePromptBundle()">프롬프트 번들 생성</button>
+          <button class="btn" onclick="copyPromptBundle()">클립보드 복사</button>
+          <span id="prMetaLabel" style="font-size:12px;color:var(--text-muted);font-family:var(--mono);"></span>
+        </div>
+        <pre class="clinical-pre" id="promptBundlePre" style="max-height:620px;overflow-y:auto;margin-top:14px;"></pre>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let META = null;
+    let CURRENT_SEED = 1;
+    let COHORT = null;
+    let SELECTED_CHAR_ID = 1;
+    let CURRENT_SCENE = null;
+    let SELECTED_SIM_CHAR_ID = 1;
+
+    async function api(method, path, body = null) {
+      const opts = { method, headers: { "Content-Type": "application/json" } };
+      if (body !== null) opts.body = JSON.stringify(body);
+      const res = await fetch(path, opts);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    function switchTab(name) {
+      document.querySelectorAll(".tab-pane").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+      document.getElementById(`tab-${name}`).classList.add("active");
+      const idx = { cohort: 0, sim: 1, cf: 2, prompt: 3 }[name];
+      document.querySelectorAll(".tab-btn")[idx].classList.add("active");
+      if (name === "sim" && !CURRENT_SCENE) {
+        runSimulation(1);
+      }
+      if (name === "cf" && !document.getElementById("cfResultArea").innerHTML) {
+        runCounterfactualLab();
+      }
+      if (name === "prompt" && !document.getElementById("promptBundlePre").textContent) {
+        compilePromptBundle();
+      }
+    }
+
+    function populateSelectors() {
+      const seedSel = document.getElementById("globalSeedSelect");
+      seedSel.innerHTML = META.seeds.map(s =>
+        `<option value="${s.seed}" ${s.seed === CURRENT_SEED ? "selected" : ""}>Seed ${s.seed} (${s.count}명 · ${s.min_age}~${s.max_age}세)</option>`
+      ).join("");
+
+      const stageOpts = META.stages.map(st => `<option value="${st.id}">${st.id} — ${st.title}</option>`).join("");
+      ["simStageSelect", "cfStageSelect", "prStageSelect"].forEach(id => {
+        document.getElementById(id).innerHTML = stageOpts;
+      });
+
+      const scenOpts = META.scenarios.map(sc => `<option value="${sc.id}">${sc.id} — ${sc.title}</option>`).join("");
+      ["simScenarioSelect", "cfScenarioSelect", "prScenarioSelect"].forEach(id => {
+        document.getElementById(id).innerHTML = scenOpts;
+      });
+
+      document.getElementById("simProviderSelect").innerHTML = META.providers.map(p =>
+        `<option value="${p.id}">${p.label}</option>`
+      ).join("");
+
+      document.getElementById("cfAxisSelect").innerHTML = META.axes.map(a =>
+        `<option value="${a.axis}">${a.title}</option>`
+      ).join("");
+    }
+
+    async function loadSeedCohort(seed) {
+      CURRENT_SEED = Number(seed);
+      COHORT = await api("GET", `/api/cohorts/${CURRENT_SEED}`);
+      renderCohortSummary();
+      renderCohortGrid();
+      populateCharDropdown();
+      await selectCharacter(SELECTED_CHAR_ID);
+    }
+
+    function populateCharDropdown() {
+      const cfChar = document.getElementById("cfCharSelect");
+      cfChar.innerHTML = COHORT.characters.map(c =>
+        `<option value="${c.id}" ${c.id === SELECTED_CHAR_ID ? "selected" : ""}>#${String(c.id).padStart(2, "0")} (${c.sex}, ${c.age}세) IQ${c.iq} ACE${c.ace} ${c.reflex}</option>`
+      ).join("");
+    }
+
+    function renderCohortSummary() {
+      const kpis = document.getElementById("cohortKpis");
+      const mCnt = COHORT.sex_ratio.M || 0;
+      const fCnt = COHORT.sex_ratio.F || 0;
+      kpis.innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-label">군상 규모 & 성비</div>
+          <div class="kpi-val">${COHORT.count}명 <span style="font-size:14px;color:var(--text-muted);">(${mCnt}M / ${fCnt}F)</span></div>
+          <div class="kpi-sub">Seed #${COHORT.seed} 고정 샘플링</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">추정 IQ 분포</div>
+          <div class="kpi-val">${COHORT.iq_stats.mean}</div>
+          <div class="kpi-sub">범위 ${COHORT.iq_stats.min} ~ ${COHORT.iq_stats.max}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">평균 ACE & 고위험군</div>
+          <div class="kpi-val">${COHORT.ace_stats.mean}점 <span style="font-size:14px;color:var(--crimson);">(4+점: ${COHORT.ace_stats.high_risk_count}명)</span></div>
+          <div class="kpi-sub">아동기 부정 경험 누적</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">평균 수면 / 스마트폰</div>
+          <div class="kpi-val">${COHORT.sleep_mean}h / ${COHORT.digital_mean}h</div>
+          <div class="kpi-sub">일평균 수면 및 디지털 소비</div>
+        </div>
+      `;
+
+      document.getElementById("cohortMetaNote").textContent = `생성 시각: ${COHORT.generated_at}`;
+      const chips = document.getElementById("highlightChips");
+      chips.innerHTML = COHORT.highlights.map(h => `
+        <div class="chip" onclick="selectCharacter(${h.id})">
+          <strong>[${h.tag}]</strong> #${String(h.id).padStart(2, "0")} · ${h.summary.split(" ").slice(1, 6).join(" ")}
+        </div>
+      `).join("");
+    }
+
+    function reflexBadgeClass(reflex) {
+      if (reflex.includes("대결")) return "badge-danger";
+      if (reflex.includes("얼어붙음")) return "badge-violet";
+      if (reflex.includes("과잉")) return "badge-warn";
+      if (reflex.includes("차분") || reflex.includes("균형")) return "badge-ok";
+      return "";
+    }
+
+    function renderCohortGrid() {
+      const q = document.getElementById("charSearch").value.trim().toLowerCase();
+      const sex = document.getElementById("filterSex").value;
+      const reflex = document.getElementById("filterReflex").value;
+      const aceFilter = document.getElementById("filterAce").value;
+
+      const filtered = COHORT.characters.filter(c => {
+        if (sex && c.sex !== sex) return false;
+        if (reflex && !c.reflex_full.includes(reflex)) return false;
+        if (aceFilter === "high" && c.ace < 4) return false;
+        if (aceFilter === "mid" && (c.ace < 1 || c.ace > 3)) return false;
+        if (aceFilter === "zero" && c.ace !== 0) return false;
+        if (q && !c.one_liner.toLowerCase().includes(q) && !`#${c.id}`.includes(q)) return false;
+        return true;
+      });
+
+      document.getElementById("filteredCountLabel").textContent = `${filtered.length} / ${COHORT.count}명 표시 중`;
+
+      const grid = document.getElementById("charGrid");
+      grid.innerHTML = filtered.map(c => `
+        <div class="char-card ${c.id === SELECTED_CHAR_ID ? "selected" : ""}" onclick="selectCharacter(${c.id})">
+          <div class="char-top">
+            <span class="char-id">#${String(c.id).padStart(2, "0")} · ${c.sex === "M" ? "남" : "여"} · ${c.age}세</span>
+            <span class="badge ${reflexBadgeClass(c.reflex)}">${c.reflex}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text);margin-bottom:6px;font-weight:600;">
+            ${c.region} · ${c.occupation || c.education_tier}
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;">
+            <span class="badge">매력 ${c.face_score}/10 (${c.face_rank}위)</span>
+            <span class="badge">IQ ${c.iq}</span>
+            <span class="badge ${c.ace >= 4 ? "badge-danger" : ""}">ACE ${c.ace}${c.has_csa ? " (M2+)" : ""}</span>
+            <span class="badge">${c.attachment}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${c.post_hoc_label.join(" · ")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function selectCharacter(charId) {
+      SELECTED_CHAR_ID = Number(charId);
+      renderCohortGrid();
+      const data = await api("GET", `/api/cohorts/${CURRENT_SEED}/character/${SELECTED_CHAR_ID}`);
+      document.getElementById("dossierTitle").textContent = `#${String(SELECTED_CHAR_ID).padStart(2, "0")} 임상 차트 (Seed ${CURRENT_SEED})`;
+      document.getElementById("dossierPre").textContent = data.card_text;
+      const cfChar = document.getElementById("cfCharSelect");
+      if (cfChar) cfChar.value = String(SELECTED_CHAR_ID);
+    }
+
+    async function onSeedChange() {
+      const seed = Number(document.getElementById("globalSeedSelect").value);
+      CURRENT_SCENE = null;
+      await loadSeedCohort(seed);
+    }
+
+    async function generateNewSeed() {
+      const seedInput = document.getElementById("newSeedInput").value.trim();
+      const seed = seedInput ? Number(seedInput) : Math.floor(Math.random() * 899) + 100;
+      const ageMode = document.getElementById("newSeedAgeMode").value;
+      const res = await api("POST", "/api/cohorts/generate", { seed, count: 30, age_mode: ageMode });
+      META.seeds = res.seeds;
+      CURRENT_SEED = seed;
+      populateSelectors();
+      await loadSeedCohort(seed);
+    }
+
+    function jumpToSimInterrogate() {
+      SELECTED_SIM_CHAR_ID = SELECTED_CHAR_ID;
+      switchTab("sim");
+      if (CURRENT_SCENE) renderSimInspector(SELECTED_SIM_CHAR_ID);
+    }
+
+    function jumpToCounterfactual() {
+      document.getElementById("cfCharSelect").value = String(SELECTED_CHAR_ID);
+      switchTab("cf");
+      runCounterfactualLab();
+    }
+
+    async function runSimulation(runs = 1, priorVotes = null) {
+      const stageId = document.getElementById("simStageSelect").value;
+      const scenarioId = document.getElementById("simScenarioSelect").value;
+      const provider = document.getElementById("simProviderSelect").value;
+      const simSeed = Number(document.getElementById("simSeedInput").value || 42);
+      const tick = Number(document.getElementById("simTickInput").value || 1);
+      const customStimulus = document.getElementById("customStimulusInput").value.trim() || null;
+
+      const res = await api("POST", "/api/simulate", {
+        seed: CURRENT_SEED,
+        stage_id: stageId,
+        scenario_id: scenarioId,
+        provider,
+        sim_seed: simSeed,
+        tick,
+        runs,
+        custom_stimulus: customStimulus,
+        prior_votes: priorVotes,
+      });
+
+      CURRENT_SCENE = res.scene;
+      renderSceneSummary(CURRENT_SCENE);
+      if (res.mode === "multi" && res.multi) {
+        renderMultiRunSummary(res.multi);
+      } else {
+        document.getElementById("multiRunPanel").style.display = "none";
+      }
+      renderSimParticipants();
+      renderSimInspector(SELECTED_SIM_CHAR_ID || 1);
+    }
+
+    async function runNextTick() {
+      if (!CURRENT_SCENE) return runSimulation(1);
+      const nextTick = Number(document.getElementById("simTickInput").value || 1) + 1;
+      document.getElementById("simTickInput").value = String(nextTick);
+      const priorVotes = {};
+      CURRENT_SCENE.vote_tally.forEach(vt => { priorVotes[vt.target_id] = vt.votes; });
+      await runSimulation(1, priorVotes);
+    }
+
+    function renderSceneSummary(scene) {
+      const panel = document.getElementById("simSummaryPanel");
+      panel.style.display = "block";
+      const top = scene.summary.top_target;
+      const mutual = scene.summary.mutual_pairs.map(m => `#${String(m.a).padStart(2, "0")} ↔ #${String(m.b).padStart(2, "0")}`).join(", ") || "없음";
+      const tallyHtml = scene.vote_tally.slice(0, 10).map(vt => `
+        <div class="tally-item" onclick="selectSimChar(${vt.target_id})">
+          <strong style="color:var(--cyan);font-family:var(--mono);">#${String(vt.target_id).padStart(2, "0")}</strong>
+          <span class="badge badge-danger" style="margin-left:4px;">${vt.votes}표</span>
+          <span style="color:var(--text-muted);font-size:11px;margin-left:4px;">(${vt.sex}, ${vt.reflex}, 매력${vt.face_rank}위)</span>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">투표자: ${vt.voters.map(v => "#" + String(v).padStart(2, "0")).join(", ")}</div>
+        </div>
+      `).join("");
+
+      panel.innerHTML = `
+        <div class="panel-title">
+          <span>무대: ${scene.stage.id} ${scene.stage.title} × 시나리오: ${scene.scenario.id} ${scene.scenario.title} (Tick ${scene.tick})</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--cyan);">Engine: ${scene.provider} · 평균 스트레스: ${scene.summary.mean_stress}/100</span>
+        </div>
+        <div style="font-size:13px;color:#cbd5e1;background:#0b0e15;padding:10px 14px;border-radius:6px;border:1px solid var(--border);margin-bottom:10px;">
+          <strong>부여된 자극:</strong> ${scene.scenario.prompt_stimulus}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+          <span>최다 지목 표적: <strong style="color:var(--crimson);">${top ? `#${String(top.target_id).padStart(2, "0")} (${top.votes}표)` : "-"}</strong></span>
+          <span>상호 지목 쌍: <strong style="color:var(--amber);">${mutual}</strong></span>
+          <span>겉·속 불일치(위선 기표): <strong style="color:var(--cyan);">${scene.summary.hypocrisy_count}명</strong></span>
+          <span>0표 무지목 인원: <strong>${scene.summary.zero_vote_count}명</strong></span>
+        </div>
+        <div class="tally-bar">${tallyHtml}</div>
+      `;
+    }
+
+    function renderMultiRunSummary(multi) {
+      const panel = document.getElementById("multiRunPanel");
+      panel.style.display = "block";
+      const rows = multi.invariant_targets.map(t => `
+        <span class="chip" onclick="selectSimChar(${t.target_id})">
+          <strong>#${String(t.target_id).padStart(2, "0")}</strong> 총 ${t.total_votes}표 (평균 ${t.avg_votes_per_run}표/회 · 1위 ${t.times_ranked_first}/${multi.runs}회)
+        </span>
+      `).join("");
+      panel.innerHTML = `
+        <div class="panel-title">
+          <span>다중 실행 분산 분석 (${multi.runs}회 반복 실행 시 표적이 수렴하는 구조적 희생양/중심인물)</span>
+        </div>
+        <div class="chips">${rows}</div>
+      `;
+    }
+
+    function renderSimParticipants() {
+      if (!CURRENT_SCENE) return;
+      const sortMode = document.getElementById("simSortSelect").value;
+      const list = [...CURRENT_SCENE.participants];
+      if (sortMode === "stress") list.sort((a, b) => b.stress_arousal - a.stress_arousal);
+      else if (sortMode === "target") list.sort((a, b) => a.target_id - b.target_id);
+      else list.sort((a, b) => a.id - b.id);
+
+      const container = document.getElementById("simParticipantList");
+      container.innerHTML = list.map(p => `
+        <div class="p-row ${p.id === SELECTED_SIM_CHAR_ID ? "selected" : ""}" onclick="selectSimChar(${p.id})">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-family:var(--mono);font-weight:700;color:var(--cyan);">
+              #${String(p.id).padStart(2, "0")} (${p.sex}, ${p.age}세) → 표적 #${String(p.target_id).padStart(2, "0")}
+            </span>
+            <div style="display:flex;gap:4px;">
+              ${p.hypocrisy ? `<span class="badge badge-warn">위선(겉 #${String(p.public_claim_id).padStart(2, "0")})</span>` : ""}
+              <span class="badge ${reflexBadgeClass(p.reflex_short)}">${p.reflex_short}</span>
+              <span class="badge ${p.stress_arousal >= 75 ? "badge-danger" : ""}">긴장 ${p.stress_arousal}</span>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${p.utterance}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function selectSimChar(charId) {
+      SELECTED_SIM_CHAR_ID = Number(charId);
+      renderSimParticipants();
+      renderSimInspector(SELECTED_SIM_CHAR_ID);
+    }
+
+    function renderSimInspector(charId) {
+      if (!CURRENT_SCENE) return;
+      const p = CURRENT_SCENE.participants.find(x => x.id === Number(charId)) || CURRENT_SCENE.participants[0];
+      const box = document.getElementById("simCharInspector");
+      box.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+          <div>
+            <h3 style="font-size:16px;color:var(--cyan);font-family:var(--mono);">
+              #${String(p.id).padStart(2, "0")} 관찰 리포트 → 지목 표적: #${String(p.target_id).padStart(2, "0")}
+              ${p.hypocrisy ? `<span class="badge badge-warn" style="margin-left:6px;">겉으로는 #${String(p.public_claim_id).padStart(2, "0")}번 지지 표명</span>` : ""}
+            </h3>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${p.one_liner}</div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <span class="badge ${reflexBadgeClass(p.reflex_short)}">반사: ${p.activated_reflex}</span>
+            <span class="badge badge-danger">심박 ${p.somatic.heart_rate_bpm}bpm · 긴장 ${p.stress_arousal}/100</span>
+          </div>
+        </div>
+
+        <div class="lens-grid">
+          <div class="lens-card lens-surface">
+            <h4 style="color:var(--cyan);"><span>1. Surface (외피 · 드러난 행동과 발화)</span><span>PUBLIC</span></h4>
+            <p style="font-size:13px;">${p.lenses.surface}</p>
+          </div>
+          <div class="lens-card lens-xray">
+            <h4 style="color:var(--amber);"><span>2. X-Ray (속마음 · 의식적 계산과 신체 반응)</span><span>INTERIOR</span></h4>
+            <p style="font-size:13px;">${p.lenses.xray}</p>
+          </div>
+          <div class="lens-card lens-phone">
+            <h4 style="color:var(--emerald);"><span>3. Phone (디지털 발자국 · 스마트폰 행동)</span><span>DIGITAL</span></h4>
+            <p style="font-size:13px;">${p.lenses.phone}</p>
+          </div>
+          <div class="lens-card lens-sub">
+            <h4 style="color:var(--crimson);"><span>4. Subconscious (무의식 · 본인 접근 불가 층)</span><span>INACCESSIBLE</span></h4>
+            <p style="font-size:13px;">${p.lenses.subconscious}</p>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;background:#0b0e15;border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-size:11px;font-family:var(--mono);color:var(--text-muted);margin-bottom:6px;">WORLD MAP (4-TEMPORAL HORIZON)</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;font-size:12px;">
+            <div><strong style="color:var(--cyan);">지금(Now):</strong> ${p.world_map.now}</div>
+            <div><strong style="color:var(--text-muted);">방금(Retention):</strong> ${p.world_map.retention}</div>
+            <div><strong style="color:var(--amber);">곧(Protention):</strong> ${p.world_map.protention}</div>
+            <div><strong style="color:var(--violet);">배경(Background):</strong> ${p.world_map.background}</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;background:#0b0e15;border:1px solid var(--border);border-radius:8px;padding:14px;">
+          <div class="panel-title" style="margin-bottom:8px;">
+            <span>1:1 캐릭터 심문 콘솔 (Interrogate #${String(p.id).padStart(2, "0")}) — 표면 답변 vs 실제 속마음 대조</span>
+          </div>
+          <div class="chips" style="margin-bottom:8px;">
+            <span class="chip" onclick="askCharQuestion('왜 #${String(p.target_id).padStart(2, "0")}번에게 투표했나요?')">왜 #${String(p.target_id).padStart(2, "0")}번에게 투표했나요?</span>
+            <span class="chip" onclick="askCharQuestion('겉으로 한 말과 실제 속마음이 다른 것 아닌가요?')">겉으로 한 말과 속마음이 다른 것 아닌가요?</span>
+            <span class="chip" onclick="askCharQuestion('지금 이 공간에서 누가 제일 두렵거나 거슬리나요?')">누가 제일 두렵거나 거슬리나요?</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <input id="interrogateInput" type="text" placeholder="#${String(p.id).padStart(2, "0")}번에게 직접 질문 입력..." style="flex:1;" />
+            <button class="btn btn-primary" onclick="askCharQuestion()">심문하기</button>
+          </div>
+          <div id="interrogateOutput" style="margin-top:10px;"></div>
+        </div>
+      `;
+    }
+
+    async function askCharQuestion(presetQ = null) {
+      const inputEl = document.getElementById("interrogateInput");
+      const question = presetQ || (inputEl ? inputEl.value.trim() : "") || "방금 왜 그렇게 행동했나요?";
+      if (presetQ && inputEl) inputEl.value = presetQ;
+
+      const res = await api("POST", "/api/interrogate", {
+        seed: CURRENT_SEED,
+        char_id: SELECTED_SIM_CHAR_ID,
+        question,
+        stage_id: document.getElementById("simStageSelect").value,
+        scenario_id: document.getElementById("simScenarioSelect").value,
+        provider: document.getElementById("simProviderSelect").value,
+      });
+
+      document.getElementById("interrogateOutput").innerHTML = `
+        <div style="border-top:1px solid var(--border);padding-top:10px;font-size:13px;display:grid;gap:8px;">
+          <div><span class="badge">표면 발화 (진실성 ${res.sincerity_score}%)</span> <span class="badge badge-warn">${res.defense_mechanism}</span></div>
+          <div style="color:var(--text);"><strong>[입으로 한 대답]</strong> ${res.public_reply}</div>
+          <div style="color:#fcd34d;"><strong>[X-Ray 실제 속내]</strong> ${res.xray_thought}</div>
+          <div style="color:#fda4af;"><strong>[무의식 누출 신호]</strong> ${res.subconscious_leak}</div>
+        </div>
+      `;
+    }
+
+    async function runCounterfactualLab() {
+      const charId = Number(document.getElementById("cfCharSelect").value || 9);
+      const axis = document.getElementById("cfAxisSelect").value || "memory";
+      const stageId = document.getElementById("cfStageSelect").value || "S01";
+      const scenarioId = document.getElementById("cfScenarioSelect").value || "SC01";
+
+      const res = await api("POST", "/api/counterfactual", {
+        seed: CURRENT_SEED,
+        char_id: charId,
+        axis,
+        stage_id: stageId,
+        scenario_id: scenarioId,
+      });
+
+      const ev = res.evaluation;
+      const a0 = res.arm_0;
+      const a1 = res.arm_1;
+
+      document.getElementById("cfResultArea").innerHTML = `
+        <div class="panel">
+          <div class="panel-title">
+            <span>독립 평가 영수증 (human30.evaluate Receipt) — 캐릭터 #${String(res.char_id).padStart(2, "0")} × [${res.axis.toUpperCase()}] 단독 변이</span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--cyan);">Scenario SHA256: ${res.manifest.scenario_sha256.slice(0, 16)}…</span>
+          </div>
+          <div style="font-size:13px;margin-bottom:10px;color:var(--amber);font-weight:600;">
+            변이 내용: ${res.mutation_summary}
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <span class="badge ${ev.judgment_changed ? "badge-danger" : "badge-ok"}">판단(표적) 변화: ${ev.judgment_changed ? `변화함 (#${a0.target_id} → #${a1.target_id})` : `유지됨 (#${a0.target_id})`}</span>
+            <span class="badge ${ev.action_changed ? "badge-warn" : "badge-ok"}">행동 양식 변화: ${ev.action_changed ? "변화함" : "유지됨"}</span>
+            <span class="badge ${ev.emotion_changed ? "badge-violet" : ""}">감정 델타: ΔValence=${ev.emotion_delta.valence}, ΔArousal=${ev.emotion_delta.arousal}</span>
+            <span class="badge">긴장도 변화: ${a0.stress_arousal} → ${a1.stress_arousal}</span>
+          </div>
+
+          <div class="cf-grid">
+            <div class="lens-card lens-surface">
+              <h4 style="color:var(--cyan);"><span>ARM 0 — 원본 조건 (Baseline)</span><span>표적 #${String(a0.target_id).padStart(2, "0")} · 긴장 ${a0.stress_arousal}</span></h4>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;font-family:var(--mono);">${res.conditions.arm_0[res.axis]}</div>
+              <p style="font-size:13px;margin-bottom:8px;"><strong>외피:</strong> ${a0.lenses.surface}</p>
+              <p style="font-size:13px;margin-bottom:8px;color:#fcd34d;"><strong>X-Ray:</strong> ${a0.lenses.xray}</p>
+              <p style="font-size:13px;color:#fda4af;"><strong>무의식:</strong> ${a0.lenses.subconscious}</p>
+            </div>
+            <div class="lens-card lens-sub">
+              <h4 style="color:var(--amber);"><span>ARM 1 — 반사실 변이 조건 (Counterfactual)</span><span>표적 #${String(a1.target_id).padStart(2, "0")} · 긴장 ${a1.stress_arousal}</span></h4>
+              <div style="font-size:12px;color:var(--amber);margin-bottom:8px;font-family:var(--mono);">${res.conditions.arm_1[res.axis]}</div>
+              <p style="font-size:13px;margin-bottom:8px;"><strong>외피:</strong> ${a1.lenses.surface}</p>
+              <p style="font-size:13px;margin-bottom:8px;color:#fcd34d;"><strong>X-Ray:</strong> ${a1.lenses.xray}</p>
+              <p style="font-size:13px;color:#fda4af;"><strong>무의식:</strong> ${a1.lenses.subconscious}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function compilePromptBundle() {
+      const stageId = document.getElementById("prStageSelect").value;
+      const scenarioId = document.getElementById("prScenarioSelect").value;
+      const rawChars = document.getElementById("prCharsInput").value.trim();
+      let charIds = null;
+      if (rawChars) {
+        charIds = rawChars.split(",").map(s => Number(s.trim())).filter(n => n >= 1 && n <= 100);
+      }
+      const res = await api("POST", "/api/prompt", {
+        seed: CURRENT_SEED,
+        stage_id: stageId,
+        scenario_id: scenarioId,
+        char_ids: charIds,
+      });
+      document.getElementById("prMetaLabel").textContent = `캐릭터 ${res.character_count}명 포함 · 약 ${res.estimated_tokens.toLocaleString()} 토큰`;
+      document.getElementById("promptBundlePre").textContent = res.prompt;
+    }
+
+    async function copyPromptBundle() {
+      const text = document.getElementById("promptBundlePre").textContent;
+      if (!text) return;
+      await navigator.clipboard.writeText(text);
+      document.getElementById("prMetaLabel").textContent = "클립보드에 복사되었습니다!";
+    }
+
+    async function init() {
+      META = await api("GET", "/api/meta");
+      populateSelectors();
+      await loadSeedCohort(CURRENT_SEED);
+    }
+
+    init();
+  </script>
+</body>
+</html>
