@@ -524,6 +524,7 @@
 
     <!-- TAB 2: SIMULATOR & 4-LENS -->
     <section id="tab-sim" class="tab-pane">
+      <div id="simError" class="panel" role="alert" hidden style="color:var(--crimson);border-color:var(--crimson);"></div>
       <div class="panel">
         <div class="sim-controls">
           <div class="control-group">
@@ -839,44 +840,60 @@
       runCounterfactualLab();
     }
 
-    async function runSimulation(runs = 1, priorVotes = null) {
-      const stageId = document.getElementById("simStageSelect").value;
-      const scenarioId = document.getElementById("simScenarioSelect").value;
-      const provider = document.getElementById("simProviderSelect").value;
-      const simSeed = Number(document.getElementById("simSeedInput").value || 42);
-      const tick = Number(document.getElementById("simTickInput").value || 1);
-      const customStimulus = document.getElementById("customStimulusInput").value.trim() || null;
+    async function runSimulation(runs = 1, priorVotes = null, requestedTick = null) {
+      const errorPanel = document.getElementById("simError");
+      errorPanel.hidden = true;
+      errorPanel.textContent = "";
+      let res;
+      try {
+        const stageId = document.getElementById("simStageSelect").value;
+        const scenarioId = document.getElementById("simScenarioSelect").value;
+        const provider = document.getElementById("simProviderSelect").value;
+        const simSeed = Number(document.getElementById("simSeedInput").value || 42);
+        const tick = requestedTick ?? Number(document.getElementById("simTickInput").value || 1);
+        const customStimulus = document.getElementById("customStimulusInput").value.trim() || null;
 
-      const res = await api("POST", "/api/simulate", {
-        seed: CURRENT_SEED,
-        stage_id: stageId,
-        scenario_id: scenarioId,
-        provider,
-        sim_seed: simSeed,
-        tick,
-        runs,
-        custom_stimulus: customStimulus,
-        prior_votes: priorVotes,
-      });
+        res = await api("POST", "/api/simulate", {
+          seed: CURRENT_SEED,
+          stage_id: stageId,
+          scenario_id: scenarioId,
+          provider,
+          sim_seed: simSeed,
+          tick,
+          runs,
+          custom_stimulus: customStimulus,
+          prior_votes: priorVotes,
+        });
 
-      CURRENT_SCENE = res.scene;
-      renderSceneSummary(CURRENT_SCENE);
-      if (res.mode === "multi" && res.multi) {
-        renderMultiRunSummary(res.multi);
-      } else {
-        document.getElementById("multiRunPanel").style.display = "none";
+      } catch (_error) {
+        errorPanel.textContent = "시뮬레이션 응답을 읽지 못했습니다. 표시된 결과가 있다면 이전 실행 결과입니다. 입력과 로컬 서버 상태를 확인한 뒤 같은 실행 버튼으로 다시 시도할 수 있습니다. 자동으로 재시도하지 않습니다. 외부 엔진 재시도는 추가 비용이 발생할 수 있습니다.";
+        errorPanel.hidden = false;
+        return false;
       }
-      renderSimParticipants();
-      renderSimInspector(SELECTED_SIM_CHAR_ID || 1);
+      if (requestedTick !== null) document.getElementById("simTickInput").value = String(requestedTick);
+      CURRENT_SCENE = res.scene;
+      try {
+        renderSceneSummary(CURRENT_SCENE);
+        if (res.mode === "multi" && res.multi) {
+          renderMultiRunSummary(res.multi);
+        } else {
+          document.getElementById("multiRunPanel").style.display = "none";
+        }
+        renderSimParticipants();
+        renderSimInspector(SELECTED_SIM_CHAR_ID || 1);
+      } catch (_error) {
+        errorPanel.textContent = "서버 응답은 받았지만 결과를 모두 표시하지 못했습니다. 화면에 이전 결과와 새 결과가 섞여 있을 수 있습니다. 자동으로 재실행하지 않습니다. 외부 엔진으로 다시 실행하면 추가 비용이 발생할 수 있습니다.";
+        errorPanel.hidden = false;
+      }
+      return true;
     }
 
     async function runNextTick() {
       if (!CURRENT_SCENE) return runSimulation(1);
       const nextTick = Number(document.getElementById("simTickInput").value || 1) + 1;
-      document.getElementById("simTickInput").value = String(nextTick);
       const priorVotes = {};
       CURRENT_SCENE.vote_tally.forEach(vt => { priorVotes[vt.target_id] = vt.votes; });
-      await runSimulation(1, priorVotes);
+      await runSimulation(1, priorVotes, nextTick);
     }
 
     function renderSceneSummary(scene) {
