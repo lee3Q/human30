@@ -631,10 +631,10 @@
             <input id="prCharsInput" type="text" placeholder="전체 30명 (또는 1,4,9,21)" />
           </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="compilePromptBundle()">프롬프트 번들 생성</button>
           <button class="btn" onclick="copyPromptBundle()">클립보드 복사</button>
-          <span id="prMetaLabel" style="font-size:12px;color:var(--text-muted);font-family:var(--mono);"></span>
+          <span id="prMetaLabel" role="status" style="font-size:12px;color:var(--text-muted);font-family:var(--mono);"></span>
         </div>
         <pre class="clinical-pre" id="promptBundlePre" style="max-height:620px;overflow-y:auto;margin-top:14px;"></pre>
       </div>
@@ -1143,8 +1143,14 @@
     async function copyPromptBundle() {
       const text = document.getElementById("promptBundlePre").textContent;
       if (!text) return;
-      await navigator.clipboard.writeText(text);
-      document.getElementById("prMetaLabel").textContent = "클립보드에 복사되었습니다!";
+      const label = document.getElementById("prMetaLabel");
+      label.textContent = "클립보드에 복사 중...";
+      try {
+        await navigator.clipboard.writeText(text);
+        label.textContent = "클립보드에 복사되었습니다!";
+      } catch (_error) {
+        label.textContent = "클립보드에 복사하지 못했습니다. 아래 프롬프트 본문을 직접 선택해 복사하거나 브라우저 설정을 확인한 뒤 다시 시도하세요.";
+      }
     }
 
     async function init() {
